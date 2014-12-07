@@ -4,7 +4,7 @@
 
 <head>
 
-  <title>Streaming Arduino Sensor Data to Smoothie Charts Tutorial</title>
+  <title>Tutorial: Streaming Arduino Sensor Data to Smoothie Charts</title>
 
   <link rel="stylesheet" type="text/css" href="article.css">
   <meta charset="utf-8" />
@@ -19,7 +19,7 @@
 
     <header>
 
-      <h1>Streaming Arduino Sensor Data to Smoothie Charts Tutorial</h1>
+      <h1>Tutorial: Streaming Arduino Sensor Data to a Smoothie Chart</h1>
       <h3>Posted by: Seth Lakowske</h3>
       <p>Published: <time pubdate="pubdate">2014-12-07</time></p>
 
@@ -30,12 +30,35 @@
       <h2>Requirements</h2>
 
       <ul>
-	<li>npm</li>
-	<li>nodejs</li>
+	<li><a href="http://nodejs.org">Node.js</a></li>
+	<li><a href="http://www.amazon.com/gp/product/B00ASSQ9S6/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B00ASSQ9S6&linkCode=as2&tag=inforgain-20&linkId=W7QM2SG754UUZXFZ">Geeetech Iduino Nano 168 ATmega168 Board V3.0 5V/16Mhz compatible with Arduino's IDE</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=inforgain-20&l=as2&o=1&a=B00ASSQ9S6" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+	</li>
+	<li><a href="http://www.amazon.com/gp/product/B008B656PO/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B008B656PO&linkCode=as2&tag=inforgain-20&linkId=QFKJ4ACDWYSNKZ7R">20A range Current Sensor Module ACS712 Module</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=inforgain-20&l=as2&o=1&a=B008B656PO" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+	</li>
       </ul>
 
       <p>First, install nodejs if you haven't already.  Then create a directory
-      to contain your project code.  Run npm init</p>
+      to contain your project code.  Inside the new directory, run</p>
+      <pre><code>
+	  #Initialize your project
+	  npm init
+      </code></pre>
+
+      <p>Next, add dependencies to your project.  The json-streamer transform is written to buffer the basic json serial data
+	coming from the Arduino Nano.</p>
+      
+      <pre><code>
+	  npm install serialport --save
+	  npm install git://github.com/lakowske/json-streamer --save
+      </code></pre>
+	
+      <p>Next, create a pipe using a series of stream transforms.  We'll pipe
+      the data into a smoothie chart.</p>
+
+      <pre><code>
+	  var SerialPort = require("serialport").SerialPort
+	  var JSONReader = require('json-streamer');
+      </code></pre>
 
     </p>
 

@@ -49,6 +49,7 @@
       
       <pre><code>
 	  npm install serialport --save
+	  npm install express --save
 	  npm install git://github.com/lakowske/json-streamer --save
       </code></pre>
 	
@@ -56,8 +57,13 @@
       the data into a smoothie chart.</p>
 
       <pre><code>
-	  var SerialPort = require("serialport").SerialPort
-	  var JSONReader = require('json-streamer');
+
+	var SerialPort = require("serialport").SerialPort
+	var JSONReader = require('json-streamer');
+
+	var serialPort = new SerialPort("/dev/tty-usbserial1", {
+	baudrate: 57600
+	});
       </code></pre>
 
     </p>

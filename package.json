@@ -1,0 +1,27 @@
+{
+  "name": "lakowske-blog",
+  "version": "0.0.1",
+  "description": "A weblog by Seth Lakowske",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lakowske/Blog"
+  },
+  "keywords": [
+    "Seth",
+    "Lakowske",
+    "blog"
+  ],
+  "author": "Seth Lakowske",
+  "license": "All rights reserved",
+  "bugs": {
+    "url": "https://github.com/lakowske/Blog/issues"
+  },
+  "homepage": "https://github.com/lakowske/Blog",
+  "dependencies": {
+    "express": "^4.10.4"
+  }
+}

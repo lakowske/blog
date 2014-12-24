@@ -12,5 +12,10 @@ console.log(path);
 
 app.use(express.static(__dirname + '/articles'))
 
-app.listen(8000);
+app.post('/pushreq', function(req,res) {
+    console.log(req.body);
+    res.send('ok');
+})
+
+app.listen(3333);
 

@@ -49,8 +49,8 @@
       
       <pre><code>
 	  npm install serialport --save
-	  npm install express --save
 	  npm install git://github.com/lakowske/json-streamer --save
+	  npm install git://github.com/lakowske/websocket-express --save
       </code></pre>
 	
       <p>Next, create a pipe using a series of stream transforms.  We'll pipe
@@ -62,7 +62,7 @@
 	var JSONReader = require('json-streamer');
 
 	var serialPort = new SerialPort("/dev/tty-usbserial1", {
-	baudrate: 57600
+	   baudrate: 57600
 	});
       </code></pre>
 

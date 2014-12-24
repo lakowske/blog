@@ -2,10 +2,16 @@
  * (C) 2014 Seth Lakowske
  */
 
-var express = require('express');
+var express    = require('express');
+var bodyParser = require('body-parser');
 
 var app = express();
 
+//we want to parse incoming POST json data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+
+//the path(s) we want to serve
 var path = __dirname + '/articles';
 
 console.log(path);

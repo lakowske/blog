@@ -5,8 +5,9 @@
 var express    = require('express');
 var bodyParser = require('body-parser');
 var gitPull    = require('git-pull');
+var git        = require('git-rev')
 
-var app = express();
+var app        = express();
 
 //we want to parse incoming POST json data
 app.use(bodyParser.json());
@@ -22,6 +23,12 @@ app.use(express.static(__dirname + '/articles'))
 app.post('/pushreq', function(req,res) {
 
     console.log(req.body);
+
+    //get our current branch
+    git.branch(function (str) {
+        console.log('branch', str)
+        // => master
+    })
 
     //pull the latest changes
     gitPull('./', function (err, consoleOutput) {

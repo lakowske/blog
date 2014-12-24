@@ -24,7 +24,7 @@ app.post('/pushreq', function(req,res) {
 
     console.log(req.body);
 
-    gitpull('./', function (err, consoleOutput) {
+    gitPull('./', function (err, consoleOutput) {
         if (err) {
             console.error("Error!", err, consoleOutput);
         } else {

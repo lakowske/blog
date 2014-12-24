@@ -27,21 +27,22 @@ app.post('/pushreq', function(req,res) {
     //get our current branch
     git.branch(function (str) {
         console.log('branch', str)
-        // => master
+
+        //pull the latest changes
+        gitPull('./', function (err, consoleOutput) {
+            if (err) {
+                console.error("Error!", err, consoleOutput);
+            } else {
+                console.log("Success!", consoleOutput);
+                process.exit(0);
+            }
+        });
+
     })
 
-    //pull the latest changes
-    gitPull('./', function (err, consoleOutput) {
-        if (err) {
-            console.error("Error!", err, consoleOutput);
-        } else {
-            console.log("Success!", consoleOutput);
-        }
-    });
 
     res.send('ok');
 
-    process.exit(0);
 })
 
 app.listen(3333);

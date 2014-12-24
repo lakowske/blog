@@ -4,6 +4,7 @@
 
 var express    = require('express');
 var bodyParser = require('body-parser');
+var gitPull    = require('git-pull');
 
 var app = express();
 
@@ -19,7 +20,18 @@ console.log(path);
 app.use(express.static(__dirname + '/articles'))
 
 app.post('/pushreq', function(req,res) {
+
+
     console.log(req.body);
+
+    gitpull('./', function (err, consoleOutput) {
+        if (err) {
+            console.error("Error!", err, consoleOutput);
+        } else {
+            console.log("Success!", consoleOutput);
+        }
+    });
+
     res.send('ok');
 })
 

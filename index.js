@@ -21,9 +21,9 @@ app.use(express.static(__dirname + '/articles'))
 
 app.post('/pushreq', function(req,res) {
 
-
     console.log(req.body);
 
+    //pull the latest changes
     gitPull('./', function (err, consoleOutput) {
         if (err) {
             console.error("Error!", err, consoleOutput);
@@ -33,6 +33,8 @@ app.post('/pushreq', function(req,res) {
     });
 
     res.send('ok');
+
+    process.exit(0);
 })
 
 app.listen(3333);

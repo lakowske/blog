@@ -25,6 +25,8 @@
     "body-parser": "^1.10.0",
     "express": "^4.10.4",
     "git-pull": "^0.1.0",
-    "git-rev": "^0.2.1"
+    "git-rev": "^0.2.1",
+    "github-webhook-handler": "^0.3.4",
+    "websocket-express": "git://github.com/lakowske/websocket-express"
   }
 }

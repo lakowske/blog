@@ -2,28 +2,27 @@
  * (C) 2014 Seth Lakowske
  */
 
-var express    = require('express');
-var bodyParser = require('body-parser');
-var gitPull    = require('git-pull');
-var git        = require('git-rev')
-
-var app        = express();
-
-//we want to parse incoming POST json data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
+var gitPull        = require('git-pull');
+var git            = require('git-rev')
+var createHandler  = require('github-webhook-handler');
+var handler        = createHandler({ path: '/webhook', secret: 'myhashsecret' })
+var WsStaticServer = require('websocket-express').WsStaticServer;
 
 //the path(s) we want to serve
 var path = __dirname + '/articles';
 
 console.log(path);
 
-app.use(express.static(__dirname + '/articles'))
+var server = new WsStaticServer({
+    path   : 'path',
+    wsPath : '/webSocket'
+})
 
-app.post('/pushreq', function(req,res) {
+
+server.app.post('/pushreq', function(req,res) {
 
     console.log(req.body);
-
+/*
     //get our current branch
     git.branch(function (str) {
         console.log('branch', str)
@@ -40,10 +39,9 @@ app.post('/pushreq', function(req,res) {
 
     })
 
-
+*/
     res.send('ok');
 
 })
 
-app.listen(3333);
-
+server.listen(3333);

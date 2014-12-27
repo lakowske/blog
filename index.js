@@ -7,6 +7,7 @@ var git            = require('git-rev')
 var createHandler  = require('github-webhook-handler');
 var handler        = createHandler({ path: '/webhook', secret: 'myhashsecret' })
 var WsStaticServer = require('websocket-express').WsStaticServer;
+var bodyParser     = require('body-parser');
 
 //the path(s) we want to serve
 var path = __dirname + '/articles';
@@ -18,8 +19,12 @@ var server = new WsStaticServer({
     wsPath : '/webSocket'
 })
 
+var app = server.app;
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-server.app.post('/pushreq', function(req,res) {
+
+app.post('/pushreq', function(req,res) {
 
     console.log(req.body);
 /*

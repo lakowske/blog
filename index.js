@@ -17,6 +17,11 @@ var bodyFile = fs.createWriteStream('pushEvent.txt');
 
 var server   = http.createServer(function(req, res) {
     req.pipe(bodyFile);
+    req.on('end', function() {
+      res.writeHead(200, {'content-type': 'text/plain'})
+      res.write('got push event\n');
+      res.end();
+    });
 })
 
 server.listen(3333);

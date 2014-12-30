@@ -26,6 +26,7 @@
     "express": "^4.10.4",
     "git-pull": "^0.1.0",
     "git-rev": "^0.2.1",
-    "github-webhook-deployer": "git://github.com/lakowske/github-webhook-deployer"
+    "github-webhook-deployer": "git://github.com/lakowske/github-webhook-deployer",
+    "websocket-express": "git://github.com/lakowske/websocket-express"
   }
 }

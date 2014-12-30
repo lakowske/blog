@@ -2,49 +2,22 @@
  * (C) 2014 Seth Lakowske
  */
 
-var express    = require('express');
-var bodyParser = require('body-parser');
-var gitPull    = require('git-pull');
-var git        = require('git-rev');
-var app        = express();
-
+var http           = require('http');
+var fs             = require('fs');
+var WsStaticServer = require('websocket-express').WsStaticServer;
+//the port we want to serve from
 var appPort = 3333
-
-//we want to parse incoming POST json data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended:true}));
 
 //the path(s) we want to serve
 var path = __dirname + '/articles';
 
+//let the world know
 console.log(path);
 
-app.use(express.static(__dirname + '/articles'))
-
-app.post('/pushreq', function(req,res) {
-
-    console.log(req.body);
-    /*
-    //get our current branch
-    git.branch(function (str) {
-        console.log('branch', str)
-
-        //pull the latest changes
-        gitPull('./', function (err, consoleOutput) {
-            if (err) {
-                console.error("Error!", err, consoleOutput);
-            } else {
-                console.log("Success!", consoleOutput);
-                process.exit(0);
-            }
-        });
-
-    })
-    */
-
-    res.send('ok');
-
+//Create a static server with websockets
+var server = new WsStaticServer({
+    path   : 'path',
+    wsPath : '/webSocket'
 })
 
-app.listen(3333);
-
+server.listen(appPort);

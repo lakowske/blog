@@ -11,9 +11,6 @@ var appPort        = 3333
 //the path(s) we want to serve
 var path           = __dirname + '/articles';
 
-//let the world know
-console.log(path);
-
 //Create a github deployer
 var deployer = new Deployer({path:'/webhook', secret : 'testSecret'});
 deployer.listen(appPort+1);

@@ -2,9 +2,9 @@
  * (C) 2014 Seth Lakowske
  */
 
-var http           = require('http');
-var fs             = require('fs');
 var WsStaticServer = require('websocket-express').WsStaticServer;
+var Deployer       = require('github-webhook-deployer');
+
 //the port we want to serve from
 var appPort = 3333
 
@@ -14,10 +14,13 @@ var path = __dirname + '/articles';
 //let the world know
 console.log(path);
 
+//Create a github webhook deployer listener
+var deployer = new Deployer({path:'/webhook', secret : 'testSecret'});
+deployer.listen(appPort+1);
+
 //Create a static server with websockets
 var server = new WsStaticServer({
-    path   : 'path',
+    path   : path,
     wsPath : '/webSocket'
 })
-
 server.listen(appPort);

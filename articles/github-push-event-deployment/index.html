@@ -3,7 +3,10 @@
   <title>Github push event deployment</title>
 </head>
 <body>
-  <p>Github push event deployment</p>
+  <h1>Github push event deployment</h1>
+  <h3>Posted by: Seth Lakowske</h3>
+  <p>Published: <time pubdate="pubdate">2014-12-30</time></p>
+
   <p>github-webhook-deployer listens for github push events.
     It's a sidecar-service that runs along side your
     service.  When a push event is received, github-webhook-deployer
@@ -11,5 +14,18 @@
     such as forever, restarts the service with the new codebase 
     and you have deployed using a Github push event.
   </p>
+
+
+  <h2>Requirements</h2>
+
+  <p>First, install nodejs if you haven't already.  Then create a directory
+    to contain your project code.  Inside the new directory, run</p>
+
+  <pre><code>
+      #Initialize your project
+      npm init
+  </code></pre>
+
+
 </body>
 </html>

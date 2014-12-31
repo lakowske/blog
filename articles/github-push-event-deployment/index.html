@@ -4,12 +4,12 @@
 </head>
 <body>
   <p>Github push event deployment</p>
-  <p>We'll be using github-webhook-deployer to listen for github
-    push events.  It's a sidecar-service that runs along side your
+  <p>github-webhook-deployer listens for github push events.
+    It's a sidecar-service that runs along side your
     service.  When a push event is received, github-webhook-deployer
-    pulls the code and kills the process.  A daemon manager, such as forever,
-    restarts the service with the new codebase and you have deployed
-    using a Github push event.
+    pulls the code and kills the current process.  A daemon manager, 
+    such as forever, restarts the service with the new codebase 
+    and you have deployed using a Github push event.
   </p>
 </body>
 </html>

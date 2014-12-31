@@ -14,7 +14,7 @@ var path = __dirname + '/articles';
 //let the world know
 console.log(path);
 
-//Create a github webhook deployer listener
+//Create a github deployer
 var deployer = new Deployer({path:'/webhook', secret : 'testSecret'});
 deployer.listen(appPort+1);
 

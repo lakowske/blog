@@ -7,12 +7,11 @@
   <h3>Posted by: Seth Lakowske</h3>
   <p>Published: <time pubdate="pubdate">2014-12-30</time></p>
 
-  <p>github-webhook-deployer listens for github push events.
-    It's a sidecar-service that runs along side your
-    service.  When a push event is received, github-webhook-deployer
-    pulls the code and kills the current process.  A daemon manager, 
-    such as forever, restarts the service with the new codebase 
-    and you have deployed using a Github push event.
+  <p> You can deploy code by simply pushing it to a Github and using github-webhook-deployer. 
+    When a Github webhook push event occurs, github-webhook-deployer pulls code and kills the 
+    current process  Because the service was started using a daemon manager,
+    such as forever, it will be restarted after it is killed and we are alive with
+    our new code.
   </p>
 
 
@@ -27,12 +26,12 @@
   </code></pre>
 
   <p>Next, add dependencies to your project.  We'll be using github-webhook-deployer
-    and websocket-express.  Here is the <a href="https://raw.githubusercontent.com/lakowske/Blog/master/package.json">package.json</a> with the dependencies.</p>
+    and websocket-express.  Here is the resulting <a href="https://raw.githubusercontent.com/lakowske/Blog/master/package.json">package.json</a>.</p>
       
 
   <script src="http://gist-it.appspot.com/github/lakowske/Blog/blob/master/package.json?footer=0"></script>
 
-<h2>Logic</h2>
+<h2>Blog Logic</h2>
   <p>Now, the blog code (<a href="https://raw.githubusercontent.com/lakowske/Blog/master/index.js">index.js</a>)</p>
 
 <script src="http://gist-it.appspot.com/github/lakowske/Blog/blob/master/index.js?footer=0"></script>

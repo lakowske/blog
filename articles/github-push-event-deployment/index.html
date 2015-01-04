@@ -7,11 +7,13 @@
   <h3>Posted by: Seth Lakowske</h3>
   <p>Published: <time pubdate="pubdate">2014-12-30</time></p>
 
-  <p> You can deploy code by simply pushing it to a Github and using github-webhook-deployer. 
-    When a Github webhook push event occurs, github-webhook-deployer pulls code and kills the 
-    current process  Because the service was started using a daemon manager,
-    such as Forever.js, it will be restarted after it is killed and we'll be live with
-    our new code.
+  <p> 
+    You can deploy code by simply pushing it to Github.  When you push code changes
+    to Github, a Github webhook push event occurs.   You can listen for these Github webhook
+    push events in your node.js program by using github-webhook-deployer.  It listens 
+    for these push events, then git pulls and kills the current process.  If the service 
+    was started using a daemon manager, such as Forever.js, it should get restarted after
+    it is killed and you'll be live with your new code.
   </p>
 
 

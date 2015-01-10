@@ -6,7 +6,7 @@ var WsStaticServer = require('websocket-express').WsStaticServer;
 var Deployer       = require('github-webhook-deployer');
 
 //the port we want to serve from
-var appPort        = 3333
+var appPort        = 4444
 
 //the path(s) we want to serve
 var path           = __dirname + '/articles';

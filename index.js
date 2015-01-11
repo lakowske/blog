@@ -21,4 +21,6 @@ var server = new WsStaticServer({
     wsPath : '/webSocket'
 })
 
+console.log('listening on port ' + appPort);
+
 server.listen(appPort);

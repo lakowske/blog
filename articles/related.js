@@ -19,6 +19,8 @@ function loadArticles() {
 
 }
 
+loadArticles();
+
 },{"http":7}],2:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.

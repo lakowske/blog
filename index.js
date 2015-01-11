@@ -27,6 +27,14 @@ var server = new WsStaticServer({
     wsPath : '/webSocket'
 })
 
+server.server.on('request', function(req, res) {
+
+    if (req.url === '/related_articles') {
+        res.send(JSON.stringify({'blah':'jah'}));
+    }
+
+})
+
 console.log('listening on port ' + appPort);
 
 server.listen(appPort);

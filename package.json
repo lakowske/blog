@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/lakowske/Blog",
   "dependencies": {
-    "github-webhook-deployer": ">= 0.0.1",
+    "github-webhook-deployer": ">= 0.0.2",
     "websocket-express": "git://github.com/lakowske/websocket-express"
   }
 }

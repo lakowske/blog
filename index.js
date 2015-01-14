@@ -2,39 +2,30 @@
  * (C) 2014 Seth Lakowske
  */
 
-var WsStaticServer = require('websocket-express').WsStaticServer;
+var http           = require('http');
+var express        = require('express');
 var Deployer       = require('github-webhook-deployer');
 
-//the port we want to serve from
+//the port we want to serve from is passed to us on the command line
 var appPort        = parseInt(process.argv[2], 10);
+
+//the mount point (i.e. url prefix to static content)
+var mount          = '/articles'
+//the path we want to serve
+var path           = __dirname + mount;
+
+//Create the blog server
+var app = express();
+app.use(mount, express.static(path));
+var server = http.createServer(app);
+console.log('web server listening on port ' + appPort);
+server.listen(appPort);
+
 
 //deployment port listening for github push events
 var deployerPort   = appPort+1;
 
-//the path(s) we want to serve
-var path           = __dirname + '/articles';
-
-//Create a github deployer
+//Create a github webhook deployer
 var deployer = new Deployer({path:'/webhook', secret : 'testSecret'});
-
-console.log('listening on port ' + deployerPort);
-
-deployer.listen(appPort+1);
-
-//Create a static server with websockets
-var server = new WsStaticServer({
-    path   : path,
-    wsPath : '/webSocket'
-})
-
-server.server.on('request', function(req, res) {
-
-    if (req.url === '/related_articles') {
-        res.send(JSON.stringify({'blah':'jah'}));
-    }
-
-})
-
-console.log('listening on port ' + appPort);
-
-server.listen(appPort);
+console.log('deployer listening on port ' + deployerPort);
+deployer.listen(deployerPort);

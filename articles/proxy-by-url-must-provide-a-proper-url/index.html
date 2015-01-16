@@ -1,0 +1,37 @@
+
+<html>
+<head>
+<title>Proxy-by-url must provide proper url error</title>
+</head>
+<body>
+<p>
+  I get the following error using v0.0.3 proxy-by-url from github:
+</p>
+<pre><code>
+19:55:27/seth/boltzman~/workspace/proxy-service-directory> node index.js 
+
+/home/seth/workspace/proxy-service-directory/node_modules/http-proxy/lib/http-proxy/index.js:119
+    throw err;
+          ^
+Error: Must provide a proper URL as target
+    at ProxyServer.<anonymous> (/home/seth/workspace/proxy-service-directory/node_modules/http-proxy/lib/http-proxy/index.js:68:35)
+    at Server.closure (/home/seth/workspace/proxy-service-directory/node_modules/http-proxy/lib/http-proxy/index.js:125:43)
+    at Server.emit (events.js:98:17)
+    at HTTPParser.parser.onIncoming (http.js:2108:12)
+    at HTTPParser.parserOnHeadersComplete [as onHeadersComplete] (http.js:121:23)
+    at Socket.socket.ondata (http.js:1966:22)
+    at TCP.onread (net.js:527:27)
+</code></pre>
+<p>
+  I was using the example in the README.md
+</p>
+<pre><code>
+require('http-proxy').createServer(
+  require('proxy-by-url')({
+    '/database': { port: 5984, host: 'localhost' },
+  })
+).listen(8000)
+</code></pre>
+
+</body>
+</html>

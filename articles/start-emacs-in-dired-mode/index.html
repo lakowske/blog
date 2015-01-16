@@ -9,6 +9,9 @@
     <h3>Posted by: Seth Lakowske</h3>
     <p>Published: <time pubdate="pubdate">2015-01-10</time></p>
 
+    <div id="related_articles"></div>
+    <script type="text/javascript" src="../related.js"></script>
+
     <p>
       You can start emacs in dired mode by adding this to your startup script
 
@@ -33,8 +36,18 @@
       </code></pre>
 
       This starts emacs and executes the dired command, <b>starting emacs in dired mode</b>
-
     </p>
+
+    <p>
+      Lastly, a simple way is to just pass the directory to emacs, e.g.
+
+      <pre><code>
+
+	  emacs .
+
+      </code></pre>
+
+      <b>Starting emacs in dired mode</b> at the current working directory.
   </body>
 
 <!-- Disqus Thread -->

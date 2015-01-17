@@ -43,8 +43,7 @@ require('http-proxy').createServer(require('proxy-by-url')({
 var server = require('http').createServer(require('proxy-by-directory')({
     '/articles' : { target : 'http://localhost:5555/' },
     '/' : { target : 'http://sethlakowske.com:7777' }
-}))
-      
+})).listen(8000)
   </code></pre>
 
 

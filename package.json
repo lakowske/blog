@@ -23,7 +23,10 @@
   "homepage": "https://github.com/lakowske/Blog",
   "dependencies": {
     "ecstatic": "^0.5.8",
+    "findit": "^2.0.0",
     "github-webhook-deployer": "*",
+    "hyperglue": "^2.0.1",
+    "hyperspace": "^2.1.4",
     "is-root": "^1.0.0",
     "minimist": "^1.1.0",
     "path": "^0.11.14",

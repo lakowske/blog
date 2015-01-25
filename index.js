@@ -10,6 +10,7 @@ var minimist       = require('minimist');
 var trumpet        = require('trumpet');
 var fs             = require('fs');
 var path           = require('path');
+var articles       = require('./articles');
 
 var argv           = minimist(process.argv.slice(2), {
     alias: { p: 'port', u: 'uid', g: 'gid' },
@@ -41,7 +42,10 @@ function layout(res, params) {
 
 router.addRoute('/related/:article', function (req, res, params) {
     console.log(params);
-    layout(res, params).end('hi');
+    var pipe = layout(res, params);
+    //pipe.end('hi');
+
+    articles.toHTML(pipe);
 });
 
 var st     = ecstatic({

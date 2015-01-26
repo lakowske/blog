@@ -33,8 +33,8 @@ function asTable() {
         return {
             'a.name' : {
                 name : doc.name,
-                href : doc.name,
-                _text : doc.message
+                href : doc.url,
+                _text : doc.name
             }
         }
     });
@@ -52,7 +52,7 @@ function toHTML(pipe) {
         if (match) {
             file = path.dirname(file);
             file = path.basename(file);
-            linkStand.write({name:file, message:file})
+            linkStand.write({name:file, url:'/articles/' + file})
         }
         }, function() {
             //pipe.end();

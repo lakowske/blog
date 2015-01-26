@@ -41,7 +41,6 @@ function layout(res, params) {
 }
 
 router.addRoute('/related/:article', function (req, res, params) {
-    console.log(params);
     var pipe = layout(res, params);
     //pipe.end('hi');
 

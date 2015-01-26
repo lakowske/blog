@@ -52,7 +52,7 @@ function toHTML(pipe) {
         if (match) {
             file = path.dirname(file);
             file = path.basename(file);
-            linkStand.write({name:file, url:'/articles/' + file})
+            linkStand.write({name:file, url:'/related/' + file})
         }
         }, function() {
             //pipe.end();

@@ -37,7 +37,7 @@ function layout(res, params) {
     res.setHeader('content-type', 'text/html');
     var tr = trumpet();
     read('/' + params.article + '/index.html').pipe(tr).pipe(res);
-    return tr.createWriteStream('#body');
+    return tr.createWriteStream('#related');
 }
 
 router.addRoute('/related/:article', function (req, res, params) {

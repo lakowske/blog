@@ -1,0 +1,12 @@
+
+body {
+    width: 960px;
+    margin:0px auto;
+    font-family:sans-serif;
+
+}
+
+
+.title .byline .date {
+    text-align:center;
+}

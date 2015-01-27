@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Share javascript in node and the browser using Browserify and Tape</title>
-    <link rel="stylesheet" type="text/css" href="/style/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/style/style.css">
   </head>
   <body>
     <h1 class="title">Share javascript in node and the browser with Browserify</h1>
@@ -32,21 +32,21 @@
       My initial exposure to Browserify was while I was writing a
       Backbone application and testing with Mocha and Sinon.  These
       libraries were not written as CommonJS modules - the
-      native module system of Nodejs.  As a consequence, they didn't
-      work well with Browserify.  At the time, I was more concerned
+      native module system of Nodejs.  As a consequence, there was no
+      guarantee they would work well with Browserify.  At the time, I was more concerned
       with these libraries than my module system, so I choose to go with
-      Requirejs.  While the pain of Requirejs started to build, I
+      Requirejs.  While the pains of Requirejs started to build, I
       kept reading about people using Browserify.  I was also becoming
       more familiar with Nodejs and its pipe API, which I am fond
       of from my Unix experience.  When I learned the power of pipes
       and streams was available in the browser via Browserify, I
       decided to give Browserify another try.
     <p>
-      So far, Browserify is working well.  Browserify lets me use the
+      So far, Browserify is working well - it lets me use the
       pipe API I love in Nodejs.  Other Nodejs modules are available
       also.  When I write a new module, I can write it in typical
       Nodejs fashion and I feel comfortable knowing it will work in
-      the browser and of course Nodejs. I switched my unit test
+      the browser and Nodejs. I switched my unit test
       library from Karma to Tape.  Tape is written by substack, the
       same person who created Browserify, so of course it works with
       Browserify.  I finally feel like I have a tool that allows me to

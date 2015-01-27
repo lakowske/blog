@@ -27,7 +27,7 @@ var Deployer       = require('github-webhook-deployer');
 var appPort        = parseInt(process.argv[2], 10);
 
 //the mount point (i.e. url prefix to static content)
-var mount          = '/articles'
+var mount          = '/static'
 
 function read (file) {
     return fs.createReadStream(path.join(__dirname, 'articles', file));
@@ -40,7 +40,7 @@ function layout(res, params) {
     return tr.createWriteStream('#related');
 }
 
-router.addRoute('/related/:article', function (req, res, params) {
+router.addRoute('/articles/:article', function (req, res, params) {
     var pipe = layout(res, params);
     //pipe.end('hi');
 
@@ -48,7 +48,7 @@ router.addRoute('/related/:article', function (req, res, params) {
 });
 
 var st     = ecstatic({
-    root : __dirname + '/articles',
+    root : __dirname + '/static',
     baseDir : mount,
 })
 

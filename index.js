@@ -2,26 +2,28 @@
  * (C) 2014 Seth Lakowske
  */
 
+var fs             = require('fs');
+var path           = require('path');
 var http           = require('http');
 var alloc          = require('tcp-bind');
 var router         = require('routes')();
 var ecstatic       = require('ecstatic');
 var minimist       = require('minimist');
 var trumpet        = require('trumpet');
-var fs             = require('fs');
-var path           = require('path');
+var deployer       = require('github-webhook-deployer');
 var articles       = require('./articles');
 
+//parse the cli arguments
 var argv           = minimist(process.argv.slice(2), {
     alias: { p: 'port', u: 'uid', g: 'gid' },
     defaults: { port: (require('is-root')() ? 80 : 8000) }
 })
 
 var fd = alloc(argv.port);
+
 if (argv.gid) process.setgid(argv.gid);
 if (argv.uid) process.setuid(argv.uid);
 
-var deployer       = require('github-webhook-deployer');
 
 //the port we want to serve from is passed to us on the command line
 var appPort        = parseInt(process.argv[2], 10);
@@ -42,8 +44,6 @@ function layout(res, params) {
 
 router.addRoute('/articles/:article', function (req, res, params) {
     var pipe = layout(res, params);
-    //pipe.end('hi');
-
     articles.toHTML(pipe);
 });
 

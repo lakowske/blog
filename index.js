@@ -21,7 +21,7 @@ var fd = alloc(argv.port);
 if (argv.gid) process.setgid(argv.gid);
 if (argv.uid) process.setuid(argv.uid);
 
-var Deployer       = require('github-webhook-deployer');
+var deployer       = require('github-webhook-deployer');
 
 //the port we want to serve from is passed to us on the command line
 var appPort        = parseInt(process.argv[2], 10);
@@ -68,6 +68,10 @@ server.listen({ fd: fd }, function () {
 var deployerPort   = argv.port + 1;
 
 //Create a github webhook deployer
-var deployer = new Deployer({path:'/webhook', secret : 'testSecret'});
+
 console.log('deployer listening on port ' + deployerPort);
-deployer.listen(deployerPort);
+
+var server = http.createServer(deployer({
+    path:'/webhook',
+    secret : 'testSecret'
+})).listen(deployerPort);

@@ -8,6 +8,7 @@ var http           = require('http');
 var alloc          = require('tcp-bind');
 var router         = require('routes')();
 var ecstatic       = require('ecstatic');
+var cookie         = require('cookie');
 var minimist       = require('minimist');
 var trumpet        = require('trumpet');
 var deployer       = require('github-webhook-deployer');
@@ -23,10 +24,6 @@ var fd = alloc(argv.port);
 
 if (argv.gid) process.setgid(argv.gid);
 if (argv.uid) process.setuid(argv.uid);
-
-
-//the port we want to serve from is passed to us on the command line
-var appPort        = parseInt(process.argv[2], 10);
 
 //the mount point (i.e. url prefix to static content)
 var mount          = '/static'
@@ -53,6 +50,12 @@ var st     = ecstatic({
 })
 
 var server = http.createServer(function(req, res) {
+
+    var cookies = cookie.parse(req.headers.cookie);
+    if (!cookies.sid) {
+        res.setHeader("Set-Cookie", cookie.serialize('sid', Math.random().toString()));
+    }
+
 
     var m = router.match(req.url);
     if (m) m.fn(req, res, m.params);

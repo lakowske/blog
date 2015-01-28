@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/lakowske/Blog",
   "dependencies": {
+    "cookie": "^0.1.2",
     "ecstatic": "^0.5.8",
     "findit": "^2.0.0",
     "github-webhook-deployer": "^1.0.0",

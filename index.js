@@ -51,11 +51,14 @@ var st     = ecstatic({
 
 var server = http.createServer(function(req, res) {
 
-    var cookies = cookie.parse(req.headers.cookie);
+    var cookies = {};
+
+    if (req.headers.cookie)
+        cookies = cookie.parse(req.headers.cookie);
+
     if (!cookies.sid) {
         res.setHeader("Set-Cookie", cookie.serialize('sid', Math.random().toString()));
     }
-
 
     var m = router.match(req.url);
     if (m) m.fn(req, res, m.params);

@@ -3,27 +3,20 @@
  */
 
 var path      = require('path');
-var find      = require('findit')
+var walk      = require('walk')
 var hyperspace = require('hyperspace');
 
+var discovered = []
 
 function articles(onFile, onEnd) {
-   var finder = find('./articles');
+   var walker = walk.walk('./articles');
 
-
-    finder.on('directory', function (dir, stat, stop) {
-        var base = path.basename(dir);
+    walker.on('file', function (root, stat, next) {
+        onFile(root, stat);
+        next();
     });
 
-    finder.on('file', function (file, stat) {
-        onFile(file, stat);
-    });
-
-    finder.on('link', function (link, stat) {
-        //console.log(link);
-    });
-
-    finder.on('end', onEnd);
+    walker.on('end', onEnd);
 }
 
 var html = '<tr><td><a class="name"></a></td></tr>';
@@ -43,21 +36,23 @@ function asTable() {
 function toHTML(pipe) {
     var linkStand = asTable();
     linkStand.pipe(pipe);
-    var timeout = setTimeout(function() {
-        pipe.end();
-    }, 150);
 
-    articles(function(file, stat) {
-        var match = /html/.test(file)
-        if (match) {
-            file = path.dirname(file);
-            file = path.basename(file);
-            linkStand.write({name:file, url:'/articles/' + file})
-        }
-        }, function() {
-            //pipe.end();
-        });
+    for (var i = 0 ; i < discovered.length ; i++) {
+         linkStand.write({name:discovered[i], url: discovered[i]})
+    }
+
+    linkStand.end();
 }
+
+articles(function(file, stat) {
+    var match = /html/.test(stat.name)
+    if (match) {
+        file = path.basename(file);
+        discovered.push(file);
+    }
+}, function() {
+    //pipe.end();
+});
 
 module.exports.articles = articles;
 module.exports.toHTML   = toHTML;

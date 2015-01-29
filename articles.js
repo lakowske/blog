@@ -38,7 +38,7 @@ function toHTML(pipe) {
     linkStand.pipe(pipe);
 
     for (var i = 0 ; i < discovered.length ; i++) {
-         linkStand.write({name:discovered[i], url: discovered[i]})
+         linkStand.write({name:discovered[i], url: '/articles/' + discovered[i]})
     }
 
     linkStand.end();

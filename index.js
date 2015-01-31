@@ -20,7 +20,7 @@ var argv           = minimist(process.argv.slice(2), {
     defaults: { port: (require('is-root')() ? 80 : 8000) }
 })
 
-var fd = alloc(argv.port);
+//var fd = alloc(argv.port);
 
 if (argv.gid) process.setgid(argv.gid);
 if (argv.uid) process.setuid(argv.uid);
@@ -48,10 +48,12 @@ var server = http.createServer(function(req, res) {
     if (m) m.fn(req, res, m.params);
     else st(req, res);
 
-});
+}).listen(argv.port);
 
-articles('/articles', './articles', router, function() {
-    server.listen({ fd: fd }, function () {
+console.log(__dirname + '/articles');
+
+articles('/articles', __dirname + '/articles', router, function() {
+    server.listen(argv.port, function () {
         console.log('listening on :' + server.address().port);
     });
 });
@@ -64,7 +66,7 @@ var deployerPort   = argv.port + 1;
 
 console.log('deployer listening on port ' + deployerPort);
 
-var server = http.createServer(deployer({
+var depServer = http.createServer(deployer({
     path:'/webhook',
     secret : 'testSecret'
 })).listen(deployerPort);

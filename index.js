@@ -12,7 +12,7 @@ var cookie         = require('cookie');
 var minimist       = require('minimist');
 var trumpet        = require('trumpet');
 var deployer       = require('github-webhook-deployer');
-var articles       = require('./articles');
+var articles       = require('blog-articles');
 
 //parse the cli arguments
 var argv           = minimist(process.argv.slice(2), {
@@ -20,29 +20,13 @@ var argv           = minimist(process.argv.slice(2), {
     defaults: { port: (require('is-root')() ? 80 : 8000) }
 })
 
-var fd = alloc(argv.port);
+//var fd = alloc(argv.port);
 
 if (argv.gid) process.setgid(argv.gid);
 if (argv.uid) process.setuid(argv.uid);
 
 //the mount point (i.e. url prefix to static content)
 var mount          = '/static'
-
-function read (file) {
-    return fs.createReadStream(path.join(__dirname, 'articles', file));
-}
-
-function layout(res, params) {
-    res.setHeader('content-type', 'text/html');
-    var tr = trumpet();
-    read('/' + params.article + '/index.html').pipe(tr).pipe(res);
-    return tr.createWriteStream('#related');
-}
-
-router.addRoute('/articles/:article', function (req, res, params) {
-    var pipe = layout(res, params);
-    articles.toHTML(pipe);
-});
 
 var st     = ecstatic({
     root : __dirname + '/static',
@@ -55,11 +39,16 @@ var server = http.createServer(function(req, res) {
     if (m) m.fn(req, res, m.params);
     else st(req, res);
 
+}).listen(argv.port);
+
+console.log(__dirname + '/articles');
+
+articles('/articles', __dirname + '/articles', router, function() {
+    server.listen(argv.port, function () {
+        console.log('listening on :' + server.address().port);
+    });
 });
 
-server.listen({ fd: fd }, function () {
-    console.log('listening on :' + server.address().port);
-});
 
 //deployment port listening for github push events
 var deployerPort   = argv.port + 1;
@@ -68,7 +57,7 @@ var deployerPort   = argv.port + 1;
 
 console.log('deployer listening on port ' + deployerPort);
 
-var server = http.createServer(deployer({
+var depServer = http.createServer(deployer({
     path:'/webhook',
     secret : 'testSecret'
 })).listen(deployerPort);

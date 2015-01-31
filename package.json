@@ -24,7 +24,6 @@
   "dependencies": {
     "cookie": "^0.1.2",
     "ecstatic": "^0.5.8",
-    "findit": "^2.0.0",
     "github-webhook-deployer": "^1.0.0",
     "hyperglue": "^2.0.1",
     "hyperspace": "^2.1.4",
@@ -33,6 +32,7 @@
     "routes": "^2.0.0",
     "tcp-bind": "^1.1.1",
     "trumpet": "^1.7.0",
+    "blog-articles":"git://github.com/lakowske/blog-articles",
     "walk": "^2.3.9"
   }
 }

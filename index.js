@@ -11,6 +11,7 @@ var ecstatic       = require('ecstatic');
 var cookie         = require('cookie');
 var minimist       = require('minimist');
 var trumpet        = require('trumpet');
+var level          = require('level');
 var deployer       = require('github-webhook-deployer');
 var articles       = require('blog-articles');
 
@@ -20,10 +21,18 @@ var argv           = minimist(process.argv.slice(2), {
     defaults: { port: (require('is-root')() ? 80 : 8000) }
 })
 
-//var fd = alloc(argv.port);
-
 if (argv.gid) process.setgid(argv.gid);
 if (argv.uid) process.setuid(argv.uid);
+
+//open the request logs db
+var db = level('./request.db');
+var requests = db.createWriteStream();
+
+requests.on('error', function(error) {
+    console.log(error);
+})
+
+requests.pipe(process.stdout);
 
 //the mount point (i.e. url prefix to static content)
 var mount          = '/static'
@@ -34,6 +43,9 @@ var st     = ecstatic({
 })
 
 var server = http.createServer(function(req, res) {
+    var millis = new Date().getTime();
+
+    requests.write({key: millis,  value : JSON.stringify(req.headers)});
 
     var m = router.match(req.url);
     if (m) m.fn(req, res, m.params);

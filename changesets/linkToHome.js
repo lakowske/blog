@@ -30,7 +30,7 @@ function inject() {
 function updateLink() {
     var tr = trumpet();
     var ws = tr.select('body > h3').createWriteStream();
-    ws.end('Posted by: <a href="sethlakowske.com">Seth Lakowske</a>');
+    ws.end('Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a>');
 
     return tr;
 }

@@ -23,7 +23,6 @@
   "homepage": "https://github.com/lakowske/Blog",
   "dependencies": {
     "blog-articles": "git://github.com/lakowske/blog-articles",
-    "http-request-logger": "git://github.com/lakowske/http-request-logger",
     "cookie": "^0.1.2",
     "ecstatic": "^0.5.8",
     "github-webhook-deployer": "^1.0.0",

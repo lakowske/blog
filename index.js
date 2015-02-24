@@ -14,7 +14,6 @@ var trumpet        = require('trumpet');
 var level          = require('level');
 var deployer       = require('github-webhook-deployer');
 var articles       = require('blog-articles');
-var logger         = require('http-request-logger');
 
 //parse the cli arguments
 var argv           = minimist(process.argv.slice(2), {
@@ -24,11 +23,6 @@ var argv           = minimist(process.argv.slice(2), {
 
 if (argv.gid) process.setgid(argv.gid);
 if (argv.uid) process.setuid(argv.uid);
-
-//open the request db
-var db = level('./request.db');
-requestLogger = logger(db);
-request       = requestLogger.request();
 
 //the mount point (i.e. url prefix to static content)
 var mount          = '/static'
@@ -55,9 +49,6 @@ articles('/articles', __dirname + '/articles', router, function() {
         console.log('listening on :' + server.address().port);
     });
 });
-
-router.addRoute('/requests', requestLogger.requests());
-
 
 //deployment port listening for github push events
 var deployerPort   = argv.port + 1;

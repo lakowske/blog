@@ -34,8 +34,6 @@ var st     = ecstatic({
 })
 
 var server = http.createServer(function(req, res) {
-    //log the request
-    request(req, res);
 
     var m = router.match(req.url);
     if (m) m.fn(req, res, m.params);

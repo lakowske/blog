@@ -11,7 +11,6 @@ var ecstatic       = require('ecstatic');
 var cookie         = require('cookie');
 var minimist       = require('minimist');
 var trumpet        = require('trumpet');
-var level          = require('level');
 var deployer       = require('github-webhook-deployer');
 var articles       = require('blog-articles');
 

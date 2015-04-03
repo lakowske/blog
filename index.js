@@ -44,7 +44,7 @@ var articleDir = __dirname + '/articles';
 var mount      = '/articles';
 
 //Get a set of discovered articles
-articles(mount, articleDir, function(discovered) {
+articles.articles(articleDir, function(discovered) {
 
     //Apply url generation step
     var urls = discovered.map(function(article) {
@@ -58,13 +58,14 @@ articles(mount, articleDir, function(discovered) {
 
             var related = trumpet();
             var ws      = related.createWriteStream('#related');
-            var stand   = linkstand.toHTML(discovered, urls);
+            var stand   = articles.linkstand.toHTML(discovered, urls);
             stand.pipe(ws);
 
             res.setHeader('content-type', 'text/html');
 
             //Compose the article and pipe to response
-            articleStream.pipe(related).pipe(reqstats).pipe(res);
+            //articleStream.pipe(related).pipe(reqstats).pipe(res);
+            articleStream.pipe(related).pipe(res);
         })
 
     })

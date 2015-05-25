@@ -14,15 +14,8 @@ var trumpet        = require('trumpet');
 var deployer       = require('github-webhook-deployer');
 var articles       = require('blog-articles');
 
-
 //parse the cli arguments
-var argv           = minimist(process.argv.slice(2), {
-    alias: { p: 'port', u: 'uid', g: 'gid' },
-    defaults: { port: (require('is-root')() ? 80 : 8000) }
-})
-
-if (argv.gid) process.setgid(argv.gid);
-if (argv.uid) process.setuid(argv.uid);
+var port   = parseInt(process.argv[2], 10);
 
 //the mount point (i.e. url prefix to static content)
 var mount          = '/static'
@@ -38,9 +31,9 @@ var server = http.createServer(function(req, res) {
     if (m) m.fn(req, res, m.params);
     else st(req, res);
 
-}).listen(argv.port);
+}).listen(port);
 
-var articleDir = __dirname + '/articles';
+var articleDir = 'articles';
 var mount      = '/articles';
 
 //Get a set of discovered articles
@@ -50,34 +43,35 @@ articles.articles(articleDir, function(discovered) {
     var urls = discovered.map(function(article) {
 
         //Generated url to respond to (could be multiple urls if desired)
-        var url = mount + '/' + article;
+        var url = '/' + article.root;
 
         //Lamda to apply on url request
         router.addRoute(url, function(req, res, params) {
-            var articleStream = fs.createReadStream(path.join(articleDir, article, 'index.html'));
+            var articleStream = fs.createReadStream(article.path);
 
             var related = trumpet();
             var ws      = related.createWriteStream('#related');
-            var stand   = articles.linkstand.toHTML(discovered, urls);
+            var stand   = articles.linkstand.toHTML(discovered);
             stand.pipe(ws);
 
-            res.setHeader('content-type', 'text/html');
+            //res.setHeader('content-type', 'text/html');
 
             //Compose the article and pipe to response
             //articleStream.pipe(related).pipe(reqstats).pipe(res);
             articleStream.pipe(related).pipe(res);
         })
 
+        return url;
     })
 
-    server.listen(argv.port, function () {
+    server.listen(port, function () {
         console.log('listening on :' + server.address().port);
     });
 
 })
 
 //deployment port listening for github push events
-var deployerPort   = argv.port + 1;
+var deployerPort   = port + 1;
 
 //Create a github webhook deployer
 

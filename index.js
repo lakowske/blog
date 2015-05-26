@@ -49,6 +49,7 @@ articles.articles(articleDir, function(discovered) {
         router.addRoute(url, function(req, res, params) {
             var articleStream = fs.createReadStream(article.path);
 
+
             related = article.related(discovered);
 
             //Compose the article and pipe to response

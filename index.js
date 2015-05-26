@@ -49,12 +49,7 @@ articles.articles(articleDir, function(discovered) {
         router.addRoute(url, function(req, res, params) {
             var articleStream = fs.createReadStream(article.path);
 
-            var related = trumpet();
-            var ws      = related.createWriteStream('#related');
-            var stand   = articles.linkstand.toHTML(discovered);
-            stand.pipe(ws);
-
-            //res.setHeader('content-type', 'text/html');
+            related = article.related(discovered);
 
             //Compose the article and pipe to response
             //articleStream.pipe(related).pipe(reqstats).pipe(res);

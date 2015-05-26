@@ -50,7 +50,7 @@ articles.articles(articleDir, function(discovered) {
             var articleStream = fs.createReadStream(article.path);
 
 
-            related = article.related(discovered);
+            var related = articles.related(discovered);
 
             //Compose the article and pipe to response
             //articleStream.pipe(related).pipe(reqstats).pipe(res);

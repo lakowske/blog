@@ -54,7 +54,7 @@ articles.articles(articleDir, function(discovered) {
             var stand   = articles.linkstand.toHTML(discovered);
             stand.pipe(ws);
 
-            //res.setHeader('content-type', 'text/html');
+            res.setHeader('content-type', 'text/html');
 
             //Compose the article and pipe to response
             //articleStream.pipe(related).pipe(reqstats).pipe(res);

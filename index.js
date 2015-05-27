@@ -18,11 +18,14 @@ var articles       = require('blog-articles');
 var port   = parseInt(process.argv[2], 10);
 
 //the mount point (i.e. url prefix to static content)
-var mount          = '/static'
+var staticContent         = '/static'
+
+//the relative path to a directory containing articles
+var articleDir = 'articles';
 
 var st     = ecstatic({
     root : __dirname + '/static',
-    baseDir : mount,
+    baseDir : staticContent,
 })
 
 var server = http.createServer(function(req, res) {
@@ -33,8 +36,7 @@ var server = http.createServer(function(req, res) {
 
 }).listen(port);
 
-var articleDir = 'articles';
-var mount      = '/articles';
+
 
 //Get a set of discovered articles
 articles.articles(articleDir, function(discovered) {
@@ -48,8 +50,6 @@ articles.articles(articleDir, function(discovered) {
         //Lamda to apply on url request
         router.addRoute(url, function(req, res, params) {
             var articleStream = fs.createReadStream(article.path);
-
-
             var related = articles.related(discovered);
 
             //Compose the article and pipe to response

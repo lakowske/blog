@@ -29,7 +29,7 @@ var st     = ecstatic({
 })
 
 var server = http.createServer(function(req, res) {
-
+    console.info(req.method + ' ' + req.url);
     var m = router.match(req.url);
     if (m) m.fn(req, res, m.params);
     else st(req, res);
@@ -47,6 +47,8 @@ articles.articles(articleDir, function(discovered) {
         //Generated url to respond to (could be multiple urls if desired)
         var url = '/' + article.root;
 
+        console.log(url);
+        
         //Lamda to apply on url request
         router.addRoute(url, function(req, res, params) {
             var articleStream = fs.createReadStream(article.path);

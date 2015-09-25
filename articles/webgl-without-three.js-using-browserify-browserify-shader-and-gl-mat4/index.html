@@ -10,8 +10,8 @@
 
   <p>
     When writing WebGL software, resorting to three.js to draw simple
-    scenes may not be necessary.  Three.js is a nice comprehensive library, it
-    has scene graph, modeling, lighting, fog and many more functions.
+    scenes may not be necessary.  Three.js is a nice comprehensive
+    library.  It has scene graphing, modeling, lighting, fog and many more functions.
     But when most of these are unneeded, pare down using Browserify and a few supporting
     modules.  The result is a smaller library that has only the
     required code.
@@ -222,9 +222,16 @@ void main() {
 }
   </code></pre>
 
-  <H3>Finally</H3>
+  <H3>Watchify</H3>
+  <p>Run watchify to watch files and compile them into a single
+  bundle.js javascript file.</p>
+  <pre><code>
+ watchify --debug -t browserify-shader index.js -o bundle.js
+  </code></pre>
+ <H3>Finally</H3>
   <p> Below is an animation using bundle.js created with the above
-  source files and watchify.</p>
+    source files and watchify.</p>
+   
   <script src="/static/bundles/bundle.js"></script>
   
   <table id="related"></table>

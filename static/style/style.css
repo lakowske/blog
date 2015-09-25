@@ -1,11 +1,15 @@
 
 body {
-    width: 480px;
+    width: 960px;
     margin:0px auto;
     font-family:sans-serif;
 
 }
 
+textarea {
+    width: 960px;
+    height: 120px;
+}
 
 .title .byline .date {
     text-align:center;
@@ -18,3 +22,20 @@ table#related {
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
+
+pre, code{
+    direction: ltr;
+    text-align: left;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+pre {
+    border: solid 1px blue;
+    color: black;
+    margin: 10px;
+    padding: 10px;
+    background: #aabbcc;
+}
+

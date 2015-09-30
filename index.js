@@ -18,13 +18,13 @@ var articles       = require('blog-articles');
 var port   = parseInt(process.argv[2], 10);
 
 //the mount point (i.e. url prefix to static content)
-var staticContent         = '/static'
+var staticContent         = '/'
 
 //the relative path to a directory containing articles
 var articleDir = 'articles';
 
 var st     = ecstatic({
-    root : __dirname + '/static',
+    root : __dirname,
     baseDir : staticContent,
 })
 

@@ -2,6 +2,7 @@
 <head>
 <title>WebGL without Three.js using Browserify, Browserify-shader and gl-mat4</title>
 <link rel="stylesheet" type="text/css" href="/static/style/style.css">
+<link rel="stylesheet" type="text/css" href="node_modules/prismjs-package/prism.css">
 </head>
 <body>
   <h1>WebGL without Three.js using Browserify, Browserify-shader and gl-mat4</h1>
@@ -12,9 +13,8 @@
     When writing WebGL software, resorting to three.js to draw simple
     scenes may not be necessary.  Three.js is a nice comprehensive
     library.  It has scene graphing, modeling, lighting, fog and many more functions.
-    But when most of these are unneeded, pare down using Browserify and a few supporting
-    modules.  The result is a smaller library that has only the
-    required code.
+    But when most of these are unneeded, pare down with Browserify and a few supporting
+    modules.  The result is a smaller library with only the required code.
   <p>
 
   <p>
@@ -26,28 +26,24 @@
     I recommend watchify too.  It automatically runs
     Browserify when source files change, so there isn't a manual compile
     step to load changes to the browser.
+  </p>
+  <p>
+    Install browserify and watchify globally with the -g switch to run
+    them on any future project.
 
-    Install these globally with the -g switch passed to npm.
-    <pre>
-    <code>
-sudo npm install browserify -g
-sudo npm install watchify -g
-    </code>
-    </pre>
+<pre><code class="language-bash">sudo npm install browserify -g
+sudo npm install watchify -g</code></pre>
+
   </p>
 
   <p>
     <H2>Init the project</H2>
-    Next, create a project directory and run <code>npm init</code> to
-    create a package.json describing your dependencies.
+    Create a project directory and run <code>npm init</code> to
+    create a package.json.  This file will describing project dependencies.
 
-    <pre>
-    <code>
-mkdir 3dify
+<pre><code class="language-bash">mkdir 3dify
 cd 3dify
-npm init
-    </code>
-    </pre>
+npm init</code></pre>
   </p>
 
   <p>
@@ -56,18 +52,14 @@ npm init
     statements.  glmat-4 is a matrix library useful for doing 3d math
     (linear algebra).
 
-    <pre>
-    <code>
-npm install browserify-shader --save-dev
-npm install glmat-4 --save
-    </code>
-    </pre>
+<pre><code class="language-bash">npm install browserify-shader --save-dev
+npm install glmat-4 --save</code></pre>
   </p>
 
-  
-  <H2>Simple Triangle</H2>
-  Finally add to index.html, index.js, fragment.c and vertex.c.  These
-  source files are sufficient to draw a simple scene.
+
+  <H2>Draw a Rotating Triangle using gl-mat4</H2>
+  We'll fill in index.html, index.js, fragment.c and vertex.c with code
+  necessary to draw a rotating triangle.  This code is sufficient to draw a simple scene.
 
 
   <p>
@@ -75,24 +67,12 @@ npm install glmat-4 --save
   index.html is an extremely simple file including only the output
   from browserify, in this case bundle.js. <br>
 
-  <textarea>
-
-      <html>
-
-        <head>
-          <title>3dify example</title>
-        </head>
-
-        <body>
-          <script src="/bundle.js"></script>
-        </body>
-
-      </html>
-
-  </textarea>
+  <pre data-src="index.html" class="langauge-markup">
+    <code id="sample" class="language-markup">
+  </code></pre>
   </p>
   <H3>index.js</H3>
-  <pre><code>
+  <pre><code class="  language-javascript">
 var mat4 = require('gl-mat4');
 var svs  = require('./vertex.c');
 var sfs  = require('./fragment.c');
@@ -198,21 +178,25 @@ function simpleRenderer(gl, aspect, vertices) {
   </code></pre>
 
   <H3>fragment.c</H3>
-  <pre><code>
+  This simple fragment shader sets the color to a constant that
+  is populated by the javascript code above.
+  <pre><code class="language-glsl">
 precision mediump float;
 
 uniform vec4 u_color;
 
 void main() {
 
-  // convert the rectangle from pixels to 0.0 to 1.0
   gl_FragColor = u_color;
 
 }
   </code></pre>
 
   <H3>vertex.c</H3>
-  <pre><code>
+  This vertex shader transforms the triangle vertices using a
+  matrix.  The matrix is passed in on each render and defines
+  transformations (mainly rotation) used to animate the triangle.
+  <pre><code class="language-glsl">
 attribute vec4 a_position;
 
 uniform mat4 u_matrix;
@@ -224,15 +208,19 @@ void main() {
 
   <H3>Watchify</H3>
   <p>Run watchify to watch files and compile them into a single
-  bundle.js javascript file.</p>
-  <pre><code>
+  bundle.js javascript file.  Here the use of browserify-shader
+  plugin allows the glsl shaders to be require'd into the
+  script.  And --debug tells watchify to create a source map for
+  more managable source viewing/debugging</p>
+  <pre><code class="language-bash">
  watchify --debug -t browserify-shader index.js -o bundle.js
   </code></pre>
- <H3>Finally</H3>
+ <H3>Result</H3>
   <p> Below is an animation using bundle.js created with the above
     source files and watchify.</p>
-   
-  <script src="/static/bundles/bundle.js"></script>
+  <script src="bundle.js"></script>
+  <script src="html/bundle.js"/>
+
   
   <table id="related"></table>
   

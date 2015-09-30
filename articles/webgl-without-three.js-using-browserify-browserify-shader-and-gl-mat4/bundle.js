@@ -20,7 +20,7 @@ module.exports = '\n' +
  */
 
 var prism = require('prismjs-package');
-var html = require('./html/3dify.html');
+var html = require('./3dify/3dify.html');
 
 prism.highlightAll();
 var code = document.getElementById('sample');
@@ -37,7 +37,7 @@ code.innerHTML = page;
 
 
 
-},{"./html/3dify.html":1,"prismjs-package":3}],3:[function(require,module,exports){
+},{"./3dify/3dify.html":1,"prismjs-package":3}],3:[function(require,module,exports){
 (function (global){
 var prism = function (self, window) {
 

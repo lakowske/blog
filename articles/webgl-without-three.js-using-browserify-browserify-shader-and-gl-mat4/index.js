@@ -3,7 +3,7 @@
  */
 
 var prism = require('prismjs-package');
-var html = require('./html/3dify.html');
+var html = require('./3dify/3dify.html');
 
 prism.highlightAll();
 var code = document.getElementById('sample');

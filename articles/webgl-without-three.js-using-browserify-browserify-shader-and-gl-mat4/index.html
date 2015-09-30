@@ -73,7 +73,11 @@ npm install glmat-4 --save</code></pre>
   </p>
   <H3>index.js</H3>
   Notice the glsl files, vertex.c and fragment.c, required at the top
-  of the script.  Our browserify-shader dependency provides this feature.
+  of the script.  Our browserify-shader dependency provides this
+  feature.  If you'd like more information about the script, see the
+  inline comments or check out the excellent webgl tutorial
+  <a href="http://webglfundamentals.org/">webglfundamentals.org</a>
+  to learn webgl basics.
   <pre><code class="  language-javascript">
 var mat4 = require('gl-mat4');
 var svs  = require('./vertex.c');
@@ -196,7 +200,7 @@ void main() {
   <H3>vertex.c</H3>
   This vertex shader transforms the triangle vertices using a
   matrix.  The matrix is passed in on each render and defines
-  transformations (mainly rotation) used to animate the triangle.
+  transformations, mainly rotation, used to animate the triangle.
   <pre><code class="language-glsl">
 attribute vec4 a_position;
 
@@ -211,8 +215,7 @@ void main() {
   <p>Run watchify to watch files and compile them into a single
   bundle.js javascript file.  Here the use of browserify-shader
   plugin allows the glsl shaders to be require'd into the
-  script.  And --debug tells watchify to create a source map for
-  more managable source viewing/debugging</p>
+  script.  And --debug tells watchify to create a source map for managable source viewing/debugging</p>
   <pre><code class="language-bash">
  watchify --debug -t browserify-shader index.js -o bundle.js
   </code></pre>

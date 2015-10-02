@@ -1,11 +1,11 @@
 <html>
 <head>
-<title>WebGL without Three.js using Browserify, Browserify-shader and gl-mat4</title>
+<title>WebGL without Three.js using browserify-shader and gl-mat4</title>
 <link rel="stylesheet" type="text/css" href="/static/style/style.css">
 <link rel="stylesheet" type="text/css" href="/articles/webgl-without-three.js-using-browserify-browserify-shader-and-gl-mat4/node_modules/prismjs-package/prism.css">
 </head>
 <body>
-  <h1>WebGL without Three.js using Browserify, Browserify-shader and gl-mat4</h1>
+  <h1>WebGL without Three.js using browserify-shader and gl-mat4</h1>
   <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
   <h4>Published: <time pubdate="pubdate">2015-09-22</time></h4>
 
@@ -20,22 +20,11 @@
   <p>
     <H2>Install Browserify</H2>
     
-    To get started, install Browserify.  Browserify will combine
+    To get started, install Browserify.  You can
+    checkout the <a href="/articles/use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/">Browserify
+    Tutorial</a> to combine
     your source files and their dependencies into one bundle,
     including the GLSL shaders!
-    I recommend watchify too.  It automatically runs
-    Browserify when source files change, so there isn't a manual compile
-    step to load changes to the browser.
-  </p>
-  <p>
-    Install browserify and watchify globally with the -g switch to run
-    them on any future project.
-
-<pre><code class="language-bash">sudo npm install browserify -g
-sudo npm install watchify -g</code></pre>
-
-  </p>
-
   <p>
     <H2>Init the project</H2>
     Create a project directory and run <code>npm init</code> to
@@ -47,9 +36,9 @@ npm init</code></pre>
   </p>
 
   <p>
-    Now define dependencies.<br><br>  Browserify-shader is a development dependency
+    Now install dependencies.<br><br>  <a href="https://www.npmjs.com/package/browserify-shader">browserify-shader</a> is a development dependency
     that allow you to include a shader using node-style require
-    statements.  glmat-4 is a matrix library useful for doing 3d math
+    statements.  <a href="https://www.npmjs.com/package/gl-mat4">glmat-4</a> is a matrix library useful for doing 3d math
     (linear algebra).
 
 <pre><code class="language-bash">npm install browserify-shader --save-dev

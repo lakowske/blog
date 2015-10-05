@@ -12,15 +12,19 @@ setup();
 function setup() {
     var body     = document.getElementsByTagName('body')[0];
     var glCanvas = getCanvas(body);
-    glCanvas.gl.enable(glCanvas.gl.DEPTH_TEST);
-    
-    //create a simple renderer for a simple triangle
-    var renderer = simpleRenderer(glCanvas.gl, 1, new Float32Array([-0.5,-0.5,-1.0,0.0,0.5,-1.0,0.5,-0.5,-1.0]));
 
     //Create a matrix to transform the triangle
     var matrix = mat4.create();
     //Move it back 4 units
     mat4.translate(matrix, matrix, [0.0, 0.0, -3.0]);
+    
+    attacheMouseListeners(glCanvas, matrix);
+    
+    glCanvas.gl.enable(glCanvas.gl.DEPTH_TEST);
+    
+    //create a simple renderer for a simple triangle
+    var renderer = simpleRenderer(glCanvas.gl, 1, new Float32Array([-0.5,-0.5,-1.0,0.0,0.5,-1.0,0.5,-0.5,-1.0]));
+
 
     //Called when a frame is scheduled.  A rapid sequence of scene draws creates the animation effect.
     var renderFn = function(timestamp) {
@@ -44,6 +48,9 @@ function setup() {
 function getCanvas(parent) {
     //Create a canvas with specified attributes and append it to the parent.
     var canvas = document.createElement('canvas');
+    canvas.width = 960;
+    canvas.height = 1024;
+    
     var div    = document.createElement('div');
     canvas.setAttribute('id', 'mycanvas');
     div.setAttribute('id', 'glcanvas');
@@ -52,6 +59,32 @@ function getCanvas(parent) {
     
     var gl     = canvas.getContext('webgl');
     return {canvas: canvas, gl : gl}
+}
+
+function attacheMouseListeners(canvas, matrix) {
+    
+    document.onmousemove = handleMouseMove(matrix);
+    
+}
+
+function handleMouseMove(matrix) {
+
+    var lastX = 0;
+    var lastY = 0;
+    return function( event ) {
+
+        var x = event.clientX;
+        var y = event.clientY;
+
+        var diffX = x - lastX;
+        var diffY = y - lastY;
+        
+        mat4.rotateY(matrix, matrix, (diffX/960) * Math.PI);
+        mat4.rotateX(matrix, matrix, (diffY/1024) * Math.PI);
+
+        lastX = x;
+        lastY = y;
+    }
 }
 
 //Returns a simple rendering function that draws the passed in vertices.

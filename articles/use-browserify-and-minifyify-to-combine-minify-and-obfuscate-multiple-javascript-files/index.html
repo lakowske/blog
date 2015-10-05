@@ -20,8 +20,7 @@
       can combine them to create a single bundle of JavaScript that is faster to
       download and easy to include on a webpage.  The rotating
       triangles in the background are an example of a single bundle.js
-      I've created for this page.  And if you're interested in WebGL,
-      feel free to learn from the <a href="/articles/webgl-using-gl-mat4-browserify-shader-and-browserify/">WebGL Tutorial</a> too!
+      I've created and included in this page.
     </p>
 
     <p>
@@ -87,6 +86,12 @@ browserify index.js -d -p [minifyify --no-map] > bundle.js
 # or use watchify to run browserify on your file when they change
 watchify -t browserify-shader -d -p [minifyify --no-map] index.js -o bundle.js
       </code></pre>
+    <p>
+      And if you're interested in WebGL,
+      feel free to learn from
+      the <a href="/articles/webgl-using-gl-mat4-browserify-shader-and-browserify/">WebGL
+        Tutorial</a> too!
+    </p>
       <script src="bundle.js"></script>
 
       <table id="related"></table>

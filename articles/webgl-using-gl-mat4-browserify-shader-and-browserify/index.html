@@ -1,30 +1,28 @@
 <html>
 <head>
-<title>WebGL without Three.js using browserify-shader and gl-mat4</title>
+<title>WebGL using gl-mat4, browserify-shader and Browserify</title>
 <link rel="stylesheet" type="text/css" href="/static/style/style.css">
-<link rel="stylesheet" type="text/css" href="/articles/webgl-without-three.js-using-browserify-browserify-shader-and-gl-mat4/node_modules/prismjs-package/prism.css">
+<link rel="stylesheet" type="text/css" href="/articles/webgl-using-gl-mat4-browserify-shader-and-browserify/node_modules/prismjs-package/prism.css">
 </head>
 <body>
-  <h1>WebGL without Three.js using browserify-shader and gl-mat4</h1>
+  <h1>WebGL using gl-mat4, browserify-shader and Browserify</h1>
   <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
   <h4>Published: <time pubdate="pubdate">2015-09-22</time></h4>
 
   <p>
-    When writing WebGL software, resorting to three.js to draw simple
-    scenes may not be necessary.  Three.js is a nice comprehensive
-    library.  It has scene graphing, modeling, lighting, fog and many more functions.
-    But when most of these are unneeded, pare down with Browserify and a few supporting
-    modules.  The result is a smaller library with only the required code.
-  <p>
+    Pare down your WebGL scripts with Browserify and a few supporting
+    modules on simple scenes.  The result is a smaller Javascript bundle with only the required
+    code. While Three.js is a nice comprehensive library, including it can be overkill for a basic scene.
+  </p>
 
   <p>
     <H2>Install Browserify</H2>
     
-    To get started, install Browserify.  You can
-    checkout the <a href="/articles/use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/">Browserify
-    Tutorial</a> to combine
-    your source files and their dependencies into one bundle,
-    including the GLSL shaders!
+    To get started, install Browserify and checkout my <a href="/articles/use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/">Browserify
+    Tutorial</a> on combining source files and their dependencies into
+    one bundle - including your GLSL.  GLSL shader programs have made the
+    OpenGL graphics pipeline more configurable since their introduction.  browserify-shader will
+    allow you to easily bundle GLSL shaders in with your Javascript.
   <p>
     <H2>Init the project</H2>
     Create a project directory and run <code>npm init</code> to
@@ -36,7 +34,8 @@ npm init</code></pre>
   </p>
 
   <p>
-    Now install dependencies.<br><br>  <a href="https://www.npmjs.com/package/browserify-shader">browserify-shader</a> is a development dependency
+    <H2>Install dependencies</H2>
+    <a href="https://www.npmjs.com/package/browserify-shader">browserify-shader</a> is a development dependency
     that allow you to include a shader using node-style require
     statements.  <a href="https://www.npmjs.com/package/gl-mat4">glmat-4</a> is a matrix library useful for doing 3d math
     (linear algebra).
@@ -48,13 +47,13 @@ npm install glmat-4 --save</code></pre>
 
   <H2>Draw a Rotating Triangle using gl-mat4</H2>
   We'll fill in index.html, index.js, fragment.c and vertex.c with code
-  necessary to draw a rotating triangle.  This code is sufficient to draw a simple scene.
+  necessary to draw a rotating triangle.  This code and our dependencies are sufficient to draw a simple scene.
 
 
   <p>
   <H3>index.html</H3>
-  index.html is an extremely simple file including only the output
-  from browserify, in this case bundle.js. <br>
+  index.html is an extremely simple file including only the browserify
+  bundle, in this case I named it bundle.js. <br>
 
   <pre data-src="index.html" class="langauge-markup">
     <code id="sample" class="language-markup">
@@ -63,10 +62,10 @@ npm install glmat-4 --save</code></pre>
   <H3>index.js</H3>
   Notice the glsl files, vertex.c and fragment.c, required at the top
   of the script.  Our browserify-shader dependency provides this
-  feature.  If you'd like more information about the script, see the
-  inline comments or check out the excellent webgl tutorial
+  feature.  If you'd like more information about WebGL, see the
+  inline comments or check out the excellent WebGL tutorial
   <a href="http://webglfundamentals.org/">webglfundamentals.org</a>
-  to learn webgl basics.
+  to learn WebGL basics.
   <pre><code class="  language-javascript">
 var mat4 = require('gl-mat4');
 var svs  = require('./vertex.c');
@@ -188,8 +187,8 @@ void main() {
 
   <H3>vertex.c</H3>
   This vertex shader transforms the triangle vertices using a
-  matrix.  The matrix is passed in on each render and defines
-  transformations, mainly rotation, used to animate the triangle.
+  4x4 matrix.  The matrix is passed in on each render and defines
+  the linear transformations, mainly rotation, used to animate the triangle.
   <pre><code class="language-glsl">
 attribute vec4 a_position;
 
@@ -203,7 +202,7 @@ void main() {
   <H3>Watchify</H3>
   <p>Run watchify to watch files and compile them into a single
   bundle.js javascript file.  Here the use of browserify-shader
-  plugin allows the glsl shaders to be require'd into the
+  plugin allows the GLSL shaders to be require'd into the
   script.  And --debug tells watchify to create a source map for managable source viewing/debugging</p>
   <pre><code class="language-bash">
  watchify --debug -t browserify-shader index.js -o bundle.js
@@ -211,8 +210,8 @@ void main() {
  <H3>Result</H3>
   <p> Below is an animation using the bundle.js created with the above
     source files and watchify.</p>
-  <script src="/articles/webgl-without-three.js-using-browserify-browserify-shader-and-gl-mat4/bundle.js"></script>
-  <script src="/articles/webgl-without-three.js-using-browserify-browserify-shader-and-gl-mat4/3dify/bundle.js"></script>
+  <script src="/articles/webgl-using-gl-mat4-browserify-shader-and-browserify/bundle.js"></script>
+  <script src="/articles/webgl-using-gl-mat4-browserify-shader-and-browserify/3dify/bundle.js"></script>
 
   
   <table id="related"></table>

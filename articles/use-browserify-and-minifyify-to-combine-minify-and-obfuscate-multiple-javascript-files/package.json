@@ -9,9 +9,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "browserify": "^11.2.0",
-    "browserify-shader": "^0.1.0",
-    "minifyify": "^7.1.0",
-    "prismjs-package": "^0.2.0"
+      "browserify": "^11.2.0",
+      "browserify-shader": "^0.1.0",
+      "minifyify": "^7.1.0",
+      "prismjs-package": "^0.2.0",
+      "webgl-triangles": "git://github.com/lakowske/webgl-triangles"
   }
 }

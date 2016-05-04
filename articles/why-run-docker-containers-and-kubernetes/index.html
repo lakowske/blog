@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <title>Why run Docker containers using Kubernetes?</title>
+    <link rel="stylesheet" type="text/css" href="/static/style/style.css">
+  </head>
+
+  <body>
+    <h1>Why run Docker containers using Kubernetes?</h1>
+    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h4>Published: <time pubdate="pubdate">2016-04-25</time></h4>
+    
+    <ul>
+      <li>Service isolation without the heavyweight VM.  Adding a
+      service to a server does not affect other services on the server</li>
+      <li>Lends itself to immutable infrastructure, so services are
+        reloadable without missing configuration when a server goes down</li>
+      <li>Services can be run on a large cluster of nodes making it
+        more reliable</li>
+      <li>Code can be broken out into smaller micro services that are easier to
+        learn/release/update</li>
+      <li>Immutable containers can be created which improve
+      security. Data can only be mutated in programmer specified
+      volumes, so root kits can't be installed even if the system is penetrated.</li>
+    </ul>
+  </body>
+
+</html>

@@ -14,13 +14,14 @@
       service to a server does not affect other services on the server</li>
       <li>Lends itself to immutable infrastructure, so services are
         reloadable without missing configuration when a server goes down</li>
+      <li>Immutable containers can be created which improve
+      security. Data can only be mutated in programmer specified
+      volumes, so root kits can't be installed even if the system is
+        penetrated.</li>
       <li>Services can be run on a large cluster of nodes making it
         more reliable</li>
       <li>Code can be broken out into smaller micro services that are easier to
         learn/release/update</li>
-      <li>Immutable containers can be created which improve
-      security. Data can only be mutated in programmer specified
-      volumes, so root kits can't be installed even if the system is penetrated.</li>
     </ul>
   </body>
 

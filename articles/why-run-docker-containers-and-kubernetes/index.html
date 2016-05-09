@@ -19,6 +19,8 @@
         security. Data can only be mutated in programmer specified
         volumes, so root kits can't be installed even if the system is
         penetrated.</li>
+      <li>Lends itself to immutable infrastructure, so services are
+        reloadable without missing configuration when a server goes down</li>
       <li>Some environments will only host in private clusters and not
         on public clouds</li>
       <li>Both Docker and Kubernetes are free to use on a workstation
@@ -27,8 +29,6 @@
         after each commit on a system that mirrors production</li>
       <li>Service isolation without the heavyweight VM.  Adding a
       service to a server does not affect other services on the server</li>
-      <li>Lends itself to immutable infrastructure, so services are
-        reloadable without missing configuration when a server goes down</li>
       <li>Services can be run on a large cluster of nodes making it
         more reliable</li>
       <li>Access to Docker hub leverages the work of the opensource

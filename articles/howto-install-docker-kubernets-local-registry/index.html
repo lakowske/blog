@@ -80,8 +80,7 @@ docker tag hello-node localhost:5000/hello-node</code></pre>
     <pre><code class="language-bash">docker push localhost:5000/hello-node</code></pre>
     Now run a deployment in Kubernetes using the image located on your
     local registry.
-    <pre><code class="language-bash">kubectl run hello-node
-        --image=localhost:5000/hello-node --port=8888</code></pre>
+    <pre><code class="language-bash">kubectl run hello-node --image=localhost:5000/hello-node --port=8888</code></pre>
     
     <H3>Conclusion</H3>
     <p>

@@ -42,7 +42,9 @@
     and run Kubernetes.
 
     <pre><code class="language-bash">export K8S_VERSION=$(curl -sS https://storage.googleapis.com/kubernetes-release/release/stable.txt)</code></pre>
-
+    Now start the Hyperkube container.  This container will start a
+    number of additional Kubernetes containers used to orchestrate
+    your cluster.
     <pre><code class="language-bash">export ARCH=amd64
         docker run -d \
         --volume=/:/rootfs:ro \

@@ -43,7 +43,8 @@
     <pre><code class="language-bash">export K8S_VERSION=$(curl -sS https://storage.googleapis.com/kubernetes-release/release/stable.txt)</code></pre>
     Now run the Hyperkube image.  This image will run a
     number of additional Kubernetes images used to orchestrate
-    your cluster.
+    your cluster. I've added --restart=always so that Kubernetes will
+    be relaunched on reboots, or if it dies, but this is optional.
     <pre><code class="language-bash">export ARCH=amd64
 docker run -d \
 --volume=/:/rootfs:ro \

@@ -72,7 +72,7 @@
         --restart=always --name registry registry:2</code></pre>
     Build an image and tag it.
     <pre><code class="language-bash">docker build -t hello-node .
-        docker tag hello-node localhost:5000/hello-node</code></pre>
+docker tag hello-node localhost:5000/hello-node</code></pre>
     Push the image to our local registry.
     <pre><code class="language-bash">docker push localhost:5000/hello-node</code></pre>
     Now run a deployment in Kubernetes using the image.

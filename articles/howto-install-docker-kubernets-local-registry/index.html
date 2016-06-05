@@ -85,9 +85,17 @@ docker tag hello-node localhost:5000/hello-node</code></pre>
         --image=localhost:5000/hello-node --port=8888</code></pre>
     
     <H3>Conclusion</H3>
+    <p>
     You should now have a deployment of your image running using your
     private local registry.  You can verify by
     running <span><pre><code class="language-bash">kubectl get deployments</code></pre>
+    </p>
+    
+<p>
+  You may also connect to your pod via port forwarding to test
+  the service. 
+</p>      
+      
     
     <script src="/static/bundles/triangles/bundle.js"></script>
     <table id="related"></table>

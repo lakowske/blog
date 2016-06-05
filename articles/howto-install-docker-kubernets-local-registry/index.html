@@ -39,14 +39,13 @@
     <H2>Run Kubernetes using Docker</H2>
 
     Once you have Docker Toolbox installed, you can leverage Docker to
-    run Kubernetes.  Setup Kubernetes
-    environment variables, then simply issue a docker run to install
-    and run Kubernetes.
+    run Kubernetes.  To run Kubernetes, setup the environment
+    variables, then simply issue a docker run Kubernetes.
 
     <pre><code class="language-bash">export K8S_VERSION=$(curl -sS https://storage.googleapis.com/kubernetes-release/release/stable.txt)</code></pre>
-    Now run the Hyperkube image.  This image will run additional Kubernetes images used to orchestrate
-    your cluster. I've added --restart=always so that Kubernetes will
-    be relaunched on reboots, or if it dies.
+    Now run the Kubernetes Hyperkube image.  This image will run
+    additional Kubernetes images used to orchestrate your
+    cluster. I've added --restart=always so that Kubernetes will be relaunched on reboots, or if it dies.
     <pre><code class="language-bash">export ARCH=amd64
 docker run -d \
 --volume=/:/rootfs:ro \

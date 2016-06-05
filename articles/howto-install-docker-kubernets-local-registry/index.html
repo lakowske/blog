@@ -42,7 +42,7 @@
     and run Kubernetes.
 
     <pre><code class="language-bash">export K8S_VERSION=$(curl -sS https://storage.googleapis.com/kubernetes-release/release/stable.txt)</code></pre>
-    Now start the Hyperkube container.  This container will start a
+    Now start the Hyperkube container.  This container will run a
     number of additional Kubernetes containers used to orchestrate
     your cluster.
     <pre><code class="language-bash">export ARCH=amd64
@@ -64,7 +64,8 @@
         --cluster-dns=10.0.0.10 \
         --cluster-domain=cluster.local \
             --allow-privileged --v=2</code></pre>
-    
+    Verify your setup is running
+    <pre><code class="language-bash">docker ps</code></pre>
     <script src="/static/bundles/triangles/bundle.js"></script>
 
   </body>

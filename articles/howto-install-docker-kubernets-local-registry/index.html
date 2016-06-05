@@ -38,7 +38,7 @@
     <H2>Run Kubernetes using Docker</H2>
 
     Once you have Docker Toolbox installed, you can leverage Docker to
-    run Kubernetes.  First setup the Kubernetes version environment
+    run Kubernetes.  First, setup the Kubernetes version environment
     variable.
 
     <pre><code class="language-bash">export K8S_VERSION=$(curl -sS https://storage.googleapis.com/kubernetes-release/release/stable.txt)</code></pre>
@@ -66,7 +66,7 @@ gcr.io/google_containers/hyperkube-${ARCH}:${K8S_VERSION} \
 --cluster-domain=cluster.local \
 --allow-privileged --v=2</code></pre>
     
-    Verify your setup is running.  You should see a number of
+    Verify your setup is running.  You should see a number of kubernetes
         containers in the list.
     <pre><code class="language-bash">docker ps</code></pre>
     <H3>Run private local registry</H3>

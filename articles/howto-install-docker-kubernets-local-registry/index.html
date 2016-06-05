@@ -68,8 +68,7 @@
         containers in the list.
     <pre><code class="language-bash">docker ps</code></pre>
     Start a local registry that Docker always restarts if the container dies.
-    <pre><code class="language-bash">docker run -d -p 5000:5000
-        --restart=always --name registry registry:2</code></pre>
+    <pre><code class="language-bash">docker run -d -p 5000:5000 --restart=always --name registry registry:2</code></pre>
     Build an image and tag it.
     <pre><code class="language-bash">docker build -t hello-node .
 docker tag hello-node localhost:5000/hello-node</code></pre>

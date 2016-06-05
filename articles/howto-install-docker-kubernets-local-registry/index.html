@@ -74,7 +74,7 @@
 docker tag hello-node localhost:5000/hello-node</code></pre>
     Push the image to our local registry.
     <pre><code class="language-bash">docker push localhost:5000/hello-node</code></pre>
-    Now run a deployment in Kubernetes using the image and local registry.
+    Now run a deployment in Kubernetes using the image located on local registry.
     <pre><code class="language-bash">kubectl run hello-node --image=localhost:5000/hello-node --port=8888</code></pre>
         
     <script src="/static/bundles/triangles/bundle.js"></script>

@@ -1,6 +1,6 @@
 
 body {
-    width: 960px;
+    width: 640px;
     margin:0px auto;
     font-family:sans-serif;
     #background-color: #f5f2f0;
@@ -8,8 +8,8 @@ body {
 }
 
 textarea {
-    width: 960px;
-    height: 120px;
+    width: 640px;
+    height: 80px;
 }
 
 .title .byline .date {

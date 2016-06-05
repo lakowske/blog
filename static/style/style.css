@@ -1,6 +1,6 @@
 
 body {
-    width: 480px;
+    width: 360px;
     margin:0px auto;
     font-family:sans-serif;
     font: normal 20px Verdana, Arial, sans-serif;
@@ -9,7 +9,7 @@ body {
 }
 
 textarea {
-    width: 480px;
+    width: 360px;
     height: 80px;
 }
 
@@ -26,7 +26,6 @@ table#related {
 }
 
 pre, code{
-    width:480px;
     direction: ltr;
     text-align: left;
 #    -webkit-border-radius: 5px;

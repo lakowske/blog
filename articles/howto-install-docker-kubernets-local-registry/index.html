@@ -9,7 +9,7 @@
   </head>
 
   <body>
-    <h2>Use Docker, Kubernetes And A Local Private Registry
+    <h2>Use Docker, Kubernetes And A Private Local Registry
     on your laptop</h1>
     <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2016-06-04</time></h4>
@@ -67,7 +67,7 @@
     Verify your setup is running.  You should see a number of
         containers in the list.
     <pre><code class="language-bash">docker ps</code></pre>
-    Start a local registry that Docker always restarts if the container dies.
+    Start a private local registry that Docker always restarts if the container dies.
     <pre><code class="language-bash">docker run -d -p 5000:5000 --restart=always --name registry registry:2</code></pre>
     Build an image and tag it.
     <pre><code class="language-bash">docker build -t hello-node .

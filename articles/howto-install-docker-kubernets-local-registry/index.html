@@ -84,7 +84,7 @@ docker tag hello-node localhost:5000/hello-node</code></pre>
     
     <H3>Conclusion</H3>
     <p>
-    You should now have a deployment of your image running using your
+    You should now have a deployment of your image, in my case hello-node, running using your
     private local registry.  You can verify by
     running <span><pre><code class="language-bash">kubectl get deployments</code></pre></span>
     </p>
@@ -92,8 +92,8 @@ docker tag hello-node localhost:5000/hello-node</code></pre>
     <p>
       You may also connect to your pod via port forwarding to test
       the service.  For example, I forward traffic from 8090 on
-      my localhost to port 8080 in my jenkins pod.  Now when I point
-      my browser to localhost:8090, I get the jenkins landing page.
+      my localhost to port 8080 on my jenkins pod.  Now when I point
+      my browser to localhost:8090, I talk to the jenkins web service.
       <pre><code class="language-bash">kubectl port-forward jenkins-3828317938-il1gc 8090:8080</code></pre>
     </p>
       

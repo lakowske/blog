@@ -6,3 +6,7 @@
     z-index: -1;
 }
 
+#mycanvas {
+    width: 480px;
+    height: 480px;
+}

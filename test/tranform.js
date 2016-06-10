@@ -7,7 +7,9 @@ test('can read html', function(t) {
 
     var tr = trumpet();
     tr.selectAll('code', function(code) {
-        console.log(code.getAttributes()['class'])
+        console.log(code);
+        var lang = nsh.getLanguage(code.getAttributes()['class']);
+        
         code.createReadStream().pipe(process.stdout);
     })
 

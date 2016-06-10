@@ -9,7 +9,7 @@ test('can read html', function(t) {
         code.createReadStream().pipe(process.stdout);
     })
 
-    var html = fs.createReadStream('../articles/howto-install-docker-kubernetes-local-registry/index.html');
+    var html = fs.createReadStream('../articles/howto-install-docker-kubernets-local-registry/index.html');
     html.pipe(tr);
 
     t.end();

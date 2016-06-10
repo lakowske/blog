@@ -6,6 +6,7 @@ test('can read html', function(t) {
 
     var tr = trumpet();
     tr.selectAll('code', function(code) {
+        console.log(code);
         code.createReadStream().pipe(process.stdout);
     })
 

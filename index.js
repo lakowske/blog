@@ -41,7 +41,8 @@ var server = http.createServer(function(req, res) {
 function highlighter() {
     var langMap = {
         'language-bash' : 'bash',
-        'language-javascript' : 'js'
+        'language-javascript' : 'js',
+        'language-glsl' : 'c'
     }
 
     var tr = trumpet();

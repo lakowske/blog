@@ -50,7 +50,8 @@ function highlighter() {
         var codeClass = code.getAttributes()['class'];
         var lang = nsh.getLanguage(langMap[codeClass]);
         var stream = code.createStream({outer:true});
-        slurp(stream, 8096, function(err, content) {
+        var rStream = code.createReadStream();
+        slurp(rStream, 8096, function(err, content) {
             
             stream.end(nsh.highlight(content, lang));
         })

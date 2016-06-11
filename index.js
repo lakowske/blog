@@ -92,13 +92,14 @@ articles.articles(articleDir, function(discovered) {
 
         //Generated url to respond to (could be multiple urls if desired)
         var url = '/' + article.root;
-
-        console.log(url);
+        var type = article.type
+        console.log(url, type);
         
         //Lamda to apply on url request
         router.addRoute(url, function(req, res, params) {
             var articleStream = fs.createReadStream(article.path);
             var related = articles.related(discovered);
+
 
             //Compose the article and pipe to response
             //articleStream.pipe(related).pipe(reqstats).pipe(res);

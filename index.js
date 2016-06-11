@@ -49,11 +49,13 @@ function highlighter() {
 
     tr.selectAll('pre > code', function(code) {
         var codeClass = code.getAttributes()['class'];
-        var lang = nsh.getLanguage(langMap[codeClass]);
-        console.log(lang);
-        if (typeof lang === 'undefined') {
-            lang = nsh.getLanguage('plain');
+        var langDesc = langMap[codeClass];
+        
+        if (typeof langDesc === 'undefined') {
+            langDesc = 'plain';
         }
+
+        var lang = nsh.getLanguage(langMap[codeClass]);
         
         var rStream = code.createReadStream();
         var wStream = code.createWriteStream({outer:true});        

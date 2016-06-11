@@ -37,9 +37,6 @@ test('can read html', function(t) {
         var stream = code.createStream({outer:true});
         slurp(stream, 8096, function(err, content) {
             
-            //console.log('code: ' + code + '\ncodeClass: ' + codeClass + '\nlang: ' + lang + '\ncontent: ' + content
-            //    + '\nhighlighted:' + nsh.highlight(content, lang));
-            
             stream.end(nsh.highlight(content, lang));
         })
         //code.createReadStream().pipe(process.stdout);
@@ -54,6 +51,11 @@ test('can read html', function(t) {
 
 test('can append to tag', function(t) {
 
+    var tr = append('head', '<link rel="stylesheet" type="text/css" href="/static/bundles/triangles/style.css">');
+    var html = fs.createReadStream('../articles/howto-install-docker-kubernets-local-registry/index.html');
+    html.pipe(tr).pipe(process.stdout);
+
+    t.end();
 
 
 }

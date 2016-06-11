@@ -14,7 +14,7 @@ function append(selector, string) {
 
     tr.selectAll(selector, function(code) {
         
-        var stream = code.createStream({outer:true});
+        var stream = code.createStream();
         
         slurp(stream, 8096, function(err, content) {
             stream.end(content + string);

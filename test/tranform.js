@@ -13,7 +13,7 @@ test('can read html', function(t) {
 
     var tr = trumpet();
 
-    tr.selectAll('code', function(code) {
+    tr.selectAll('pre code', function(code) {
         var codeClass = code.getAttributes()['class'];
         var lang = nsh.getLanguage(langMap[codeClass]);
         var stream = code.createStream({outer:true});

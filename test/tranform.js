@@ -9,6 +9,22 @@ var langMap = {
     'language-javascript' : 'js'
 }
 
+function append(selector, string) {
+    var tr = trumpet();
+
+    tr.selectAll(selector, function(code) {
+        
+        var stream = code.createStream({outer:true});
+        
+        slurp(stream, 8096, function(err, content) {
+            stream.end(content + string);
+        })
+        
+    })
+    
+    return tr;
+}
+
 test('can read html', function(t) {
 
     console.log(nsh.getStyles());
@@ -36,7 +52,11 @@ test('can read html', function(t) {
     
 })
 
+test('can append to tag', function(t) {
 
+
+
+}
 
 
 

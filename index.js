@@ -104,6 +104,7 @@ articles.articles(articleDir, function(discovered) {
         console.log('listening on :' + server.address().port);
     });
 
+    
 })
 
 //deployment port listening for github push events

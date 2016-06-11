@@ -14,7 +14,7 @@
   <p>
     I get the following error using v0.0.3 of proxy-by-url from github:
   </p>
-  <pre><code>
+  <pre><code class="language-bash">
 19:55:27/seth/boltzman~/workspace/proxy-service-directory> node index.js 
 
 /home/seth/workspace/proxy-service-directory/node_modules/http-proxy/lib/http-proxy/index.js:119
@@ -32,7 +32,7 @@ at ProxyServer.<anonymous> (/home/seth/workspace/proxy-service-directory/node_mo
   <p>
     Using the example in the README.md
   </p>
-  <pre><code>
+  <pre><code class="language-bash">
 require('http-proxy').createServer(require('proxy-by-url')({
         '/database': { port: 5984, host: 'localhost' },
 })).listen(8000)
@@ -42,7 +42,7 @@ require('http-proxy').createServer(require('proxy-by-url')({
     So, I created a new module called proxy-by-directory that is inspired by proxy-by-url and works with http-proxy v1.0.  It's 
     on npm and <a href="http://github.com/lakowske/proxy-by-directory">github</a>.  You use proxy-by-directory like this:
   </p>
-  <pre><code>
+  <pre><code class="language-bash">
 var server = require('http').createServer(require('proxy-by-directory')({
     '/articles' : { target : 'http://localhost:5555/' },
     '/' : { target : 'http://sethlakowske.com:7777' }

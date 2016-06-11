@@ -40,7 +40,7 @@
 
       <p>First, install nodejs if you haven't already.  Then create a directory
       to contain your project code.  Inside the new directory, run</p>
-      <pre><code>
+      <pre><code class="language-bash">
 	  #Initialize your project
 	  npm init
       </code></pre>
@@ -48,7 +48,7 @@
       <p>Next, add dependencies to your project.  The json-streamer transform is written to buffer the basic json serial data
 	coming from the Arduino Nano.</p>
       
-      <pre><code>
+      <pre><code class="language-bash">
 	  npm install serialport --save
 	  npm install git://github.com/lakowske/json-streamer --save
 	  npm install git://github.com/lakowske/websocket-express --save
@@ -57,7 +57,7 @@
       <p>Next, create a pipe using a series of stream transforms.  We'll pipe
       the data into a smoothie chart.</p>
 
-      <pre><code>
+      <pre><code class="language-javascript">
 
 	var SerialPort = require("serialport").SerialPort
 	var JSONReader = require('json-streamer');

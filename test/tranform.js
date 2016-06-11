@@ -12,7 +12,9 @@ test('can read html', function(t) {
         var codeClass = code.getAttributes()['class'];
         var lang = nsh.getLanguage(codeClass);
         slurp(code.createReadStream(), 8096, function(err, content) {
-            console.log('codeClass: ' + codeClass + '\ncontent: ' + content);
+            
+            console.log('codeClass: ' + codeClass + '\nlang: ' + lang + '\ncontent: ' + content);
+
         })
         //code.createReadStream().pipe(process.stdout);
     })
@@ -23,3 +25,13 @@ test('can read html', function(t) {
     t.end();
     
 })
+
+
+
+
+
+
+
+
+
+

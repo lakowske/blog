@@ -55,7 +55,7 @@ function highlighter() {
             langDesc = 'plain';
         }
 
-        var lang = nsh.getLanguage(langMap[codeClass]);
+        var lang = nsh.getLanguage(langDesc);
         
         var rStream = code.createReadStream();
         var wStream = code.createWriteStream({outer:true});        

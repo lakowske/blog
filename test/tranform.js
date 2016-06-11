@@ -58,7 +58,7 @@ test('can append to tag', function(t) {
     t.end();
 
 
-}
+})
 
 
 

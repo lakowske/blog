@@ -50,6 +50,7 @@ function highlighter() {
     tr.selectAll('pre > code', function(code) {
         var codeClass = code.getAttributes()['class'];
         var lang = nsh.getLanguage(langMap[codeClass]);
+        console.log(lang);
         if (typeof lang === 'undefined') {
             lang = nsh.getLanguage('plain');
         }

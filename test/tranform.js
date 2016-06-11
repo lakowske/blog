@@ -16,7 +16,7 @@ test('can read html', function(t) {
     tr.selectAll('code', function(code) {
         var codeClass = code.getAttributes()['class'];
         var lang = nsh.getLanguage(langMap[codeClass]);
-        var stream = code.createStream();
+        var stream = code.createStream({outer:true});
         slurp(stream, 8096, function(err, content) {
             
             //console.log('code: ' + code + '\ncodeClass: ' + codeClass + '\nlang: ' + lang + '\ncontent: ' + content

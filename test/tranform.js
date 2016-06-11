@@ -11,7 +11,7 @@ var langMap = {
 
 test('can read html', function(t) {
 
-    nsh.getStyles();
+    console.log(nsh.getStyles());
     
     var tr = trumpet();
 

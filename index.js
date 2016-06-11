@@ -105,7 +105,14 @@ articles.articles(articleDir, function(discovered) {
             //articleStream.pipe(related).pipe(reqstats).pipe(res);
             var syntaxCss = append('head', '<link rel="stylesheet" type="text/css" href="/static/style/syntax.css">');
             var mobileViewport = append('head', '<meta name="viewport" content="width=device-width, initial-scale=1.0">')
-            articleStream.pipe(related).pipe(highlighter()).pipe(syntaxCss).pipe(mobileViewport).pipe(res);
+            var transform = mobileViewport
+            if (type.prism === 'undefined') {
+                transform = transform.pipe(highlighter()).pipe(syntaxCss);
+            }
+            
+            articleStream.pipe(related).pipe(transform).pipe(res);
+
+
         })
 
         return url;

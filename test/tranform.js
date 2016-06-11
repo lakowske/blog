@@ -19,7 +19,8 @@ test('can read html', function(t) {
         slurp(code.createReadStream(), 8096, function(err, content) {
             
             console.log('code: ' + code + '\ncodeClass: ' + codeClass + '\nlang: ' + lang + '\ncontent: ' + content
-                       + '\nhighlighted:' + nsh.highlight(content, lang));
+                        + '\nhighlighted:' + nsh.highlight(content, lang));
+            
             code.createWriteStream().end(nsh.highlight(content, lang));
         })
         //code.createReadStream().pipe(process.stdout);

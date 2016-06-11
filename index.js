@@ -53,7 +53,7 @@ function highlighter() {
         var wStream = code.createWriteStream({outer:true});        
         slurp(rStream, 8096, function(err, content) {
             
-            wStream.end(nsh.highlight(content, lang));
+            wStream.end(nsh.highlight(content, lang, {gutter:false}));
         })
     })
     

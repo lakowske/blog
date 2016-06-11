@@ -53,6 +53,7 @@ function highlighter() {
         if (typeof lang === 'undefined') {
             lang = nsh.getLanguage('plain');
         }
+        
         var rStream = code.createReadStream();
         var wStream = code.createWriteStream({outer:true});        
         slurp(rStream, 8096, function(err, content) {

@@ -13,6 +13,8 @@ var minimist       = require('minimist');
 var trumpet        = require('trumpet');
 var deployer       = require('github-webhook-deployer');
 var articles       = require('blog-articles');
+var nsh            = require('node-syntaxhighlighter');
+var slurp          = require('slurp-some').slurp;
 
 //parse the cli arguments
 var port   = parseInt(process.argv[2], 10);
@@ -36,7 +38,26 @@ var server = http.createServer(function(req, res) {
 
 }).listen(port);
 
+function highlighter() {
+    var langMap = {
+        'language-bash' : 'bash',
+        'language-javascript' : 'js'
+    }
 
+    var tr = trumpet();
+
+    tr.selectAll('pre > code', function(code) {
+        var codeClass = code.getAttributes()['class'];
+        var lang = nsh.getLanguage(langMap[codeClass]);
+        var stream = code.createStream({outer:true});
+        slurp(stream, 8096, function(err, content) {
+            
+            stream.end(nsh.highlight(content, lang));
+        })
+    })
+
+    return tr;
+}
 
 //Get a set of discovered articles
 articles.articles(articleDir, function(discovered) {

@@ -59,6 +59,22 @@ function highlighter() {
     return tr;
 }
 
+function append(selector, string) {
+    var tr = trumpet();
+
+    tr.selectAll(selector, function(code) {
+        
+        var stream = code.createStream();
+        
+        slurp(stream, 8096, function(err, content) {
+            stream.end(content + string);
+        })
+        
+    })
+    
+    return tr;
+}
+
 //Get a set of discovered articles
 articles.articles(articleDir, function(discovered) {
 
@@ -77,7 +93,8 @@ articles.articles(articleDir, function(discovered) {
 
             //Compose the article and pipe to response
             //articleStream.pipe(related).pipe(reqstats).pipe(res);
-            articleStream.pipe(related).pipe(highlighter()).pipe(res);
+            var syntaxCss = append('head', '<link rel="stylesheet" type="text/css" href="/static/style/syntax.css">');
+            articleStream.pipe(related).pipe(highlighter()).pipe(syntaxCss).pipe(res);
         })
 
         return url;

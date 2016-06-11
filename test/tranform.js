@@ -26,7 +26,7 @@ test('can read html', function(t) {
     })
 
     var html = fs.createReadStream('../articles/howto-install-docker-kubernets-local-registry/index.html');
-    html.pipe(tr);
+    html.pipe(tr).pipe(process.stdout);
 
     t.end();
     

@@ -55,7 +55,7 @@ function highlighter() {
             stream.end(nsh.highlight(content, lang));
         })
     })
-
+    
     return tr;
 }
 

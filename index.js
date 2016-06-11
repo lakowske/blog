@@ -49,11 +49,11 @@ function highlighter() {
     tr.selectAll('pre > code', function(code) {
         var codeClass = code.getAttributes()['class'];
         var lang = nsh.getLanguage(langMap[codeClass]);
-        var stream = code.createStream({outer:true});
         var rStream = code.createReadStream();
+        var wStream = code.createWriteStream({outer:true});        
         slurp(rStream, 8096, function(err, content) {
             
-            stream.end(nsh.highlight(content, lang));
+            wStream.end(nsh.highlight(content, lang));
         })
     })
     

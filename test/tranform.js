@@ -11,6 +11,8 @@ var langMap = {
 
 test('can read html', function(t) {
 
+    nsh.getStyles();
+    
     var tr = trumpet();
 
     tr.selectAll('pre > code', function(code) {

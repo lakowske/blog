@@ -52,7 +52,7 @@ test('can read html', function(t) {
 test('can append to tag', function(t) {
 
     console.log(nsh.getStyles());
-    var defaults = nsh.filter(style => style.name === 'default').map( style => style.sourcePath );
+    var defaults = nsh.getStyles().filter(style => style.name === 'default').map( style => style.sourcePath );
     console.log(defaults);
     var tr = append('head', '<link rel="stylesheet" type="text/css" href="/static/bundles/triangles/style.css">');
     var html = fs.createReadStream('../articles/howto-install-docker-kubernets-local-registry/index.html');

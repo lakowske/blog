@@ -50,6 +50,9 @@ function highlighter() {
     tr.selectAll('pre > code', function(code) {
         var codeClass = code.getAttributes()['class'];
         var lang = nsh.getLanguage(langMap[codeClass]);
+        if (!lang) {
+            lang = nsh.getLanguage('plain');
+        }
         var rStream = code.createReadStream();
         var wStream = code.createWriteStream({outer:true});        
         slurp(rStream, 8096, function(err, content) {

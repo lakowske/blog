@@ -41,7 +41,3 @@ test('can read html', function(t) {
 
 
 
-
-
-
-

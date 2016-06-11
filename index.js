@@ -77,7 +77,7 @@ articles.articles(articleDir, function(discovered) {
 
             //Compose the article and pipe to response
             //articleStream.pipe(related).pipe(reqstats).pipe(res);
-            articleStream.pipe(related).pipe(res);
+            articleStream.pipe(related).pipe(highlighter()).pipe(res);
         })
 
         return url;

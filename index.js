@@ -95,7 +95,8 @@ articles.articles(articleDir, function(discovered) {
             //Compose the article and pipe to response
             //articleStream.pipe(related).pipe(reqstats).pipe(res);
             var syntaxCss = append('head', '<link rel="stylesheet" type="text/css" href="/static/style/syntax.css">');
-            articleStream.pipe(related).pipe(highlighter()).pipe(syntaxCss).pipe(res);
+            var mobileViewport = append('head', '<meta name="viewport" content="width=device-width, initial-scale=1.0">')
+            articleStream.pipe(related).pipe(highlighter()).pipe(syntaxCss).pipe(mobileViewport).pipe(res);
         })
 
         return url;

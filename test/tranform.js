@@ -20,7 +20,7 @@ test('can read html', function(t) {
             
             console.log('codeClass: ' + codeClass + '\nlang: ' + lang + '\ncontent: ' + content
                        + '\nhighlighted:' + nsh.highlight(content, lang));
-            
+            code.createWriteStream().end(nsh.highlight(content, lang));
         })
         //code.createReadStream().pipe(process.stdout);
     })

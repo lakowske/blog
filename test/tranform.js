@@ -18,7 +18,7 @@ test('can read html', function(t) {
         var lang = nsh.getLanguage(langMap[codeClass]);
         slurp(code.createReadStream(), 8096, function(err, content) {
             
-            console.log('codeClass: ' + codeClass + '\nlang: ' + lang + '\ncontent: ' + content
+            console.log('code: ' + code + '\ncodeClass: ' + codeClass + '\nlang: ' + lang + '\ncontent: ' + content
                        + '\nhighlighted:' + nsh.highlight(content, lang));
             code.createWriteStream().end(nsh.highlight(content, lang));
         })

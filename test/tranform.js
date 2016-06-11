@@ -2,7 +2,7 @@ var test = require('tape');
 var trumpet = require('trumpet');
 var fs = require('fs');
 var nsh = require('node-syntaxhighlighter');
-var slurp = require('slurp-some')
+var slurp = require('slurp-some').slurp;
 
 test('can read html', function(t) {
 

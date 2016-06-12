@@ -107,6 +107,7 @@ articles.articles(articleDir, function(discovered) {
             var mobileViewport = append('head', '<meta name="viewport" content="width=device-width, initial-scale=1.0">')
             var transform = mobileViewport
             if (!type.hasOwnProperty('prism')) {
+                console.log('not a prism article');
                 transform = transform.pipe(highlighter()).pipe(syntaxCss);
             }
             

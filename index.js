@@ -108,10 +108,10 @@ articles.articles(articleDir, function(discovered) {
             var transform = mobileViewport
             if (!type.hasOwnProperty('prism')) {
                 console.log('not a prism article');
-                transform = transform.pipe(highlighter()).pipe(syntaxCss);
+                articleStream.pipe(related).pipe(mobileViewport).pipe(highlighter()).pipe(syntaxCss).pipe(res);
+            } else {
+                articleStream.pipe(related).pipe(transform).pipe(res);
             }
-            
-            articleStream.pipe(related).pipe(transform).pipe(res);
 
         })
 

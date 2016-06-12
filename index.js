@@ -106,7 +106,7 @@ articles.articles(articleDir, function(discovered) {
             var syntaxCss = append('head', '<link rel="stylesheet" type="text/css" href="/static/style/syntax.css">');
             var mobileViewport = append('head', '<meta name="viewport" content="width=device-width, initial-scale=1.0">')
             var transform = mobileViewport
-            if (type.hasOwnProperty('prism')) {
+            if (!type.hasOwnProperty('prism')) {
                 transform = transform.pipe(highlighter()).pipe(syntaxCss);
             }
             

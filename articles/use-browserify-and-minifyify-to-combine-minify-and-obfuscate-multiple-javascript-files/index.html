@@ -26,8 +26,11 @@
     <p>
       <H2>Install Browserify</H2>
       
-      To get started, install <a href="http://browserify.org">Browserify</a>.  Browserify will combine
-      source files and their dependencies into one bundle.
+      To get started, install <a href="http://browserify.org">Browserify</a>.  Browserify combine
+      source files and their dependencies into one bundle.  It does
+      this by using the require statements in your scripts, so you
+      won't need to worry about managing the build, just include the
+      script at the root of your project, conventionally index.js.
       I recommend <a href="https://github.com/substack/watchify">Watchify</a> also.  It automatically runs
       Browserify when source files change, so there isn't a manual step in between browser refreshes.
     </p>

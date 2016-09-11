@@ -41,7 +41,10 @@
     <pre><code class="language-bash">export K8S_VERSION=$(curl -sS https://storage.googleapis.com/kubernetes-release/release/stable.txt)</code></pre>
     Now run the Kubernetes Hyperkube image.  This image will run
     additional Kubernetes images used to orchestrate your
-    cluster. I've added --restart=always so that Kubernetes will be relaunched on reboots, or if it dies.
+    cluster. I've added --restart=always so that Kubernetes will be
+    relaunched on reboots, or if it dies.  You may tweak these starting
+    parameters at some point(i.e. --cluster-dns), but they ought to provide
+    working defaults for now.
     <pre><code class="language-bash">export ARCH=amd64
 docker run -d \
 --volume=/:/rootfs:ro \
@@ -64,9 +67,7 @@ gcr.io/google_containers/hyperkube-${ARCH}:${K8S_VERSION} \
 --allow-privileged --v=2</code></pre>
     
     Verify your setup is running.  You should see a number of kubernetes
-    containers in the list. You may someday tweak these starting
-    parameters (i.e. --cluster-dns), but they ought to provide
-    working defaults for now.
+    containers in the list.
     <pre><code class="language-bash">docker ps</code></pre>
     <H3>Run a private local registry</H3>
     Start a private local registry that Docker always restarts if the container dies.

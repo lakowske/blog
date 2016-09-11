@@ -71,8 +71,9 @@ gcr.io/google_containers/hyperkube-${ARCH}:${K8S_VERSION} \
     <pre><code class="language-bash">docker ps</code></pre>
     After you verify the docker containers exist, you should verify
     you can connect to the Kubernetes cluster.
-    <pre><code class="language-bash">kubectl get pods
-        --all-namespaces</code></pre>
+    <pre><code class="language-bash">kubectl get pods --all-namespaces</code></pre>
+    Note for macOS users: If that doesn't work, you may need to port forward to the virtual machine vm.
+    <pre><code class="language-bash">docker-machine ssh `docker-machine active` -N -L 8080:localhost:8080</code></pre>
     
     <H3>Run a private local registry</H3>
     Start a private local registry that Docker always restarts if the container dies.

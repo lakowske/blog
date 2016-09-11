@@ -95,8 +95,8 @@ docker tag hello-node localhost:5000/hello-node</code></pre>
     </p>
     
     <p>
-      You may also connect to your pod via port forwarding to test
-      the service.  For example, I forward traffic from 8090 on
+      You may also connect to your pod via port forwarding to verify
+      connectivity.  For example, I forward traffic from 8090 on
       my localhost to port 8080 on a jenkins pod.  Now when I point
       my browser to localhost:8090, I talk to the jenkins web service.
       <pre><code class="language-bash">kubectl port-forward jenkins-3828317938-il1gc 8090:8080</code></pre>

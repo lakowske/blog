@@ -8,15 +8,18 @@
   </head>
 
   <body>
-    <h2>Running Kubernetes, Docker and a private Registry locally</h2>
+    <h2>Install Multi-Node Kubernetes Cluster across multiple Docker Machines</h2>
     <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2016-06-04</time></h4>
 
     <p>
-      This guide will walk you through the steps to setting up an
-      environment to run Kubernets (k8s) on your laptop or workstation.
-      You'll need to install Docker if you haven't already and
-      Kubernetes client (kubectl).
+      This guide will walk you through the steps to setting up a
+      multi-node Kubernetes (k8s) cluster on your laptop or workstation.
+      You'll need to install Docker Machine if you haven't already and
+      it'll be handy to have Kubernetes client (kubectl) to verify the
+      install.  You'll also want more RAM where possible, the number
+      of nodes on a laptop is typically contrained
+      by available free memory (each machine consuming ~1GB RAM).
     </p>
     <H2>Requirements</H2>
     <ul>

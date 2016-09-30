@@ -20,7 +20,7 @@ var slurp          = require('slurp-some').slurp;
 var port   = parseInt(process.argv[2], 10);
 
 //the mount point (i.e. url prefix to static content)
-var staticContent         = '/public/'
+var staticContent         = '/public'
 
 //the relative path to a directory containing articles
 var articleDir = 'public/articles';

@@ -27,7 +27,7 @@ var articleDir = 'public/articles';
 
 var st     = ecstatic({
     root : __dirname + staticContent,
-    basedir : staticContent
+    baseDir : staticContent
 })
 
 var server = http.createServer(function(req, res) {

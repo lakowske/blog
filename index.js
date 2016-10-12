@@ -26,7 +26,7 @@ var staticContent         = '/public'
 var articleDir = 'public/articles';
 
 var st     = ecstatic({
-    root : __dirname + staticContent
+    root : __dirname + staticContent,
     basedir : staticContent
 })
 

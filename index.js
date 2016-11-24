@@ -38,6 +38,41 @@ var server = http.createServer(function(req, res) {
 
 }).listen(port);
 
+function articleFn(discovered, article) {
+
+    return function(req, res, params) {
+        var articleStream = fs.createReadStream(article.path);
+        var related = articles.related(discovered);
+
+        //Compose the article and pipe to response
+        var syntaxCss      = append('head', '<link rel="stylesheet" type="text/css" href="/static/style/syntax.css">');
+        var mobileViewport = append('head', '<meta name="viewport" content="width=device-width, initial-scale=1.0">')
+        var transform      = mobileViewport
+        
+        if (!type.hasOwnProperty('prism')) {
+            console.log('not a prism article');
+            articleStream.pipe(related).pipe(mobileViewport).pipe(highlighter()).pipe(syntaxCss).pipe(res);
+        } else {
+            articleStream.pipe(related).pipe(transform).pipe(res);
+        }
+    }
+}
+
+/*
+ * Add article to router
+ */
+function routeArticle(article, discovered) {
+    //Generated url to respond to (could be multiple urls if desired)
+    var url = '/' + article.root;
+    var type = article.type
+    console.log(url, type);
+    
+    //Lamda to apply on url request
+    router.addRoute(url, articleFn(discovered, article));
+
+    return url;
+}
+
 function highlighter() {
     var langMap = {
         'language-bash' : 'bash',
@@ -88,35 +123,7 @@ function append(selector, string) {
 articles.articles(articleDir, function(discovered) {
 
     //Apply url generation step
-    var urls = discovered.map(function(article) {
-
-        //Generated url to respond to (could be multiple urls if desired)
-        var url = '/' + article.root;
-        var type = article.type
-        console.log(url, type);
-        
-        //Lamda to apply on url request
-        router.addRoute(url, function(req, res, params) {
-            var articleStream = fs.createReadStream(article.path);
-            var related = articles.related(discovered);
-
-
-            //Compose the article and pipe to response
-            //articleStream.pipe(related).pipe(reqstats).pipe(res);
-            var syntaxCss = append('head', '<link rel="stylesheet" type="text/css" href="/static/style/syntax.css">');
-            var mobileViewport = append('head', '<meta name="viewport" content="width=device-width, initial-scale=1.0">')
-            var transform = mobileViewport
-            if (!type.hasOwnProperty('prism')) {
-                console.log('not a prism article');
-                articleStream.pipe(related).pipe(mobileViewport).pipe(highlighter()).pipe(syntaxCss).pipe(res);
-            } else {
-                articleStream.pipe(related).pipe(transform).pipe(res);
-            }
-
-        })
-
-        return url;
-    })
+    var urls = discovered.map(function(article) { routeArticle(article, discovered)});
 
     server.listen(port, function () {
         console.log('listening on :' + server.address().port);

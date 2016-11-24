@@ -124,15 +124,3 @@ articles.articles(articleDir, function(discovered) {
 
     
 })
-
-//deployment port listening for github push events
-var deployerPort   = port + 1;
-
-//Create a github webhook deployer
-
-console.log('deployer listening on port ' + deployerPort);
-
-var depServer = http.createServer(deployer({
-    path:'/webhook',
-    secret : 'testSecret'
-})).listen(deployerPort);

@@ -43,7 +43,8 @@ function articleFn(discovered, article) {
     return function(req, res, params) {
         var articleStream = fs.createReadStream(article.path);
         var related = articles.related(discovered);
-
+        var type = article.type
+        
         //Compose the article and pipe to response
         var syntaxCss      = append('head', '<link rel="stylesheet" type="text/css" href="/static/style/syntax.css">');
         var mobileViewport = append('head', '<meta name="viewport" content="width=device-width, initial-scale=1.0">')

@@ -20,6 +20,8 @@ var slurp          = require('slurp-some').slurp;
 var port   = parseInt(process.argv[2], 10);
 var contentPath = path.normalize(process.argv[3]);
 
+console.log('port: ' + port + ' contentPath: ' + contentPath)
+
 //the mount point (i.e. url prefix to static content)
 var staticContent         = '/'
 

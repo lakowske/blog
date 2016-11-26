@@ -1,0 +1,28 @@
+<html>
+ <head> 
+  <title>slurp-some Nodejs streams</title> 
+  <link rel="stylesheet" type="text/css" href="../static/style/style.css"> 
+  <link rel="stylesheet" type="text/css" href="../static/bundles/triangles/style.css"> 
+  <meta charset="utf-8"> 
+ </head> 
+ <body> 
+  <h2>slurp-some Nodejs streams</h2>
+  <h2> </h2>
+  <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3> 
+  <div class="entry-content"> 
+   <p><a href="https://github.com/lakowske/slurp-some" title="slurp-some">slurp-some</a> is a Nodejs convenience module I published that allows a user to read a stream up to some predefined amount and error if the stream contains more data. It is especially useful when receiving http data from the outside world which can get wild. A malicious person on the internet might try to fill your memory with bullshit data unless you specify a limit to the amount of data you’re willing to receive, which is what slurp-some does for you.</p> 
+  </div> 
+  <script src="../static/bundles/triangles/bundle.js"></script> 
+  <table id="related"></table> 
+  <!-- Google analytics --> 
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-30272910-1', 'auto');
+    ga('send', 'pageview');
+  </script>   
+ </body>
+</html>

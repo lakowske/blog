@@ -1,0 +1,31 @@
+<html>
+ <head> 
+  <title>Docker Oracle 12c database and shared memory constraints</title> 
+  <link rel="stylesheet" type="text/css" href="../static/style/style.css"> 
+  <link rel="stylesheet" type="text/css" href="../static/bundles/triangles/style.css"> 
+  <meta charset="utf-8"> 
+ </head> 
+ <body> 
+  <h2>Docker Oracle 12c database and shared memory constraints</h2>
+  <h2> </h2>
+  <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3> 
+  <div class="entry-content"> 
+   <p>If you are trying to run an Oracle 12c Database (<a href="https://hub.docker.com/r/sath89/oracle-12c/">https://hub.docker.com/r/sath89/oracle-12c/</a>) in Docker and getting failures, you may have run into a shared memory constraint. &nbsp;Native Linux Docker users may not have a problem, but macOS and Windows users taking advantage of docker-machine may run into errors while trying to run an Oracle 12c database because there isn’t enough shared memory available.</p> 
+   <p>Try increasing the shared memory on docker runs with the –shm-size flag or even better create a new machine with more available RAM. &nbsp;The second option is preferable so that you’re not depending on&nbsp;a special flag in your scripts.</p> 
+   <p><code><br> docker-machine create -d virtualbox --virtualbox-disk-size 100000 --virtualbox-memory 2048 default<br> </code></p> 
+   <p>This creates a new machine with 100GB of disk space and 2GB of ram. That was enough to run a memory hungry Oracle 12c database.</p> 
+  </div> 
+  <script src="../static/bundles/triangles/bundle.js"></script> 
+  <table id="related"></table> 
+  <!-- Google analytics --> 
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-30272910-1', 'auto');
+    ga('send', 'pageview');
+  </script>   
+ </body>
+</html>

@@ -1,0 +1,65 @@
+<html>
+ <head> 
+  <title>Use Grunt and Uglifyjs to combine multiple javascript files into a single javascript file</title> 
+  <link rel="stylesheet" type="text/css" href="../../static/style/style.css"> 
+  <link rel="stylesheet" type="text/css" href="../../static/bundles/triangles/style.css"> 
+  <meta charset="utf-8"> 
+ </head> 
+ <body> 
+  <h2>Use Grunt and Uglifyjs to combine multiple javascript files into a single javascript file</h2>
+  <h2> </h2>
+  <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3> 
+  <div class="entry-content"> 
+   <p>When you are ready to publish your new JavaScript project, you can combine your JavaScript files into one file to get faster page downloads, fewer GET requests and lower complexity for users to manage. &nbsp;Users may import your project more easily with a single script tag rather than many script tags.</p> 
+   <pre><code class="language-bash">npm install grunt-contrib-uglify</code></pre>
+   <p>Here is a simple configuration that generates a single JavaScript file from three source files. Note that we generate a source map that is used to debug the JavaScript file in the browser. &nbsp;The source map will map code from our single script to the individual files so you can track down bugs more easily.</p> 
+   <pre><code class="language-javascript">// Sample project configuration.
+grunt.initConfig({
+  uglify: {
+    my_target : {
+      options : {
+        sourceMap : true,
+        sourceMapName : 'sourceMap.map'
+      },
+      files : {
+        'composite.min.js' : ['src/Model/Mux.js', 'src/Model/Hasher.js', 'src/Model/Cloner.js']
+      }
+    }
+  }
+});
+</code></pre> 
+   <p>Here is an example of minifying all JavaScript files in my projects src/ directory.</p> 
+   <pre><code class="language-javascript">// Combine all files in src/
+grunt.initConfig({
+  uglify: {
+    all_src : {
+      options : {
+        sourceMap : true,
+        sourceMapName : 'sourceMap.map'
+      },
+      src : 'src/**/*.js',
+      dest : 'composite.all.min.js'
+    }
+  }
+});
+</code></pre> 
+   <p>You can include your combined JavaScript file (composite.all.min.js) in a HTML page using the &lt;script&gt; tag.&nbsp; Because you created a source map, when you open the debugger, you will see a list of individual files rather than a single unintelligible combined file.</p> 
+   <p>Also note, if you’re starting a fresh project and like&nbsp;or are interested in Node.js on the backend, you may be interested in Browserify, which lets you write Node.js style modules in browser. &nbsp;Combining them into a single Javascript file is possible too. &nbsp;To learn more about this style of Javascript development, checkout the <a title="Browserify Tutorial" href="http://sethlakowske.com/articles/use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/">Browserify Tutorial</a>. &nbsp;It may be the direction you want to head towards in the future.</p> 
+   <p>Citations:</p> 
+   <p><a title="uglify using grunt" href="https://github.com/gruntjs/grunt-contrib-uglify">https://github.com/gruntjs/grunt-contrib-uglify</a></p> 
+   <p><a title="Uglify a directory" href="https://github.com/gruntjs/grunt-contrib-uglify/issues/23">https://github.com/gruntjs/grunt-contrib-uglify/issues/23</a></p> 
+  </div> 
+  <script src="../../static/bundles/triangles/bundle.js"></script> 
+  <table id="related"></table> 
+  <!-- Google analytics --> 
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-30272910-1', 'auto');
+    ga('send', 'pageview');
+  </script>   
+ </body>
+</html>

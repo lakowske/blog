@@ -18,16 +18,17 @@ var slurp          = require('slurp-some').slurp;
 
 //parse the cli arguments
 var port   = parseInt(process.argv[2], 10);
+var contentPath = path.normalize(process.argv[3]);
 
 //the mount point (i.e. url prefix to static content)
 var staticContent         = '/'
 
 //the relative path to a directory containing articles
-var articleDir = 'articles';
+var public = contentPath;
+var articleDir = public;
 
 var st     = ecstatic({
-    root : __dirname + staticContent,
-    baseDir : staticContent
+    root : contentPath
 })
 
 var server = http.createServer(function(req, res) {
@@ -35,6 +36,7 @@ var server = http.createServer(function(req, res) {
     var m = router.match(req.url);
     if (m) m.fn(req, res, m.params);
     else st(req, res);
+    //else res.end('nope');
 
 }).listen(port);
 
@@ -64,9 +66,9 @@ function articleFn(discovered, article) {
  */
 function routeArticle(article, discovered) {
     //Generated url to respond to (could be multiple urls if desired)
-    var url = '/' + article.root;
+    var url = article.url
     var type = article.type
-    console.log(url, type);
+    console.log(url, type, article.root);
     
     //Lamda to apply on url request
     router.addRoute(url, articleFn(discovered, article));
@@ -121,7 +123,7 @@ function append(selector, string) {
 }
 
 //Get a set of discovered articles
-articles.articles(articleDir, function(discovered) {
+articles.articles(articleDir, public, function(discovered) {
 
     //Apply url generation step
     var urls = discovered.map(function(article) { routeArticle(article, discovered)});

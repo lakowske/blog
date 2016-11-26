@@ -1,0 +1,45 @@
+<html>
+ <head> 
+  <title>Node.js closing JSONStream and other system resources gracefully</title> 
+  <link rel="stylesheet" type="text/css" href="../../static/style/style.css"> 
+  <link rel="stylesheet" type="text/css" href="../../static/bundles/triangles/style.css"> 
+  <meta charset="utf-8"> 
+ </head> 
+ <body> 
+  <h2>Node.js closing JSONStream and other system resources gracefully</h2>
+  <h2> </h2>
+  <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3> 
+  <div class="entry-content"> 
+   <p>System resources sometimes need to shutdown gracefully&nbsp;when exiting. &nbsp;In my case, I have a JSONStream open in node.js. It is serializing objects into JSON and streaming the result to disk, but when the program receives a shutdown signal (e.g. Ctrl-c) the JSON stream is not properly closed and I end up with a file like this:</p> 
+   <pre lang="javascript"><code> 
+[
+{"id":"myid","value":"myvalue"},
+</code>
+</pre> 
+   <p>This invalid JSON on disk does not have a closing bracket&nbsp;and&nbsp;causes programs to fail when trying to parse the data. &nbsp;This is bad!</p> 
+   <p>Let’s prove that we can shutdown JSONStream and other system resources gracefully.</p> 
+   <p>We create an eventemitter and assign it to the global variable COMPOSITE.Process. COMPOSITE is where I put my objects these days, but it could be any name. Next we listen for SIGINT and when we get a SIGINT (Ctrl-c), we emit an ‘exit’ event on Process. Anything that wants to gracefully exit, listens for the ‘exit’ event. When a process wants to do something on exit, they pass a promise to processFn. We won’t exit until all these Promises are resolved. Once they are all resolved, we know we can exit gracefully and therefore call process.exit().</p> 
+   <script src="https://gist.github.com/8da4636aeac4fbc4e30f.js?file="></script> 
+   <noscript> 
+    <p>View the code on <a href="https://gist.github.com/8da4636aeac4fbc4e30f">Gist</a>.</p> 
+   </noscript> 
+   <p>Now to prove Process is intercepting SIGINT (Ctrl-c), we create a test that would fail if Process was not intercepting SIGINT. We show that the test doesn’t fail and therefore is not, not intercepting SIGINT. Or in other words, the test demonstrates Process is intercepting SIGINT.</p> 
+   <script src="https://gist.github.com/a3172e1c90dbf0090dcb.js?file="></script> 
+   <noscript> 
+    <p>View the code on <a href="https://gist.github.com/a3172e1c90dbf0090dcb">Gist</a>.</p> 
+   </noscript> 
+  </div> 
+  <script src="../../static/bundles/triangles/bundle.js"></script> 
+  <table id="related"></table> 
+  <!-- Google analytics --> 
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-30272910-1', 'auto');
+    ga('send', 'pageview');
+  </script>   
+ </body>
+</html>

@@ -1,0 +1,94 @@
+<html>
+ <head> 
+  <title>Singleton, Factory and Mediator Patterns in Javascript</title> 
+  <link rel="stylesheet" type="text/css" href="../../static/style/style.css"> 
+  <link rel="stylesheet" type="text/css" href="../../static/bundles/triangles/style.css"> 
+  <meta charset="utf-8"> 
+ </head> 
+ <body> 
+  <h2>Singleton, Factory and Mediator Patterns in Javascript</h2>
+  <h2> </h2>
+  <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3> 
+  <div class="entry-content"> 
+   <p>This article outlines design patterns in Javascript and in particular how they are used in NodeHawk’s UAV Wifi testbed. To give some background, Nodehawk runs on a model aircraft’s onboard computer, presently a <a href="http://sethlakowske.com/technology/mobile-raspberry-pi/" title="Mobile Raspberry Pi">Raspberry Pi</a> in my case. NodeHawk transmits the current time from the onboard computer to a server on the ground, transmits the current location to a server and other tasks. </p> 
+   <p><strong>Factory</strong></p> 
+   <p>Factory classes build objects with specific contextual parameters(options, preferences, etc…). The user simply programs to the Factory classes interface and defers to the implementation what appropriate objects should be provided. Users can swap out a factory class implementation for a different factory class implementation with different contextual parameters. I like to call these Context classes because they provide the context under which the program will run. The Context classes also make a logical grouping of related object creation functions. A context object might look like so.</p> 
+   <pre lang="javascript"><code>
+function TimeContext() {}
+
+//return a Time implementation that works on the browser and server, but is only millisecond accurate.  
+TimeContext.prototype.time = function() { 
+  return new BrowserTime(); 
+}
+
+TimeContext.prototype.eventBus = function() { 
+  //do some work to build an event bus in build.  Here I am using Backbone's eventBus implementation. 
+  var myEventBus = {};
+  _.extend(eventBus, Backbone.Events);
+  return myEventBus;
+}
+
+...
+
+</code></pre> 
+   <p>I can now use my TimeContext Factory class like so</p> 
+   <pre language="javascript"><code>
+var timeContext = new TimeContext();
+var eventBus = timeContext.eventBus();
+var time = new timeContext.time();
+
+eventBus.on('someEvent', function() { console.log('milliseconds ' + time.getMillis()); });
+</code></pre> 
+   <code> </code> 
+   <p><code></code></p> 
+   <p>A NodeTimeContext implementation might define the time creation function differently</p> 
+   <pre lang="javascript"><code>
+
+...
+//return a Time implementation that works on the server, and is nanosecond accurate.
+TimeContext.prototype.time = function() { 
+  return new NodeTime(); 
+}
+...
+
+</code></pre> 
+   <p><strong>Singleton</strong><br> Suppose you want a single instance of an Javascript object or function.</p> 
+   <pre lang="javascript"><code>
+
+MyContext.prototype.eventBus = function() {
+  var mySingleInstanceOfEventBus = makeMeAnEventBus();
+  return mySingleInstanceOfEventBus;
+}
+
+</code></pre> 
+   <p>I use underscores memoize function to turn eventBus() into a singleton function.</p> 
+   <pre lang="javascript"><code>
+
+MyContext.prototype.eventBus = _.memoize(function() {
+  var mySingleInstanceOfEventBus = makeMeAnEventBus();
+  return mySingleInstanceOfEventBus;
+})
+
+</code></pre> 
+   <p>Now whenever I call myContext.eventBus(), I get back the same eventBus and not another instance of an event bus. By the way, I have made a convenience base class called Context which wraps all subclasses with underscore memoized functions to get rid of the _.memoize(...) on each factory function definition. The Context base class results in cleaner looking context class definitions.</p> 
+   <p><strong>Mediator</strong><br> Backbone.Events Mediates services in the Wifi testbed program. One service, simply called service, manages services. Users request a service to be loaded using this service. </p> 
+   <p>Service initialization events are attached to the eventbus using the pattern service: 
+    <service name>
+      . 
+     <br> The name of the service, for example 'service:time' is registered as an event name on the eventbus. When a 'service:time' event is triggered, the service callback is run and typically the service callback will register the service's events on the eventbus. For example, the time service registers the 'time' event. The position service registers the 'position' event. 
+    </service></p> 
+  </div> 
+  <script src="../../static/bundles/triangles/bundle.js"></script> 
+  <table id="related"></table> 
+  <!-- Google analytics --> 
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-30272910-1', 'auto');
+    ga('send', 'pageview');
+  </script>   
+ </body>
+</html>

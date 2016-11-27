@@ -20,8 +20,6 @@ var slurp          = require('slurp-some').slurp;
 var port   = parseInt(process.argv[2], 10);
 var contentPath = path.normalize(process.argv[3]);
 
-console.log('port: ' + port + ' contentPath: ' + contentPath)
-
 //the mount point (i.e. url prefix to static content)
 var staticContent         = '/'
 
@@ -38,8 +36,6 @@ var server = http.createServer(function(req, res) {
     var m = router.match(req.url);
     if (m) m.fn(req, res, m.params);
     else st(req, res);
-    //else res.end('nope');
-
 }).listen(port);
 
 function articleFn(discovered, article) {
@@ -66,9 +62,8 @@ function articleFn(discovered, article) {
 /*
  * Add article to router
  */
-function routeArticle(article, discovered) {
+function routeArticle(url, article, discovered) {
     //Generated url to respond to (could be multiple urls if desired)
-    var url = article.url
     var type = article.type
     console.log(url, type, article.root);
     
@@ -128,7 +123,13 @@ function append(selector, string) {
 articles.articles(articleDir, public, function(discovered) {
 
     //Apply url generation step
-    var urls = discovered.map(function(article) { routeArticle(article, discovered)});
+    var urls = discovered.map(function(article) {
+        var url = article.url
+        if (article.url === '/about/') {
+            routeArticle('/', article, discovered)
+        }
+        routeArticle(url, article, discovered)
+    });
 
     server.listen(port, function () {
         console.log('listening on :' + server.address().port);

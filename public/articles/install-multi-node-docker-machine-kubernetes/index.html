@@ -33,79 +33,15 @@
         and Setting up kubectl</a> to install kubectl.  kubectl is the general
         purpose CLI client for inspecting and manipulating a kubernetes cluster.
       </li>
+      <li>
+        <b>CoreOS:</b>
+      </li>        
     </ul>
 
-    <H2>Run Kubernetes using Docker</H2>
+    <H2>Coming soon...</H2>
 
-    Once you have Docker Toolbox installed, you can leverage Docker to
-    run Kubernetes with <a href="https://github.com/kubernetes/kubernetes/tree/master/cluster/images/hyperkube">hyperkube</a>.  First, setup the Kubernetes version environment
-    variable.
+    More to come, till then checkout minikube and <a href="../howto-install-docker-kubernets-local-registry/index.html">hyperkube in docker</a>
 
-    <pre><code class="language-bash">export K8S_VERSION=$(curl -sS https://storage.googleapis.com/kubernetes-release/release/stable.txt)</code></pre>
-    Now run the Kubernetes Hyperkube image.  This image will run
-    additional Kubernetes images used to orchestrate your
-    cluster. I've added --restart=always so that Kubernetes will be
-    relaunched on reboots, or if it dies.  You may tweak these starting
-    parameters at some point(i.e. --cluster-dns), but they ought to provide
-    working defaults for now.
-    <pre><code class="language-bash">export ARCH=amd64
-docker run -d \
---volume=/:/rootfs:ro \
---volume=/sys:/sys:rw \
---volume=/var/lib/docker/:/var/lib/docker:rw \
---volume=/var/lib/kubelet/:/var/lib/kubelet:rw \
---volume=/var/run:/var/run:rw \
---net=host \
---pid=host \
---privileged \
---restart=always \
-gcr.io/google_containers/hyperkube-${ARCH}:${K8S_VERSION} \
-/hyperkube kubelet \
---containerized \
---hostname-override=127.0.0.1 \
---api-servers=http://localhost:8080 \
---config=/etc/kubernetes/manifests \
---cluster-dns=8.8.8.8 \
---cluster-domain=cluster.local \
---allow-privileged --v=2</code></pre>
-    
-    Verify your setup is running.  You should see a number of kubernetes
-    containers in the list.
-    <pre><code class="language-bash">docker ps</code></pre>
-    After you verify the docker containers exist, you should verify
-    you can connect to the Kubernetes cluster.
-    <pre><code class="language-bash">kubectl get pods --all-namespaces</code></pre>
-    Note for macOS users: If that doesn't work, you may need to port forward to the virtual machine vm.
-    <pre><code class="language-bash">docker-machine ssh `docker-machine active` -N -L 8080:localhost:8080</code></pre>
-    
-    <H3>Run a private local registry</H3>
-    Start a private local registry that Docker always restarts if the container dies.
-    <pre><code class="language-bash">docker run -d -p 5000:5000 --restart=always --name registry registry:2</code></pre>
-    Build an image and tag it.
-    <pre><code class="language-bash">docker build -t hello-node .
-docker tag hello-node localhost:5000/hello-node</code></pre>
-    Push the image to your local registry.
-    <pre><code class="language-bash">docker push localhost:5000/hello-node</code></pre>
-    Now run a deployment in Kubernetes using the image located on your
-    local registry.
-    <pre><code class="language-bash">kubectl run hello-node --image=localhost:5000/hello-node --port=8888</code></pre>
-    
-    <H3 style="color: orange">Conclusion</H3>
-    <p>
-    You should now have a deployment of your image, in my case hello-node, running using your
-    private local registry, Kubernetes and Docker.  You can verify by
-    running <span><pre><code class="language-bash">kubectl get deployments</code></pre></span>
-    </p>
-    
-    <p>
-      You may also connect to your pod via port forwarding to verify
-      connectivity.  For example, I forward traffic from 8090 on
-      my localhost to port 8080 on a jenkins pod.  Now when I point
-      my browser to localhost:8090, I talk to the jenkins web service.
-      <pre><code class="language-bash">kubectl port-forward jenkins-3828317938-il1gc 8090:8080</code></pre>
-    </p>
-      
-    
     <!-- <script src="/static/bundles/triangles/bundle.js"></script> -->
     <table id="related"></table>
 

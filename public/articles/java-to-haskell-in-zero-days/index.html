@@ -1,0 +1,129 @@
+<html>
+  <head>
+    <title>Java to Haskell in Zero Daze</title>
+    <link rel="stylesheet" type="text/css"
+          href="../..//static/style/style.css">
+    <link rel="stylesheet" type="text/css"
+          href="../../static/bundles/triangles/style.css">
+  </head>
+
+  <body>
+    <h2>Java to Haskell in Zero Daze</h2>
+    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h4>Published: <time pubdate="pubdate">2017-03-2017</time></h4>
+
+    <p>
+      Haskell is a language that is foreign to most programmers coming
+      from an imperitive language like Java, C#, C++, Python and the
+      like.  You find new concepts that make learning Haskell feel
+      like learning your first imperitive language.  The first step is
+      to acknowledge this, so you don't get frustrated right away when
+      you aren't productive immediately.  This acknowledgment allowed
+      me to pass through many frustrating moments trying to do
+      something useful.  I realized, I wasn't trying to write a web
+      service, I was trying to learn haskell by way of writing a web
+      service.
+    </p>
+
+    <H2>Learn Haskell by picking a toy application you enjoy</H2>
+
+    Maybe you like to chain together processes, or write algorithms.
+    Whatever it is, do that so that you have some fun at the end of
+    each struggle.  Bite off small toy problems, and when you get too
+    ambitious, scale back and bite off something smaller.  When you're
+    stuck for hours, you know it's time to scale back and pick a smaller
+    topic within you're toy problem domain to learn.
+
+    <H2>Java to Haskell translation</H2>
+        <table>
+          <tr>
+            <th>Feature</th>
+            <th>Java</th>
+            <th>Haskell</th>
+          </tr>
+          <tr>
+            <td>Functions</td>
+            <td>
+              <pre>
+static &ltA, B&gt String = f(A a, B b) {
+  return "hi"
+}
+              </pre>
+            </td>
+            <td>
+              <pre>
+f :: a -> b -> String
+f a b = "hi"
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Structs
+            </td>
+            <td>
+              <pre>
+data MyType = MyType {
+  a :: String,
+  b :: String
+}
+
+λ> result = MyType "hi" "world"
+λ> a
+a :: MyType -> String
+λ> a result
+"hi"
+λ> b result
+"world"
+              </pre>
+            </td>
+            <td>
+              <pre>
+class MyType {
+  String a;
+  String b;
+}
+//Construct a MyType
+              </pre>
+            </td>
+          <tr>
+            <td>
+              Typedef
+            </td>
+            <td>
+              <pre>
+type PhoneBook = [(String, String)]
+              </pre>
+            </td>
+            <td>
+              <pre>
+interface PhoneBook extends Iterable&ltPair&ltString,String&gt&gt
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Interface
+            </td>
+            <td>
+              <pre>
+interface Add2 extends Add1 {
+  int add2(int number1, int number2);
+}
+              </pre>
+            </td>
+            <td>
+              <pre>
+class (Add1 a) => Add2 a where
+  add2 :: Integer -> Integer -> Integer                
+              </pre>
+            </td>
+            
+        </p>
+
+        <b> 
+          
+        
+  </body>
+  
+</html>

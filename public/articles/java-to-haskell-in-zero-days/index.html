@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Java to Haskell in Zero Daze</title>
+    <title>Java to Haskell in Zero Days</title>
     <link rel="stylesheet" type="text/css"
           href="../..//static/style/style.css">
     <link rel="stylesheet" type="text/css"
@@ -8,7 +8,7 @@
   </head>
 
   <body>
-    <h2>Java to Haskell in Zero Daze</h2>
+    <h2>Java to Haskell in Zero Days</h2>
     <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2017-03-2017</time></h4>
 
@@ -23,6 +23,14 @@
       something useful.  I realized, I wasn't trying to write a web
       service, I was trying to learn haskell by way of writing a web
       service.
+    </p>
+
+    <p>
+      If you're a productive Java or C# developer and learning
+      Haskell, you might at times find yourself a little hazy on some
+      of the concepts and terminology.  This document is meant to
+      clear up confusion by using terminology you are familiar
+      with to describe Haskell's terminology and syntax.
     </p>
 
     <H2>Learn Haskell by picking a toy application you enjoy</H2>
@@ -63,6 +71,14 @@ f a b = "hi"
             </td>
             <td>
               <pre>
+class MyType {
+  String a;
+  String b;
+}
+              </pre>
+            </td>
+            <td>
+              <pre>
 data MyType = MyType {
   a :: String,
   b :: String
@@ -77,27 +93,18 @@ a :: MyType -> String
 "world"
               </pre>
             </td>
-            <td>
-              <pre>
-class MyType {
-  String a;
-  String b;
-}
-//Construct a MyType
-              </pre>
-            </td>
           <tr>
             <td>
               Typedef
             </td>
             <td>
               <pre>
-type PhoneBook = [(String, String)]
+interface PhoneBook extends Iterable&ltPair&ltString,String&gt&gt
               </pre>
             </td>
             <td>
               <pre>
-interface PhoneBook extends Iterable&ltPair&ltString,String&gt&gt
+type PhoneBook = [(String, String)]
               </pre>
             </td>
           </tr>
@@ -115,14 +122,20 @@ interface Add2 extends Add1 {
             <td>
               <pre>
 class (Add1 a) => Add2 a where
-  add2 :: Integer -> Integer -> Integer                
+  add2 :: Integer -> Integer -> Integer        
               </pre>
             </td>
-            
-        </p>
+          </tr>
+        </table>
+</p>
+<h3>Haskell documentation</h3>
 
-        <b> 
-          
+<p>
+Haskell documentation is found on hackage.  After some time you'll
+be able to read the definitions.  Sometimes the author has documented
+their package well with examples.  Until you're more familiar, you'll
+be better off learning the fundamentals, so go <a href="http://learnyouahaskell.com">learn you a haskell</a>.
+</p>
         
   </body>
   

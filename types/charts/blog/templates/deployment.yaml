@@ -21,9 +21,11 @@ spec:
           httpGet:
             path: /
             port: {{ .Values.service.internalPort }}
+          timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /
             port: {{ .Values.service.internalPort }}
+          timeoutSeconds: 5
         resources:
 {{ toYaml .Values.resources | indent 12 }}

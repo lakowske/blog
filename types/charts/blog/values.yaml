@@ -11,6 +11,8 @@ service:
   type: ClusterIP
   externalPort: 80
   internalPort: 5555
+  externalIPs:
+    - 192.168.99.100
 resources:
   limits:
     cpu: 100m

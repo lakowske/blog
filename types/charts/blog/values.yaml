@@ -13,6 +13,10 @@ service:
   internalPort: 5555
   externalIPs:
     - 192.168.99.100
+  liveness:
+    timeoutSeconds: 10
+  readiness:
+    timeoutSeconds: 10
 resources:
   limits:
     cpu: 100m

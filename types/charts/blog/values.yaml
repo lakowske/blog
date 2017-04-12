@@ -14,9 +14,9 @@ service:
   externalIPs:
     - 192.168.99.100
   liveness:
-    timeoutSeconds: 10
+    timeoutSeconds: 15
   readiness:
-    timeoutSeconds: 10
+    timeoutSeconds: 15
 resources:
   limits:
     cpu: 100m

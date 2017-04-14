@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Kubernetes CoreOS Multi-Node Cluster Composed</title>
+    <link rel="stylesheet" type="text/css"
+          href="/static/style/style.css">
+    <link rel="stylesheet" type="text/css"
+          href="/static/bundles/triangles/style.css">
+  </head>
+
+  <body>
+    <h2>Composing A Kubernetes CoreOS Multi-Node Cluster</title>
+    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h4>Published: <time pubdate="pubdate">2016-12-03</time></h4>
+
+    <p>
+      Shell scripts can be monad like in their construction.  When
+      shell scripts are chained together with pipes, you get a sense
+      of their composability. I'll walk you through a few examples to
+      give you a concrete example of this composability.
+    </p>
+      
+    <p>
+      Copies my .ssh directory to a remote computer
+    </p>
+
+    <pre><code class="language-bash">(cd /home/seth ; tar -cf - .ssh) | ssh seth@sethlakowske.com -c tar -xf -</code></pre>
+
+    <p>
+      tar is amazing! It maps a local filesystem to a stream that we can
+      send to stdout, or in this case across the internet! At the
+      other end of the pipe, tar maps our stream to the
+      other local filesystem.  Many programs
+      use the filesystem as their environment, reading config files
+      /etc, ~/.ssh or wherever.  If you have a program that
+      only relies on the filesystem, add tar then your
+      program can take a stream as input too!
+    </p>
+
+    <pre><code class="language-bash">
+        (cd /home/seth ; tar -cf - .ssh) | ssh seth@sethlakowske.com -c tar -xf -
+        alias k8s-keys='docker run -i lakowske/k8s-keys'
+        alias tout='tar -cf -'
+        alias tin='tar -xf -'
+    </code></pre>
+    
+    
+</body>
+
+

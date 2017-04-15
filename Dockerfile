@@ -1,7 +1,8 @@
-FROM node:4-onbuild
-
-EXPOSE 5555
+FROM nginx:alpine
 
 MAINTAINER lakowske@gmail.com
 
-CMD node index.js 5555 ./public
+COPY ./public /usr/share/nginx/html/blog
+
+
+

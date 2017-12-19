@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>How-to run Kubernetes, Registry locally with ingress</title>
+    <title>Minikube Registry and Dashboard using Helm</title>
     <link rel="stylesheet" type="text/css"
           href="/static/style/style.css">
     <link rel="stylesheet" type="text/css"
@@ -8,7 +8,7 @@
   </head>
 
   <body>
-    <h2>Expose Registry and Dashboard with Helm on Minikube</h2>
+    <h2>Minikube Registry and Dashboard using Helm</h2>
     <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2017-12-08</time></h4>
 
@@ -110,7 +110,8 @@ docker tag hello-node registry.minikube.st81ess.com:80/hello-node</code></pre>
     You should now have a deployment of your image, in my case hello-node, running using your
     private local registry, Kubernetes and Docker.  You can verify by
     running <span><pre><code class="language-bash">kubectl get deployments</code></pre></span>
-    or <a href="http://dashboard.minikube.st81ess.com">http://dashboard.minikube.st81ess.com</a> and viewing your deployments.
+    - or -<br>
+    <a href="http://dashboard.minikube.st81ess.com">http://dashboard.minikube.st81ess.com</a> and view your deployments.
     </p>
     
     <!-- <script src="/static/bundles/triangles/bundle.js"></script> -->

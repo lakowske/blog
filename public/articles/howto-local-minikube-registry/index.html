@@ -95,7 +95,9 @@ helm repo update
     <pre><code class="language-bash">eval $(minikube docker-env)</code></pre>
     
     Build an image and tag it.
-    <pre><code class="language-bash">docker build -t hello-node .
+    <pre><code class="language-bash">git clone https://bitbucket.org/seth_lakowske/hello-node.git
+cd hello-node
+docker build -t hello-node .
 docker tag hello-node registry.minikube.st81ess.com:80/hello-node</code></pre>
     Push the image to your local registry.
     <pre><code class="language-bash">docker push registry.minikube.st81ess.com:80/hello-node</code></pre>

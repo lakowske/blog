@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Private Minikube Local Docker Registry using Helm</title>
+    <title>Private Minikube Docker Registry using Helm</title>
     <link rel="stylesheet" type="text/css"
           href="/static/style/style.css">
     <link rel="stylesheet" type="text/css"
@@ -8,14 +8,14 @@
   </head>
 
   <body>
-    <h2>Private Minikube Local Docker Registry using Helm</h2>
+    <h2>Private Minikube Docker Registry using Helm</h2>
     <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2017-12-08</time></h4>
 
     <p>
-      This guide will walk you through the steps to setting up an
-      environment to run Kubernetes (K8S), a password protected Docker Registry and Nginx
-      Ingress on your laptop or workstation.
+      This guide will walk you through the steps to setting up
+      a password protected Docker Registry and Nginx
+      Ingress controller on your laptop or workstation.
       You'll need a Docker client, Minikube, Helm and
       Kubernetes client (kubectl).
     </p>
@@ -45,11 +45,10 @@
 
     <H2>Run Kubernetes using Minikube</H2>
 
-    Once you have Docker Toolbox installed, you can use Docker
-    and Minikube together with Minikube's built-in docker engine.
-    <br><br>
-    Start Minikube with a generous helping of resources if you have large
-    work loads: 4 cpus, 6 GB of RAM and 100 GB Storage.
+    Start Minikube with a generous helping of resources if you run large
+    work loads.  For me that means running 4 cpus, 6 GB of RAM and 100
+    GB Storage.  Another key is to add an insecure registry flag so
+    docker will push to our registry over plaintext http port 80.
     
     <pre><code class="language-bash">minikube start --cpus 4 --disk-size 100g --memory 6000 --insecure-registry registry.minikube.st81ess.com:80</code></pre>
 
@@ -68,7 +67,7 @@
     
     <H3>Run a local private registry</H3>
 
-    Add a chart repo and initialize helm.
+    Add a chart repo and initialize helm.  Feel free to checkout my <a href="http://github.com/lakowske/charts">charts</a> repo to view the contents of these charts.
     <pre><code class="language-bash">helm repo add lakowske https://lakowske.github.io/charts
 #After adding the repo, update your index.
 helm repo update
@@ -82,12 +81,19 @@ helm init ; kubectl rollout status -w deployment/tiller-deploy --namespace=kube-
 kubectl create secret generic registry-auth --from-file=auth</code></pre>
 
     Start a private local registry deployment that Kubernetes keeps
-    alive if the container dies.  It's sitting behind an Nginx ingress
+    alive even if the container dies.  It's sitting behind an Nginx ingress
     controller that provides basic authentication.  Basic authentication
-    is helpful tool when we deploy the services like a registry over
+    is helpful tool when deploying services like a registry over
     the public internet.  In those cases, we also need to be sure to
     use https connection.  I often use kube-lego, or Kubernetes Let's
-    Encrypt.  Feel free to checkout my <a href="http://github.com/lakowske/charts">charts</a> repo to view the contents of this chart.
+    Encrypt for this purpose.  In this case, all the traffic is local,
+    so we'll stick to http.  The minikube-registry is a parent chart
+    that contains Nginx ingress controller, a Docker registry and a
+    dashboard.  The chart doesn't have any resources of its own, it
+    simply depends on sub-charts that do.  We are reusing the building
+    blocks on the
+    excellent <a href="https://github.com/kubernetes/charts">kubernetes
+    charts</a> repo.
     
     <pre><code class="language-bash">helm install lakowske/minikube-registry</code></pre>
     

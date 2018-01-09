@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Minikube Registry and Dashboard using Helm</title>
+    <title>Private Minikube Local Docker Registry using Helm</title>
     <link rel="stylesheet" type="text/css"
           href="/static/style/style.css">
     <link rel="stylesheet" type="text/css"
@@ -8,7 +8,7 @@
   </head>
 
   <body>
-    <h2>Minikube Registry and Dashboard using Helm</h2>
+    <h2>Private Minikube Local Docker Registry using Helm</h2>
     <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2017-12-08</time></h4>
 
@@ -61,35 +61,29 @@
     *.minikube.st81ess.com has been setup to resolves to
     192.168.99.100. *.minikube.st81ess.com is a flexible wildcard DNS
     useful in a typical Minikube environments to route into http/https
-    Ingress resources within K8S.  If you had your own domain, you could create
+    Ingress resources within K8S.  If you have your own domain, you can create
     *.minikube.mydomain.com to do the same.
     
     <H3>Run a local private registry</H3>
-    
-    Start a private local registry that Kubernetes always restarts if the container dies.
-    <pre><code class="language-bash">minikube addons enable registry</code></pre>
 
-    Turn on the ingress controller
-    <pre><code class="language-bash">minikube addons enable ingress</code></pre>
-
-    Add a chart repo.
+    Add a chart repo.  And initialize helm.
     <pre><code class="language-bash">helm repo add lakowske https://lakowske.github.io/charts
 #After adding the repo, update your index.	
 helm repo update
+helm init ; kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system        
     </code></pre>
 
-    If you haven't already done so, init helm and wait for tiller
-    <pre><code class="language-bash">helm init ; kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system</code></pre>
-    
-    Install the dashboard ingress chart to expose the dashboard on <a href="http://dashboard.minikube.st81ess.com">http://dashboard.minikube.st81ess.com</a>
-    <pre><code class="language-bash">helm install --namespace kube-system lakowske/minikube-dashboard-ingress</code></pre>
+    Create a username and password for your registry.  In this case,
+    we'll create a user named admin, but feel free to call it what you
+    want.  Next, add the secret to the cluster
+    <pre><code class="language-bash">htpasswd -c auth admin
+kubectl create secret generic registry-auth --from-file=auth</pre></code>
 
-    Install a registry ingress chart to expose the registry on <a href="http://registry.minikube.st81ess.com">http://registry.minikube.st81ess.com</a>
-    <pre><code class="language-bash">helm install --namespace kube-system lakowske/minikube-dashboard-ingress --set ingress.host=registry.minikube.st81ess.com --set service.name=registry</code></pre>
-
-    Edit the nginx ingress config map and set nginx-load-balancer-conf config map proxy-body-size to 0 in the data section.  This way you'll be able to upload large layers to the registry.
-    <pre><code class="language-bash">kubectl edit configmap --namespace kube-system nginx-load-balancer-conf</code></pre>
     
+    Start a private local registry that Kubernetes always restarts if
+    the container dies and is password protected.
+    <pre><code class="language-bash">helm install lakowske/minikube-registry</code></pre>
+
     To import the Docker environment into your current shell.
 
     <pre><code class="language-bash">eval $(minikube docker-env)</code></pre>

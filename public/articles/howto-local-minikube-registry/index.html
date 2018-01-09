@@ -77,7 +77,7 @@ helm init ; kubectl rollout status -w deployment/tiller-deploy --namespace=kube-
     we'll create a user named admin, but feel free to call it what you
     want.  Next, add the secret to the cluster
     <pre><code class="language-bash">htpasswd -c auth admin
-kubectl create secret generic registry-auth --from-file=auth</pre></code>
+kubectl create secret generic registry-auth --from-file=auth</code></pre>
 
     
     Start a private local registry that Kubernetes always restarts if

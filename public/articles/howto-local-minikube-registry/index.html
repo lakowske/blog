@@ -14,16 +14,18 @@
 
     <p>
       This guide will walk you through the steps to setting up an
-      environment to run Kubernetes (K8S), Docker Registry and Nginx
+      environment to run Kubernetes (K8S), a password protected Docker Registry and Nginx
       Ingress on your laptop or workstation.
-      You'll need to install Docker, Minikube, Helm and
+      You'll need a Docker client, Minikube, Helm and
       Kubernetes client (kubectl).
     </p>
     <H2>Requirements</H2>
     <ul>
       <li>
         <b>Docker:</b>
-        Install <a href="https://www.docker.com/products/docker-toolbox">Docker Toolbox</a>.
+        Install <a href="https://www.docker.com/products/docker-toolbox">Docker
+        Toolbox</a> to get a Docker client used to talk to Minikube's
+        built-in Docker engine.
       </li>
       <li>
         <b>Kubectl:</b>
@@ -48,25 +50,27 @@
     Once you have Docker Toolbox installed, you can use Docker
     and Minikube together with Minikube's built-in docker engine.
     <br><br>
-    Start Minikube with a generous helping of resources if you have big
-    loads: 4 cpus, 6 GB of RAM and 100 GB Storage.
+    Start Minikube with a generous helping of resources if you have large
+    work loads: 4 cpus, 6 GB of RAM and 100 GB Storage.
     
     <pre><code class="language-bash">minikube start --cpus 4 --disk-size 100g --memory 6000 --insecure-registry registry.minikube.st81ess.com:80</code></pre>
 
     Requests to registry.minikube.st81ess.com will resolve to your
-    local minikube ingress address, 192.168.99.100, and
-    nginx ingress controller will route the request to a backing
+    local Minikube ingress address, 192.168.99.100, and
+    Nginx ingress controller will route the request to a backing
     registry service using the hostname provided.
     <br><br>
     *.minikube.st81ess.com has been setup to resolves to
     192.168.99.100. *.minikube.st81ess.com is a flexible wildcard DNS
     useful in a typical Minikube environments to route into http/https
     Ingress resources within K8S.  If you have your own domain, you can create
-    *.minikube.mydomain.com to do the same.
+    *.minikube.mydomain.com to do the same.  Feel free to do so, we'll
+    be using registry.minikube.st81ess.com in these examples, which
+    will point to your local Minikube virtualbox.
     
     <H3>Run a local private registry</H3>
 
-    Add a chart repo.  And initialize helm.
+    Add a chart repo and initialize helm.
     <pre><code class="language-bash">helm repo add lakowske https://lakowske.github.io/charts
 #After adding the repo, update your index.	
 helm repo update

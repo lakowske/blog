@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>Installing helm on MiniShift</title>
+    <link rel="stylesheet" type="text/css"
+          href="/static/style/style.css">
+    <link rel="stylesheet" type="text/css"
+          href="/static/bundles/triangles/style.css">
+  </head>
+
+  <body>
+    <h2>Installing helm on MiniShift</h2>
+    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h4>Published: <time pubdate="pubdate">2018-08-11</time></h4>
+
+    <p>
+      Installing Helm on MiniShift requires a little extra effort
+      compared to Minikube.
+
+    </p>
+
+    <H2>Requirements</H2>
+    <ul>
+      <li>
+        <b>Kubectl:</b>
+        Follow the instructions at <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">Installing
+        and Setting up kubectl</a> to install kubectl.  kubectl is the general
+        purpose CLI client for inspecting and manipulating a kubernetes cluster.
+      </li>
+      <li>
+	<b>Minishift:</b>
+	Install <a href="https://github.com/minishift/minishift/releases"/>Minishift</a>
+</li>
+<li>
+	<b>Helm:</b>
+	Install <a href="https://github.com/kubernetes/helm/blob/master/docs/install.md"/>Helm</a>
+      </li>
+</ul>
+
+    <H2>Run Helm using Minishift</H2>
+
+    Start Minishift with a generous helping of resources if you run large
+    work loads.  For me that means running 4 cpus, 8 GB of RAM and 100
+    GB Storage.
+    
+    <pre><code class="language-bash">minishift start --vm-driver virtualbox --cpus 4 --memory 8GB --disk-size 100GB</code></pre>
+
+    Login as admin
+    <pre><code class="language-bash">oc login -u system:admin</code></pre>    
+    Create a service account for helm.
+    <pre><code class="language-bash">kubectl create sa helm -n kube-system</code></pre>
+    Give it cluster-admin priviliges, which should be okay in this case because we are on a local development cluster.  On a production cluster, more restrictions is likely appropriate.
+    <pre><code class="language-bash">kubectl create clusterrolebinding helm-admin --clusterrole=cluster-admin --serviceaccount=kube-system:helm</code></pre>
+    Start tiller on the cluster using the helm service account.
+    <pre><code class="language-bash">helm init --service-account helm</code></pre>
+    Expose tiller service to the outside world using a NodePort
+    <pre><code class="language-bash">kubectl expose deployment/tiller-deploy --target-port=tiller --type=NodePort --name=tiller -n kube-system</code></pre>
+    Tell helm where the random tiller NodePort lives
+    <pre><code class="language-bash">export HELM_HOST="$(minishift ip):$(oc get svc/tiller -o jsonpath='{.spec.ports[0].nodePort}' -n kube-system --as=system:admin)"</code></pre>
+    
+    
+</body>
+</html>

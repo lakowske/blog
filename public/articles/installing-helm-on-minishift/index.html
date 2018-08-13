@@ -56,7 +56,18 @@
     <pre><code class="language-bash">kubectl expose deployment/tiller-deploy --target-port=tiller --type=NodePort --name=tiller -n kube-system</code></pre>
     Tell helm where the random tiller NodePort lives
     <pre><code class="language-bash">export HELM_HOST="$(minishift ip):$(oc get svc/tiller -o jsonpath='{.spec.ports[0].nodePort}' -n kube-system --as=system:admin)"</code></pre>
+
+    <H2>Install kubernetes-dashboard chart</H2>
+
+    Installs the dashboard using the helm service account that was created earlier.  This gives the dashboard cluster-admin priviliges.
     
+    <pre><code class="language-bash">helm install stable/kubernetes-dashboard --set serviceAccount.name=helm --set serviceAccount.create=false --namespace kube-system --name hi</code></pre>
+    
+    Expose the dashboard service.
+
+    <pre><code class="language-bash">kubectl expose deployment/hi-kubernetes-dashboard --type=NodePort --name=dash -n kube-system</code></pre>
+    
+
     
 </body>
 </html>

@@ -38,6 +38,10 @@ var server = http.createServer(function(req, res) {
     else st(req, res);
 }).listen(port);
 
+/*
+    Read an article, add related articles, append some style to each article and pipe it to
+    the response.
+*/
 function articleFn(discovered, article) {
 
     return function(req, res, params) {
@@ -60,7 +64,7 @@ function articleFn(discovered, article) {
 }
 
 /*
- * Add article to router
+ * Add article to router and decorate with the articleFn
  */
 function routeArticle(url, article, discovered) {
     //Generated url to respond to (could be multiple urls if desired)
@@ -119,7 +123,7 @@ function append(selector, string) {
     return tr;
 }
 
-//Get a set of discovered articles
+//Find a set of discovered articles and add them to the router
 articles.articles(articleDir, public, function(discovered) {
 
     //Apply url generation step

@@ -24,7 +24,7 @@
   "dependencies": {
     "blog-articles": "git://github.com/lakowske/blog-articles",
     "cookie": "^0.1.2",
-    "ecstatic": "^0.5.8",
+    "ecstatic": "^4.1.2",
     "github-webhook-deployer": "^1.0.0",
     "hyperglue": "^2.0.1",
     "hyperspace": "^2.1.4",

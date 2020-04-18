@@ -31,12 +31,30 @@ var st     = ecstatic({
     root : contentPath
 })
 
-var server = http.createServer(function(req, res) {
-    console.info(req.method + ' ' + req.url);
-    var m = router.match(req.url);
-    if (m) m.fn(req, res, m.params);
-    else st(req, res);
-}).listen(port);
+
+
+
+//Find a set of discovered articles and add them to the router
+articles.articles(articleDir, public, function(discovered) {
+
+    //Apply url generation step
+    var urls = discovered.map(function(article) {
+        var url = article.url
+        if (article.url === '/about/') {
+            routeArticle('/', article, discovered)
+        }
+        routeArticle(url, article, discovered)
+    });
+
+    console.log('attempting to listen on ' + port);    
+    var server = http.createServer(function(req, res) {
+        console.info(req.method + ' ' + req.url);
+        var m = router.match(req.url);
+        if (m) m.fn(req, res, m.params);
+        else st(req, res);
+    }).listen(port);
+        
+})
 
 /*
     Read an article, add related articles, append some style to each article and pipe it to
@@ -123,21 +141,3 @@ function append(selector, string) {
     return tr;
 }
 
-//Find a set of discovered articles and add them to the router
-articles.articles(articleDir, public, function(discovered) {
-
-    //Apply url generation step
-    var urls = discovered.map(function(article) {
-        var url = article.url
-        if (article.url === '/about/') {
-            routeArticle('/', article, discovered)
-        }
-        routeArticle(url, article, discovered)
-    });
-
-    server.listen(port, function () {
-        console.log('listening on :' + server.address().port);
-    });
-
-    
-})

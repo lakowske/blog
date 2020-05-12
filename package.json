@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/lakowske/Blog",
   "dependencies": {
-    "blog-articles": "git://github.com/lakowske/blog-articles.git",
+    "blog-articles": "^0.1.2",
     "ecstatic": "^4.1.2",
     "hyperglue": "^2.0.1",
     "hyperspace": "^2.1.4",

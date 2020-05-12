@@ -1,7 +1,10 @@
-FROM node:4-onbuild
-
-EXPOSE 8080
+FROM node:14-slim
 
 LABEL MAINTAINER="lakowske@gmail.com"
+WORKDIR /home/node/app
+COPY . .
 
-CMD node index.js 8080 ./public
+EXPOSE 8080
+ENV PORT=8080
+
+CMD npm run serve

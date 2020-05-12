@@ -6,4 +6,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD npm run serve
+CMD node index.js 8080 ./public

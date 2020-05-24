@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/tsc src/index.ts",    
     "index": "./node_modules/.bin/ts-node src/index.ts index ./public",
-    "serve": "./node_modules/.bin/ts-node src/index.ts serve ./public"
+    "serve": "node src/index.js serve ./public"
   },
   "repository": {
     "type": "git",
@@ -34,11 +35,11 @@
     "node-syntaxhighlighter": "^0.8.1",
     "routes": "^2.0.0",
     "trumpet": "^1.7.0",
+    "slurp-some": "^1.0.2",    
     "walk": "^2.3.9"
   },
   "devDependencies": {
     "@types/node": "14.0.0",
-    "slurp-some": "^1.0.2",
     "tape": "^4.5.1",
     "through": "^2.3.6",
     "through2": "^0.6.3",

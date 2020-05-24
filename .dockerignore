@@ -1,0 +1,6 @@
+# ignore these files
+**
+!src
+!public
+!package.json
+!tsconfig.json

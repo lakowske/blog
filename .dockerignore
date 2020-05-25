@@ -3,4 +3,5 @@
 !src
 !public
 !package.json
+!Dockerfile.builder
 !tsconfig.json

@@ -1,13 +1,7 @@
-FROM node:14-slim as builder
-
-LABEL MAINTAINER="lakowske@gmail.com"
-WORKDIR /home/node/app
-COPY . .
-RUN npm install
-RUN npm run index
-RUN npm run build
+FROM gcr.io/coherent-coder-103403/blog-builder as builder
 
 FROM node:14-slim
+LABEL MAINTAINER="lakowske@gmail.com"
 WORKDIR /home/node/app
 COPY --from=builder /home/node/app/package.json .
 RUN npm install --production

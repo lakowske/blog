@@ -54,7 +54,13 @@ function fromCmdLine() {
     root : contentPath
   })  
 
-  return Promise.resolve({public: contentPath, articleDir: articleDir, port: 8080, router: router, st: st, cmd: cmd})
+  return Promise.resolve({
+    public: contentPath, 
+    articleDir: articleDir, 
+    port: 8080, 
+    router: router, 
+    st: st, 
+    cmd: cmd})
 } 
 
 function serveArticles(env) {
@@ -72,13 +78,23 @@ function serveArticles(env) {
   return Promise.resolve(env);
 }
 
+function upload(req, res, params) {
+  console.log(params);
+}
+
 function routeArticles(env) {
+  //Add upload function
+  env.router.addRoute('/upload', upload);
+
   //Apply url generation step
   var urls = env.discovered.map(function(article) {
     var url = article.url
+
+    //Route the root of the page to /about
     if (article.url === '/about/') {
         routeArticle('/', article, env)
     }
+
     routeArticle(url, article, env)
   });
 

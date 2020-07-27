@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/tsc src/index.ts",    
+    "build": "./node_modules/.bin/tsc src/index.ts",
     "index": "./node_modules/.bin/ts-node src/index.ts index ./public",
+    "watch": "./node_modules/.bin/tsc-watch --onSuccess \"node ./dist/render.js serve ./public\"",
     "serve": "node src/index.js serve ./public"
   },
   "repository": {
@@ -32,10 +33,11 @@
     "hyperglue": "^2.0.1",
     "hyperspace": "^2.1.4",
     "is-root": "^1.0.0",
+    "md5": "^2.2.1",
     "node-syntaxhighlighter": "^0.8.1",
     "routes": "^2.0.0",
+    "slurp-some": "^1.0.2",
     "trumpet": "^1.7.0",
-    "slurp-some": "^1.0.2",    
     "walk": "^2.3.9"
   },
   "devDependencies": {
@@ -44,6 +46,7 @@
     "through": "^2.3.6",
     "through2": "^0.6.3",
     "ts-node": "^8.10.1",
+    "tsc-watch": "^4.2.8",
     "typescript": "^3.9.3"
   }
 }

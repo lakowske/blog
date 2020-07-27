@@ -1,0 +1,45 @@
+<html>
+  <head>
+    <title>Testing Attoparsec Against Buffer Overflow</title>
+  </head>
+
+  <body>
+    <h2>Testing Attoparsec Against Buffer Overflow</h2>
+    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h4>Published: <time pubdate="pubdate">2017-11-05</time></h4>
+
+    <p>
+      We want to demonstrate an attoparsec parser that can survive a
+      buffer overflow attack.  If more than n bytes have been received
+      with either a successful header or a failed parse.
+    </p>
+
+    <p>
+      We'll be constructing lazy byte strings from [Char] type.
+      [Char] is a synonym for String.  We'll also be using
+      OverloadedStrings which makes string literals polymorphic over
+      IsString typeclass.
+    </p>
+
+    <pre><code class="language-haskell">
+	-- you can write
+	a :: String
+	a = "hi"
+
+	b :: Text
+	b = "world"
+    </code></pre>
+
+    <p>
+      When parsing using a combinator library, the difficulty comes
+      from precisely defining the parsed object.  If you specify what
+      it is, but fail to define what should come next, then you may
+      match a stream of characters prematurely.  The remaining
+      characters that should be included in the match are now the
+      subject of the next parse attempts and will not match because
+      they should have been consumed by the previous parser.
+    </p>
+      
+  </body>
+</html>
+

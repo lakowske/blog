@@ -8,7 +8,7 @@ RUN npm install --production
 COPY --from=builder /home/node/app/src/index.js ./src/index.js
 COPY --from=builder /home/node/app/index.json .
 COPY --from=builder /home/node/app/public ./public
-
+RUN npm run index
 
 EXPOSE 8080
 ENV PORT=8080

@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>Thoughts on Search</title>
+    <link rel="stylesheet" type="text/css"
+          href="/static/style/style.css">
+    <link rel="stylesheet" type="text/css"
+          href="/static/bundles/triangles/style.css">
+  </head>
+
+  <body>
+    <h2>Thoughts on Search</h2>
+    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h4>Published: <time pubdate="pubdate">2022-08-13</time></h4>
+
+    <H2>Searching and APIs</H2>
+    <ul>
+      <li>
+	<H3>APIs that are a subset of search</H3>
+        Often an API is a subset of search.  Anytime a user of the API
+        gets a list of items back matching some criteria, it might
+        simply be a search query masquerading as an API call.  One can
+        turn search queries into an API call.  For example, give me all
+        objects that were created on day X could be List<ObjectType>
+        getObjectsCreatedOn(Date day).  So we know that some API calls
+        have a corresponding search (e.g. List<ObjectType>
+        getObjectCreatedOn(Date someDay) -> search query: date:
+        someDay).
+      </li>
+      <li>
+        <H3>One search API vs many equivalent API calls</H3>
+        One can therefore reduce many equivalent API calls to a single
+        search API.  One still needs typing for the search result
+        objects and potentially transforming objects from a serialized
+        form to a reiffied form (e.g. bytes -> plain old objects).
+      </li>
+    </ul>
+        
+        
+
+      
+    <table id="related"></table>
+    
+  </body>
+</html>

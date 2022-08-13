@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Thoughts on Search</title>
+    <title>Thoughts on Search and APIs</title>
     <link rel="stylesheet" type="text/css"
           href="/static/style/style.css">
     <link rel="stylesheet" type="text/css"
@@ -8,7 +8,7 @@
   </head>
 
   <body>
-    <h2>Thoughts on Search</h2>
+    <h2>Thoughts on Search and APIs</h2>
     <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2022-08-13</time></h4>
 
@@ -20,11 +20,9 @@
         gets a list of items back matching some criteria, it might
         simply be a search query masquerading as an API call.  One can
         turn search queries into an API call.  For example, give me all
-        objects that were created on day X could be List<ObjectType>
-        getObjectsCreatedOn(Date day).  So we know that some API calls
-        have a corresponding search (e.g. List<ObjectType>
-        getObjectCreatedOn(Date someDay) -> search query: date:
-        someDay).
+        objects that were created on day X (date: xx/yy/zzzz) could be
+        <pre><code class="language-java">List&ltObjectType&gt getObjectsCreatedOn(Date someDay)</code></pre>
+        So we know that some API calls have a corresponding search query.
       </li>
       <li>
         <H3>One search API vs many equivalent API calls</H3>

@@ -18,18 +18,24 @@
 	<H3>APIs that are a subset of search</H3>
         Often an API is a subset of search.  Anytime a user of the API
         gets a list of items back matching some criteria, it might
-        simply be a search query masquerading as an API call.  One can
-        turn search queries into an API call.  For example, give me all
-        objects that were created on day X (date: xx/yy/zzzz) could be
+        be a search query written as an API call.  One can often
+        turn search queries into an API call.  For example, give me objects that were created on day X (date: xx/yy/zzzz).
         <pre><code class="language-java">List&ltObjectType&gt getObjectsCreatedOn(Date someDay)</code></pre>
-        So we know that some API calls have a corresponding search query.
+        So some API calls have a corresponding search query.
+      </li>
+      <li>
+        <H3>Search is a desired/required feature</H3>
+        If users want to search some criteria to
+        display, debug or measure datasets, then they may want a search
+        API.  It's better to have the search API early to leverage it later on,
+        when it's  worthwile.
       </li>
       <li>
         <H3>One search API vs many equivalent API calls</H3>
-        One can therefore reduce many equivalent API calls to a single
+        One can reduce many equivalent API calls to a single
         search API.  One still needs typing for the search result
         objects and potentially transforming objects from a serialized
-        form to a reiffied form (e.g. bytes -> plain old objects).
+        form to a reified form (e.g. bytes -> plain old objects).
       </li>
     </ul>
         

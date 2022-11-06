@@ -1,7 +1,7 @@
 #glcanvas {
-#    position: fixed;
+    position: absolute;
     top: 0px;
-    left: 0px;
+    right: 0px;
     width: 180px;
     height: 180px;
 #    z-index: -1;

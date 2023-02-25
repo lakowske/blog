@@ -30,6 +30,10 @@ table#related {
     border-radius: 5px;
 }
 
+a.articleLink {
+    font-size: 20px;
+}
+
 pre, code{
     direction: ltr;
     text-align: left;

@@ -4,15 +4,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import dotenv from 'dotenv';
 import { Configuration, OpenAIApi } from 'openai';
-import {Content} from "./Content.js";
+import {Content, LoadContext} from "./Content.js";
 import {indexMemorySize, prepareContent} from "./ContentUtils.js";
 
 dotenv.config();
 
-const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+
 
 function runServer(index : Map<string, Content>) {
     //If PORT env is set, then use that port, otherwise use 8090
@@ -22,7 +19,7 @@ function runServer(index : Map<string, Content>) {
         port = parseInt(portString);
     }
 
-    createServer(function (req, res) {
+    createServer(async function (req, res) {
         let content = parseRequest(req, index);
         if (content == null) {
             res.writeHead(404, {'Content-Type': 'text/plain'});
@@ -30,7 +27,7 @@ function runServer(index : Map<string, Content>) {
         } else {
             const mimeType = content.getMimeType();
             res.writeHead(200, {'Content-Type': mimeType});
-            let data = content.get();
+            let data = await content.get();
             res.end(data);
         }
     }).listen(port);
@@ -65,7 +62,8 @@ function parseRequest(req, index : Map<string, Content>) {
 
 async function main() {
     //return prepareContent('../public', openai);
-    return prepareContent('../public', null);
+    const loadContext = new LoadContext('../public', '../cache', null);
+    return prepareContent(loadContext);
 }
 
 main().then(function (index) {

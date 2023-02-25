@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as util from 'util';
-import {Content} from "./Content.js";
+import {Content, LoadContext} from "./Content.js";
 
 const readDir = util.promisify(fs.readdir);
 const stat = util.promisify(fs.stat);
@@ -36,7 +36,7 @@ export async function indexFiles(dir : string) : Promise<Map<string, Content>> {
     return index;
 }
 
-async function getListOfContent(dir : string) : Promise<Content[]> {
+export async function getListOfContent(dir : string) : Promise<Content[]> {
     const files = await getListOfFiles(dir);
 
     let contents = [];
@@ -44,7 +44,7 @@ async function getListOfContent(dir : string) : Promise<Content[]> {
         //get the relative path of the file
         let relativePath = path.relative(dir, file);
 
-        let content = new Content(file, relativePath);
+        let content = new Content(file, relativePath, false);
         contents.push(content);
     }
 
@@ -52,11 +52,12 @@ async function getListOfContent(dir : string) : Promise<Content[]> {
 }
 
 
-export async function cacheIndex(index : Map<string, Content>, openai) : Promise<Map<string, Content>> {
+export async function cacheIndex(index : Map<string, Content>, loadContext : LoadContext) : Promise<Map<string, Content>> {
     let entries = index.entries()
+
     for (let entry of entries) {
         let content = entry[1];
-        await content.load(openai);
+        await content.load();
     }
 
     return index;
@@ -82,7 +83,7 @@ function getHtmlTitles(index : Map<string, Content>) {
     let titles = [];
     for (let entry of entries) {
         let content = entry[1];
-        let title = content.htmlAttributes.get('title');
+        let title = content.contentAttributes.get('title');
         if (title != null) {
             titles.push(title);
         }
@@ -103,9 +104,9 @@ function addRelated(index : Map<string, Content>, links : string[]) {
     return index;
 }
 
-export async function prepareContent(contentDirectory : string, openai) {
-    let index = await indexFiles(contentDirectory);
-    index = await cacheIndex(index, openai);
+export async function prepareContent(loadContext: LoadContext) {
+    let index = await indexFiles(loadContext.contentDir);
+    index = await cacheIndex(index, loadContext);
     let links = getHtmlLinks(index);
     index = addRelated(index, links);
     return index;
@@ -140,7 +141,7 @@ export async function loadIndexFromCache(contentDir : string, cacheDir : string)
         if (await content.isCached(cacheDir)) {
             index.set(content.relativePath, content);
         } else {
-            await content.load(null);
+            await content.load();
         }
         index.set(content.relativePath, content);
     }

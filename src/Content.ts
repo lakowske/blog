@@ -1,4 +1,3 @@
-
 /*
 A Content object stores the contents of the file in a string if it's an html file, css file, or js file.
 If it's a binary file, it stores the contents in a buffer. It also stores the file's last modified date, and the file's size in bytes.
@@ -8,12 +7,39 @@ import * as util from "util";
 import mime from "mime";
 import JSDOM from "jsdom";
 import * as path from "path";
+import {OpenAIApi} from "openai";
+import {OpenAIContext} from "./OpenAIUtil.js";
 
 const stat = util.promisify(fs.stat);
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const mkdir = util.promisify(fs.mkdir);
 
+export class LoadContext {
+    public openai : OpenAIApi;
+    public cacheDir : string;
+    public contentDir: string;
+    public openaiContext: OpenAIContext;
+
+    constructor(contentDir : string, cacheDir : string, openaiContext : OpenAIContext) {
+        this.contentDir = contentDir;
+        this.cacheDir = cacheDir;
+        this.openaiContext = openaiContext;
+    }
+
+    public async getTitleEmbedding(content : Content) : Promise<Array<number>> {
+        return this.openaiContext.getCachedEmbedding(content.contentAttributes.get('title'));
+    }
+
+    public async getSummary(content : Content) : Promise<string> {
+        if (content.type === 'html') {
+            const prompt = "Summarize the html document:\n\n" + await content.get();
+            return await this.openaiContext.getReply(prompt);
+        } else {
+            return '';
+        }
+    }
+}
 
 export class Content {
 
@@ -29,28 +55,36 @@ export class Content {
 
     public size : number;
 
-    public htmlAttributes : Map<string, string>;
+    public contentAttributes : Map<string, string>;
+
+    public embeddings : Map<string, Array<number>>;
 
     public jsdom : JSDOM.JSDOM;
 
-    constructor(file : string, relativePath : string) {
+    public useCache : boolean;
+
+    constructor(file : string, relativePath : string, useCache : boolean) {
         this.file = file;
         this.relativePath = relativePath;
         this.type = file.split('.').pop();
-        this.htmlAttributes = new Map<string, string>();
+        this.contentAttributes = new Map<string, string>();
+        this.embeddings = new Map<string, Array<number>>();
+        this.useCache = useCache;
     }
 
-    public get() : Promise<any> {
+    public async get() : Promise<any> {
         if (this.contents == null) {
             this.contents = '';
-        } if (this.jsdom != null) {
-            return this.jsdom.serialize();
+        } else if (this.useCache == false) {
+            return await this.load();
+        } else if (this.jsdom != null) {
+                return this.jsdom.serialize();
         }
 
         return this.contents;
     }
 
-    public async load(openai) : Promise<any> {
+    public async load() : Promise<any> {
         const statInfo = await stat(this.file);
         this.lastModified = statInfo.mtime;
         this.size = statInfo.size;
@@ -61,12 +95,8 @@ export class Content {
             const document = this.jsdom.window.document;
             const title = document.getElementsByTagName('title');
             if (title.length > 0) {
-                this.htmlAttributes.set('title', title[0].textContent);
+                this.contentAttributes.set('title', title[0].textContent);
             }
-            if (openai != null) {
-                let response = await this.getEmbedding(openai);
-            }
-
         } else if (this.type == 'css' || this.type == 'js') {
             content = await readFile(this.file, 'utf8');
         } else {
@@ -90,27 +120,29 @@ export class Content {
 
     public getLink() : string {
         if (this.type == 'html') {
-            return `<a href="/${this.relativePath}">${this.htmlAttributes.get('title')}</a>`;
+            return `<a class="articleLink" href="/${this.relativePath}">${this.contentAttributes.get('title')}</a>`;
         } else {
             return `<a href="/${this.relativePath}">${this.relativePath}</a>`;
         }
     }
 
-    public async getEmbedding(openai) : Promise<any> {
-        const response = await openai.createEmbedding({
-            model: "text-embedding-ada-002",
-            input: this.htmlAttributes.get('title')
-        });
-        return response;
-    }
-
     public addRelated(links : string[]) {
         let document = this.jsdom.window.document;
-        let related = document.getElementById('related');
-        if (related != null) {
+        let relatedTable = document.getElementById('related');
+        if (relatedTable != null) {
+            //Add a table of links to related element
+            let tbody = document.createElement('tbody');
+            relatedTable.appendChild(tbody);
+
+
             for (let link of links) {
-                related.innerHTML += '<tr><td>' + link + '</td></tr>';
+                let tr = document.createElement('tr');
+                let td = document.createElement('td');
+                td.innerHTML = link;
+                tr.appendChild(td);
+                tbody.appendChild(tr);
             }
+
         }
     }
 
@@ -132,7 +164,8 @@ export class Content {
         let metadata = {
             lastModified: this.lastModified,
             size: this.size,
-            htmlAttributes: this.htmlAttributes,
+            contentAttributes: this.contentAttributes,
+            embeddings: this.embeddings,
             file: this.file
         }
 
@@ -147,13 +180,14 @@ export class Content {
         const metadata = JSON.parse(await readFile(metadataPath, 'utf8'));
         this.lastModified = new Date(metadata.lastModified);
         this.size = metadata.size;
-        this.htmlAttributes = metadata.htmlAttributes;
+        this.contentAttributes = metadata.contentAttributes;
+        this.embeddings = metadata.embeddings;
         this.file = metadata.file;
         if (this.type == 'html') {
             this.contents = await readFile(this.getCachedPath(dir), 'utf8');
             this.jsdom = new JSDOM.JSDOM(this.contents);
         } else {
-            await this.load(null);
+            await this.load();
         }
 
     }
@@ -176,7 +210,7 @@ export class Content {
         if (statInfo.mtime.getTime() > this.lastModified.getTime()) {
             return false;
         }
-        return true;
 
+        return true;
     }
 }

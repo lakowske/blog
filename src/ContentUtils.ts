@@ -44,7 +44,9 @@ export async function getListOfContent(dir : string) : Promise<Content[]> {
         //get the relative path of the file
         let relativePath = path.relative(dir, file);
 
-        let content = new Content(file, relativePath, false);
+        //Use the environment variable to determine if the cache is to be used.
+        let useCache = process.env.USE_CACHE === 'false' ? false : true;
+        let content = new Content(file, relativePath, useCache);
         contents.push(content);
     }
 

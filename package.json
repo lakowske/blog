@@ -8,7 +8,7 @@
     "build": "./node_modules/.bin/tsc src/index.ts",
     "index": "./node_modules/.bin/ts-node src/index.ts index ./public",
     "watch": "./node_modules/.bin/tsc --watch",
-    "serve": "node src/index.js serve ./public"
+    "serve": "node dist/index.js serve ./public"
   },
   "repository": {
     "type": "git",

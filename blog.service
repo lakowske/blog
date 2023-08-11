@@ -1,0 +1,11 @@
+[Unit]
+Description=My Blog
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=~/bin/blog
+Restart=always
+
+[Install]
+WantedBy=default.target

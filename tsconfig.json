@@ -1,6 +1,7 @@
 {
   "compileOnSave": true,  
   "compilerOptions": {
+      "moduleResolution": "node16",
       "module": "nodenext",
       "outDir": "./dist",
       "allowJs": true,

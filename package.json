@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/tsc src/index.ts",
+    "build": "./node_modules/.bin/tsc src/server.ts",
     "index": "./node_modules/.bin/ts-node src/index.ts index ./public",
     "watch": "./node_modules/.bin/tsc --watch",
-    "serve": "node dist/index.js serve ./public"
+    "serve": "(cd ./dist; node server.js)"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/lakowske/Blog",
   "dependencies": {
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "jsdom": "^21.0.0",
     "md5": "^2.2.1",
     "mime": "^3.0.0",
@@ -34,7 +34,7 @@
     "openai": "^3.1.0"
   },
   "devDependencies": {
-    "@types/node": "14.0.0",
+    "@types/node": "^20.4.8",
     "nodeunit": "^0.10.2",
     "ts-node": "^8.10.1",
     "tsc-watch": "^4.2.8",

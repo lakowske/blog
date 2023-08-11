@@ -10,3 +10,6 @@ A list of environment variables that are used by the blog
 * `USE_CACHE` - Whether to use the cache (default: true). If false, usually in development, the server will load content
     from the filesystem instead of the cache.
 
+Run
+===
+`npm run serve`

@@ -1,0 +1,13 @@
+[Unit]
+Description=Cloudflare tunnel
+After=network.target
+
+[Service]
+Type=simple
+User=seth
+Group=seth
+ExecStart=/usr/local/bin/cloudflared tunnel --config /home/seth/.cloudflared/blog.yaml run
+Restart=always
+
+[Install]
+WantedBy=default.target

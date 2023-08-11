@@ -1,10 +1,13 @@
+
 [Unit]
 Description=My Blog
 After=network.target
 
 [Service]
 Type=simple
-ExecStart=~/bin/blog
+User=seth
+Group=seth
+ExecStart=/home/seth/bin/blog
 Restart=always
 
 [Install]

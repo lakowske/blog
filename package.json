@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "build": "./node_modules/.bin/tsc src/server.ts",
+      "build": "./node_modules/.bin/tsc",
       "watch": "./node_modules/.bin/tsc --watch",
       "watchAndDump": "./node_modules/.bin/nodemon --watch ./public --ext js,html,css --exec \"npm run dump\"",
       "serve": "(cd ./dist; PORT=8099 node server.js serve)",

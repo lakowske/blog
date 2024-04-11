@@ -40,12 +40,12 @@ pre, code{
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    
+    overflow-x: auto;
+    font: normal 16px Consolas, Monaco, monospace;
 }
 
 pre {
     color: black;
-    //background: #aabbcc;
     background: #ffffff;
 }
 

@@ -2,14 +2,14 @@
   <head>
     <title>Monadic shell scripts</title>
     <link rel="stylesheet" type="text/css"
-          href="/static/style/style.css">
+          href="../../static/style/style.css">
     <link rel="stylesheet" type="text/css"
-          href="/static/bundles/triangles/style.css">
+          href="../../static/bundles/triangles/style.css">
   </head>
 
   <body>
     <h2>Monadic shell scripts</title>
-    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2016-12-03</time></h4>
 
     <p>
@@ -36,12 +36,10 @@
       program can take a stream as input too!
     </p>
 
-    <pre><code class="language-bash">
-        (cd /home/seth ; tar -cf - .ssh) | ssh seth@sethlakowske.com -c tar -xf -
-        alias k8s-keys='docker run -i lakowske/k8s-keys'
-        alias tout='tar -cf -'
-        alias tin='tar -xf -'
-    </code></pre>
+    <pre><code class="language-bash">(cd /home/seth ; tar -cf - .ssh) | ssh seth@sethlakowske.com -c tar -xf -
+alias k8s-keys='docker run -i lakowske/k8s-keys'
+alias tout='tar -cf -'
+alias tin='tar -xf -'</code></pre>
 
     <table id="related"></table>
     

@@ -1,14 +1,8 @@
-/*
-A Content object stores the contents of the file in a string if it's an html file, css file, or js file.
-If it's a binary file, it stores the contents in a buffer. It also stores the file's last modified date, and the file's size in bytes.
- */
 import * as fs from "fs";
 import * as util from "util";
 import mime from "mime";
 import JSDOM from "jsdom";
 import * as path from "path";
-import {OpenAIApi} from "openai";
-import {OpenAIContext} from "./OpenAIUtil.js";
 
 const stat = util.promisify(fs.stat);
 const readFile = util.promisify(fs.readFile);
@@ -16,31 +10,21 @@ const writeFile = util.promisify(fs.writeFile);
 const mkdir = util.promisify(fs.mkdir);
 
 export class LoadContext {
-    public openai : OpenAIApi;
     public cacheDir : string;
     public contentDir: string;
-    public openaiContext: OpenAIContext;
 
-    constructor(contentDir : string, cacheDir : string, openaiContext : OpenAIContext) {
+
+    constructor(contentDir : string, cacheDir : string) {
         this.contentDir = contentDir;
         this.cacheDir = cacheDir;
-        this.openaiContext = openaiContext;
     }
 
-    public async getTitleEmbedding(content : Content) : Promise<Array<number>> {
-        return this.openaiContext.getCachedEmbedding(content.contentAttributes.get('title'));
-    }
-
-    public async getSummary(content : Content) : Promise<string> {
-        if (content.type === 'html') {
-            const prompt = "Summarize the html document:\n\n" + await content.get();
-            return await this.openaiContext.getReply(prompt);
-        } else {
-            return '';
-        }
-    }
 }
 
+/*
+A Content object stores the contents of the file in a string if it's an html file, css file, or js file.
+If it's a binary file, it stores the contents in a buffer. It also stores the file's last modified date, and the file's size in bytes.
+ */
 export class Content {
 
     public contents : any;
@@ -66,7 +50,8 @@ export class Content {
     constructor(file : string, relativePath : string, useCache : boolean) {
         this.file = file;
         this.relativePath = relativePath;
-        this.type = file.split('.').pop();
+        const fileType = file.split('.').pop();
+        this.type = fileType !== undefined ? fileType : 'unknown';
         this.contentAttributes = new Map<string, string>();
         this.embeddings = new Map<string, Array<number>>();
         this.useCache = useCache;
@@ -120,9 +105,52 @@ export class Content {
 
     public getLink() : string {
         if (this.type == 'html') {
-            return `<a class="articleLink" href="/${this.relativePath}">${this.contentAttributes.get('title')}</a>`;
+            return `<a class="articleLink" href="../${this.relativePath}">${this.contentAttributes.get('title')}</a>`;
         } else {
-            return `<a href="/${this.relativePath}">${this.relativePath}</a>`;
+            return `<a href="../${this.relativePath}">${this.relativePath}</a>`;
+        }
+    }
+
+    /**
+     * Calculate a path to the relative content
+     * @param content is the content to link to
+     * @returns a string with the relative link
+     */
+    public getRelativeLink(content : Content) : string {
+        // Calculate the relative path to the content
+
+        //Remove the file from the path
+        const foreignContentPath = content.relativePath;
+        const currentPath = this.relativePath;
+        const relativePath = path.relative(path.dirname(currentPath), foreignContentPath);
+
+
+        return `<a href="${relativePath}">${content.contentAttributes.get('title')}</a>`;
+    }
+
+    /**
+     * Takes a list of related content and adds links to the related content to the current content
+     * @param content 
+     */
+    public addRelatedContent(content : Content[]) {
+        let document = this.jsdom.window.document;
+        let relatedTable = document.getElementById('related');
+        if (relatedTable != null) {
+            //Add a table of links to related element
+            let tbody = document.createElement('tbody');
+            relatedTable.appendChild(tbody);
+
+            for (let c of content) {
+                tbody.innerHTML += '\n';
+                let tr = document.createElement('tr');
+                let td = document.createElement('td');
+                td.innerHTML = this.getRelativeLink(c);
+                tr.appendChild(td);
+                tbody.appendChild(tr);
+            }
+
+            tbody.innerHTML += '\n';
+
         }
     }
 
@@ -136,12 +164,15 @@ export class Content {
 
 
             for (let link of links) {
+                tbody.innerHTML += '\n';
                 let tr = document.createElement('tr');
                 let td = document.createElement('td');
                 td.innerHTML = link;
                 tr.appendChild(td);
                 tbody.appendChild(tr);
             }
+
+            tbody.innerHTML += '\n';
 
         }
     }

@@ -1,44 +1,38 @@
 {
-  "name": "lakowske-blog",
+  "name": "blog",
   "version": "0.0.3",
+  "type": "module",
   "description": "A weblog by Seth Lakowske",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/tsc src/server.ts",
-    "index": "./node_modules/.bin/ts-node src/index.ts index ./public",
-    "watch": "./node_modules/.bin/tsc --watch",
-    "serve": "(cd ./dist; node server.js)"
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "build": "./node_modules/.bin/tsc src/server.ts",
+      "watch": "./node_modules/.bin/tsc --watch",
+      "watchAndDump": "./node_modules/.bin/nodemon --watch ./public --ext js,html,css --exec \"npm run dump\"",
+      "serve": "(cd ./dist; PORT=8099 node server.js serve)",
+      "dump": "(cd ./dist; node server.js dump)"
   },
   "repository": {
-    "type": "git",
-    "url": "https://github.com/lakowske/Blog"
+      "type": "git",
+      "url": "https://github.com/lakowske/Blog"
   },
   "keywords": [
-    "Seth",
-    "Lakowske",
-    "blog"
+      "blog"
   ],
   "author": "Seth Lakowske",
   "license": "All rights reserved",
   "bugs": {
-    "url": "https://github.com/lakowske/Blog/issues"
+      "url": "https://github.com/lakowske/Blog/issues"
   },
   "homepage": "https://github.com/lakowske/Blog",
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "jsdom": "^21.0.0",
-    "md5": "^2.2.1",
-    "mime": "^3.0.0",
-    "node-localstorage": "^2.2.1",
-    "openai": "^3.1.0"
+      "dotenv": "^16.4.5",
+      "jsdom": "^21.0.0",
+      "mime": "^3.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.4.8",
-    "nodeunit": "^0.10.2",
-    "ts-node": "^8.10.1",
-    "tsc-watch": "^4.2.8",
-    "typescript": "^4.9.4"
-  },
-  "type": "module"
+      "@types/node": "^20.12.4",
+      "nodemon": "^3.1.0",
+      "typescript": "^5.4.3"
+  }
 }

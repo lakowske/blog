@@ -2,18 +2,18 @@
   <head>
     <title>Private Minikube Docker Registry using Helm</title>
     <link rel="stylesheet" type="text/css"
-          href="/static/style/style.css">
+          href="../../static/style/style.css">
     <link rel="stylesheet" type="text/css"
-          href="/static/bundles/triangles/style.css">
+          href="../../static/bundles/triangles/style.css">
   </head>
 
   <body>
     <h2>Private Minikube Docker Registry using Helm</h2>
-    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
     <h4>Published: <time pubdate="pubdate">2017-12-08</time></h4>
 
     <p>
-      This guide will walk you through the steps to setting up
+      These steps walk you through setting up
       a password protected Docker Registry and Nginx
       Ingress controller on your laptop or workstation.
       You'll need a Docker client, Minikube, Helm and
@@ -71,8 +71,7 @@
     <pre><code class="language-bash">helm repo add lakowske https://lakowske.github.io/charts
 #After adding the repo, update your index.
 helm repo update
-helm init ; kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system        
-    </code></pre>
+helm init ; kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system</code></pre>
 
     Create a username and password for your registry.  In this case,
     we'll create a user named admin, but feel free to call it what you
@@ -121,10 +120,7 @@ docker tag hello-node registry.minikube.st81ess.com:80/hello-node</code></pre>
     <a href="http://dashboard.minikube.st81ess.com">http://dashboard.minikube.st81ess.com</a> and view your deployments.
     </p>
     
-    <!-- <script src="/static/bundles/triangles/bundle.js"></script> -->
     <table id="related"></table>
-
-
     
   </body>
 </html>

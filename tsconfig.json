@@ -1,11 +1,10 @@
 {
   "compileOnSave": true,  
   "compilerOptions": {
-      "moduleResolution": "node16",
-      "module": "nodenext",
+      "moduleResolution": "node",
       "outDir": "./dist",
       "allowJs": true,
-      "target": "es6",
+      "target": "ES6",
       "sourceMap": true
   },
   // NEW: Options for file/directory watching

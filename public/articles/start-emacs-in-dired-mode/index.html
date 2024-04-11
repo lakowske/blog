@@ -2,12 +2,12 @@
 
   <head>
     <title>Starting emacs in dired mode</title>
-    <link rel="stylesheet" type="text/css" href="/static/style/style.css">
+    <link rel="stylesheet" type="text/css" href="../../static/style/style.css">
   </head>
 
   <body>
     <h1>Starting emacs in dired mode</h1>
-    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
     <p>Published: <time pubdate="pubdate">2015-01-10</time></p>
 
 
@@ -16,11 +16,7 @@
     <p>
       You can start emacs in dired mode by adding this to your startup script
 
-      <pre><code>
-
-	  (dired ".")
-	  
-      </code></pre>
+      <pre><code>(dired ".")</code></pre>
 
       Next time you start emacs, the dired command will run,
       <b>starting emacs in dired mode</b> at the current working directory.
@@ -30,11 +26,7 @@
       Another way to start emacs in dired mode, is to execute an expression from the command
       line, e.g.
 
-      <pre><code>
-
-	  emacs --execute='(dired "~/")'
-
-      </code></pre>
+      <pre><code>emacs --execute='(dired "~/")'</code></pre>
 
       This starts emacs and executes the dired command, <b>starting emacs in dired mode</b>
     </p>
@@ -42,11 +34,7 @@
     <p>
       Lastly, a simple way is to just pass the directory to emacs, e.g.
 
-      <pre><code>
-
-	  emacs .
-
-      </code></pre>
+      <pre><code>emacs .</code></pre>
 
       <b>Starting emacs in dired mode</b> at the current working directory.
 

@@ -8,7 +8,7 @@
  <body> 
   <h2>Sequelize unit testing using Grunt and Nodeunit</h2>
   <h2> </h2>
-  <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3> 
+  <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3> 
   <div class="entry-content"> 
    <p>If you want to persist Javascript objects (data) to a database using Node, then it is a good idea to test this mechanism is working. &nbsp;Below you will learn how to accomplish testing your data persistence mechanism. &nbsp;Sequelize, Nodeunit and Grunt are popular tools to accomplish this task. &nbsp;Sequelize is an Object Relational Mapper (ORM), Nodeunit is a unit testing framework and Grunt is a common test runner that will run all the tests you create.</p> 
    <p>A project containing the result of this tutorial is available at <a href="https://github.com/lakowske/sequelize-grunt-nodeunit-example">https://github.com/lakowske/sequelize-grunt-nodeunit-example</a></p> 
@@ -45,8 +45,7 @@ module.exports = function(grunt) {
 };
 </code></pre> 
    <p>Next I created a SequelizeDatabase.js implementation. It contains a function that returns a sequelize sqlite instance.</p> 
-   <pre><code class="language-javascript">
-var Sequelize = require('Sequelize');
+   <pre><code class="language-javascript">var Sequelize = require('Sequelize');
 
 exports.testDB = function testDB() {
     return new Sequelize('database', 'username', 'password', {
@@ -60,8 +59,7 @@ exports.testDB = function testDB() {
 }
 </code></pre> 
    <p>I make the unit test SequelizeDatabaseTest.js.</p> 
-   <pre><code class="language-javascript">
-var db = require('./SequelizeDatabase');
+   <pre><code class="language-javascript">var db = require('./SequelizeDatabase');
 var uuid = require('uuid');
 
 exports.testSequelize = function (test) {

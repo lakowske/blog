@@ -8,13 +8,12 @@
  <body> 
   <h2>Singleton, Factory and Mediator Patterns in Javascript</h2>
   <h2> </h2>
-  <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3> 
+  <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3> 
   <div class="entry-content"> 
    <p>This article outlines design patterns in Javascript and in particular how they are used in NodeHawk’s UAV Wifi testbed. To give some background, Nodehawk runs on a model aircraft’s onboard computer, presently a <a href="http://sethlakowske.com/technology/mobile-raspberry-pi/" title="Mobile Raspberry Pi">Raspberry Pi</a> in my case. NodeHawk transmits the current time from the onboard computer to a server on the ground, transmits the current location to a server and other tasks. </p> 
    <p><strong>Factory</strong></p> 
    <p>Factory classes build objects with specific contextual parameters(options, preferences, etc…). The user simply programs to the Factory classes interface and defers to the implementation what appropriate objects should be provided. Users can swap out a factory class implementation for a different factory class implementation with different contextual parameters. I like to call these Context classes because they provide the context under which the program will run. The Context classes also make a logical grouping of related object creation functions. A context object might look like so.</p> 
-   <pre lang="javascript"><code>
-function TimeContext() {}
+   <pre lang="javascript"><code>function TimeContext() {}
 
 //return a Time implementation that works on the browser and server, but is only millisecond accurate.  
 TimeContext.prototype.time = function() { 
@@ -27,13 +26,9 @@ TimeContext.prototype.eventBus = function() {
   _.extend(eventBus, Backbone.Events);
   return myEventBus;
 }
-
-...
-
 </code></pre> 
    <p>I can now use my TimeContext Factory class like so</p> 
-   <pre language="javascript"><code>
-var timeContext = new TimeContext();
+   <pre language="javascript"><code>var timeContext = new TimeContext();
 var eventBus = timeContext.eventBus();
 var time = new timeContext.time();
 
@@ -43,7 +38,6 @@ eventBus.on('someEvent', function() { console.log('milliseconds ' + time.getMill
    <p><code></code></p> 
    <p>A NodeTimeContext implementation might define the time creation function differently</p> 
    <pre lang="javascript"><code>
-
 ...
 //return a Time implementation that works on the server, and is nanosecond accurate.
 TimeContext.prototype.time = function() { 

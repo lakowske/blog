@@ -25,6 +25,8 @@ export async function getListOfFiles(dir : string) : Promise<string[]> {
 
 }
 
+// Given a directory, return a map of all the Content objects in the directory with the 
+// relativePath as their key.
 export async function indexFiles(dir : string) : Promise<Map<string, Content>> {
     const contents = await getListOfContent(dir);
     let index = new Map<string, Content>();
@@ -36,6 +38,7 @@ export async function indexFiles(dir : string) : Promise<Map<string, Content>> {
     return index;
 }
 
+// Given a directory, return a list of all the Content objects in the directory.
 export async function getListOfContent(dir : string) : Promise<Content[]> {
     const files = await getListOfFiles(dir);
 
@@ -94,23 +97,36 @@ function getHtmlTitles(index : Map<string, Content>) {
     return titles;
 }
 
-function addRelated(index : Map<string, Content>, links : string[]) {
-    let entries = index.entries();
-    for (let entry of entries) {
-        let content = entry[1];
-        if (content.getMimeType() == 'text/html') {
-            content.addRelated(links);
+/**
+ * For each html file in the index, add the related webpages to the content object.
+ * 
+ * @param index is the map of content objects
+ * @returns 
+ */
+function addRelatedWebpages(index : Map<string, Content>) {
+
+    // Get the list of content
+    let contentList = [];
+    for (let entry of index.entries()) {
+        //Add the content to the list if it is an html file
+        if (entry[1].getMimeType() == 'text/html') {
+            contentList.push(entry[1]);
         }
+    }
+
+    for (let content of contentList) {
+        content.addRelatedContent(contentList);
     }
 
     return index;
 }
 
+// Given a LoadContext, prepare the content by indexing the files, caching the content, and adding related links.
 export async function prepareContent(loadContext: LoadContext) {
     let index = await indexFiles(loadContext.contentDir);
     index = await cacheIndex(index, loadContext);
     let links = getHtmlLinks(index);
-    index = addRelated(index, links);
+    index = addRelatedWebpages(index);
     return index;
 }
 

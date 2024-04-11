@@ -1,12 +1,12 @@
 <html>
 <head>
 <title>WebGL using gl-mat4, browserify-shader and Browserify</title>
-<link rel="stylesheet" type="text/css" href="/static/style/style.css">
-<link rel="stylesheet" type="text/css" href="/articles/webgl-using-gl-mat4-browserify-shader-and-browserify/node_modules/prismjs-package/prism.css">
+<link rel="stylesheet" type="text/css" href="../../static/style/style.css">
+<link rel="stylesheet" type="text/css" href="../webgl-using-gl-mat4-browserify-shader-and-browserify/node_modules/prismjs-package/prism.css">
 </head>
 <body>
   <h1>WebGL using gl-mat4, browserify-shader and Browserify</h1>
-  <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
+  <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
   <h4>Published: <time pubdate="pubdate">2015-09-22</time></h4>
 
   <p>
@@ -18,7 +18,7 @@
   <p>
     <H2>Install Browserify</H2>
     
-    To get started, install Browserify and checkout my <a href="/articles/use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/">Browserify
+    To get started, install Browserify and checkout my <a href="../use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/index.html">Browserify
     Tutorial</a> on combining source files and their dependencies into
     one bundle - including your GLSL.  GLSL shader programs have made the
     OpenGL graphics pipeline more configurable since their introduction.  browserify-shader will
@@ -208,10 +208,10 @@ void main() {
  watchify --debug -t browserify-shader index.js -o bundle.js
   </code></pre>
  <H3>Result</H3>
-  <p> Below is an animation using the bundle.js created with the above
+  <p>To the right is an animation using the bundle.js created with the above
     source files and watchify.</p>
-  <script src="/articles/webgl-using-gl-mat4-browserify-shader-and-browserify/bundle.js"></script>
-  <script src="/articles/webgl-using-gl-mat4-browserify-shader-and-browserify/3dify/bundle.js"></script>
+  <script src="bundle.js"></script>
+  <script src="3dify/bundle.js"></script>
 
   
   <table id="related"></table>

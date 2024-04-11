@@ -1,5 +1,0 @@
-steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/coherent-coder-103403/blog-builder:latest', '-f', 'Dockerfile.builder', '.']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/coherent-coder-103403/blog-builder:latest']  

@@ -9,7 +9,7 @@
       "build": "./node_modules/.bin/tsc",
       "watch": "./node_modules/.bin/tsc --watch",
       "watchAndDump": "./node_modules/.bin/nodemon --watch ./public --ext js,html,css --exec \"npm run dump\"",
-      "serve": "(cd ./dist; PORT=8099 node server.js serve)",
+      "serve": "(cd ./dist; PORT=8090 node server.js serve)",
       "dump": "(cd ./dist; node server.js dump)"
   },
   "repository": {

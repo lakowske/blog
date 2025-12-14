@@ -1,0 +1,17 @@
+{
+  "name": "webgl-without-three.js-using-browserify-browserify-shader-and-gl-mat4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "prismjs-package": "^0.2.0"
+  },
+  "devDependencies": {
+    "html2js-browserify": "^1.0.0"
+  }
+}

@@ -1,0 +1,164 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Private Minikube Docker Registry using Helm</title>
+    <link rel="stylesheet" type="text/css" href="../../static/style/style.css">
+    <link rel="stylesheet" type="text/css" href="../../static/bundles/triangles/style.css">
+  </head>
+
+  <body>
+    <h2>Private Minikube Docker Registry using Helm</h2>
+    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
+    <h4>Published: <time pubdate="pubdate">2017-12-08</time></h4>
+
+    <p>
+      These steps walk you through setting up
+      a password protected Docker Registry and Nginx
+      Ingress controller on your laptop or workstation.
+      You'll need a Docker client, Minikube, Helm and
+      Kubernetes client (kubectl).
+    </p>
+    <h2>Requirements</h2>
+    <ul>
+      <li>
+        <b>Docker:</b>
+        Install <a href="https://www.docker.com/products/docker-toolbox">Docker
+        Toolbox</a> to get a Docker client used to talk to Minikube's
+        built-in Docker engine.
+      </li>
+      <li>
+        <b>Kubectl:</b>
+        Follow the instructions at <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">Installing
+        and Setting up kubectl</a> to install kubectl.  kubectl is the general
+        purpose CLI client for inspecting and manipulating a kubernetes cluster.
+      </li>
+      <li>
+	<b>Minikube:</b>
+	Install <a href="https://kubernetes.io/docs/tasks/tools/install-minikube">Minikube</a>
+      </li>
+      <li>
+	<b>Helm:</b>
+	Install <a href="https://github.com/kubernetes/helm/blob/master/docs/install.md">Helm</a>
+      </li>
+    </ul>
+
+    <h2>Run Kubernetes using Minikube</h2>
+
+    Start Minikube with a generous helping of resources if you run large
+    work loads.  For me that means running 4 cpus, 6 GB of RAM and 100
+    GB Storage.  Another key is to add an insecure registry flag so
+    docker will push to our registry over plaintext http port 80.
+    
+    <pre><code class="language-bash">minikube start --cpus 4 --disk-size 100g --memory 6000 --insecure-registry registry.minikube.st81ess.com:80</code></pre>
+
+    Requests to registry.minikube.st81ess.com will resolve to your
+    local Minikube ingress address, 192.168.99.100, and
+    Nginx ingress controller will route the request to a backing
+    registry service using the hostname provided.
+    <br><br>
+    *.minikube.st81ess.com has been setup to resolves to
+    192.168.99.100. *.minikube.st81ess.com is a flexible wildcard DNS
+    useful in a typical Minikube environments to route into http/https
+    Ingress resources within K8S.  If you have your own domain, you can create
+    *.minikube.mydomain.com to do the same.  Feel free to do so, we'll
+    be using registry.minikube.st81ess.com in these examples, which
+    will point to your local Minikube virtualbox.
+    
+    <h3>Run a local private registry</h3>
+
+    Add a chart repo and initialize helm.  Feel free to checkout my <a href="http://github.com/lakowske/charts">charts</a> repo to view the contents of these charts.
+    <pre><code class="language-bash">helm repo add lakowske https://lakowske.github.io/charts
+#After adding the repo, update your index.
+helm repo update
+helm init ; kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system</code></pre>
+
+    Create a username and password for your registry.  In this case,
+    we'll create a user named admin, but feel free to call it what you
+    want.  Next, add the secret to the cluster.
+    <pre><code class="language-bash">htpasswd -c auth admin
+kubectl create secret generic registry-auth --from-file=auth</code></pre>
+
+    Start a private local registry deployment that Kubernetes keeps
+    alive even if the container dies.  It's sitting behind an Nginx ingress
+    controller that provides basic authentication.  Basic authentication
+    is helpful tool when deploying services like a registry over
+    the public internet.  In those cases, we also need to be sure to
+    use https connection.  I often use kube-lego, or Kubernetes Let's
+    Encrypt for this purpose.  In this case, all the traffic is local,
+    so we'll stick to http.  The minikube-registry is a parent chart
+    that contains Nginx ingress controller, a Docker registry and a
+    dashboard.  The chart doesn't have any resources of its own, it
+    simply depends on sub-charts that do.  We are reusing the building
+    blocks on the
+    excellent <a href="https://github.com/kubernetes/charts">kubernetes
+    charts</a> repo.
+    
+    <pre><code class="language-bash">helm install lakowske/minikube-registry</code></pre>
+    
+    To import the Docker environment into your current shell.
+
+    <pre><code class="language-bash">eval $(minikube docker-env)</code></pre>
+    
+    Build an image and tag it.
+    <pre><code class="language-bash">git clone https://bitbucket.org/seth_lakowske/hello-node.git
+cd hello-node
+docker build -t hello-node .
+docker tag hello-node registry.minikube.st81ess.com:80/hello-node</code></pre>
+    Push the image to your local registry.
+    <pre><code class="language-bash">docker push registry.minikube.st81ess.com:80/hello-node</code></pre>
+    Now run a deployment in Kubernetes using the image located on your
+    local registry.
+    <pre><code class="language-bash">kubectl run hello-node --image=registry.minikube.st81ess.com:80/hello-node --port=8888</code></pre>
+    
+    <h3 style="color: orange">Conclusion</h3>
+    <p>
+    You should now have a deployment of your image, in my case hello-node, running using your
+    private local registry, Kubernetes and Docker.  You can verify by
+    running <span></span></p><pre><code class="language-bash">kubectl get deployments</code></pre>
+    - or -<br>
+    <a href="http://dashboard.minikube.st81ess.com">http://dashboard.minikube.st81ess.com</a> and view your deployments.
+    <p></p>
+    
+    <table id="related"><tbody>
+<tr><td><a href="../../about/index.html">About</a></td></tr>
+<tr><td><a href="../conscious-cosmos-and-personal-reality/index.html">Conscious cosmos and personal reality</a></td></tr>
+<tr><td><a href="../howto-install-docker-kubernets-local-registry/index.html">Running Kubernetes, Docker and a private Registry locally</a></td></tr>
+<tr><td><a href="index.html">Private Minikube Docker Registry using Helm</a></td></tr>
+<tr><td><a href="../java-to-haskell-in-zero-days/index.html">Java to Haskell in Zero Days</a></td></tr>
+<tr><td><a href="../living-offgrid-on-a-solar-powered-boat/index.html">Living offgrid on my solar powered boat</a></td></tr>
+<tr><td><a href="../monadic-shell-scripts/index.html">Monadic shell scripts</a></td></tr>
+<tr><td><a href="../proxy-by-url-must-provide-a-proper-url/index.html">Proxy-by-url must provide proper url error</a></td></tr>
+<tr><td><a href="../shared-javascript-in-node-and-browser-browserify-tape/index.html">Share javascript in node and the browser using Browserify and Tape</a></td></tr>
+<tr><td><a href="../smoothie-charts-nodejs-arduino-stream-transform-test/index.html">Tutorial: Streaming Arduino Sensor Data to Smoothie Charts</a></td></tr>
+<tr><td><a href="../start-emacs-in-dired-mode/index.html">Starting emacs in dired mode</a></td></tr>
+<tr><td><a href="../thoughts-on-search/index.html">Thoughts on Search and APIs</a></td></tr>
+<tr><td><a href="../trading-journey/index.html">My Trading Journey</a></td></tr>
+<tr><td><a href="../traveling-without-moving/index.html">Traveling without moving</a></td></tr>
+<tr><td><a href="../use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/index.html">Browserify and Minifyify to Combine, Minify and
+    Obfuscate Multiple JavaScript Files</a></td></tr>
+<tr><td><a href="../webgl-using-gl-mat4-browserify-shader-and-browserify/index.html">WebGL using gl-mat4, browserify-shader and Browserify</a></td></tr>
+<tr><td><a href="../why-i-love-emacs-lisp/index.html">Why I love emacs lisp</a></td></tr>
+<tr><td><a href="../why-learn-haskell/index.html">Why Learn Haskell?</a></td></tr>
+<tr><td><a href="../why-run-docker-containers-and-kubernetes/index.html">Why run microservices using Docker and Kubernetes?</a></td></tr>
+<tr><td><a href="../../completed-ml-class-org-course/index.html">Completed ml-class.org course</a></td></tr>
+<tr><td><a href="../../electric-bike-article-on-madisonbikelife/index.html">Electric bike article on MadisonBikeLife</a></td></tr>
+<tr><td><a href="../../index.html">Home</a></td></tr>
+<tr><td><a href="../../logical-validity-explained/index.html">Logical validity explained</a></td></tr>
+<tr><td><a href="../../resume/index.html">Resume</a></td></tr>
+<tr><td><a href="../../shooting-weighted-dice-on-the-street/index.html">Shooting weighted dice on the street</a></td></tr>
+<tr><td><a href="../../slurp-some-nodejs-streams/index.html">slurp-some Nodejs streams</a></td></tr>
+<tr><td><a href="../../software/cross-environment-shared-logic-with-requirejs-karma-and-mocha/index.html">Cross environment Javascript with Requirejs, Karma and Mocha</a></td></tr>
+<tr><td><a href="../../software/eventemitter-vs-backbone-events-vs-diy-eventbus/index.html">Choosing an EventBus: DIY EventBus, EventEmitter or BackBone.Events</a></td></tr>
+<tr><td><a href="../../software/node-js-closing-jsonstream-and-other-system-resources-gracefully/index.html">Node.js closing JSONStream and other system resources gracefully</a></td></tr>
+<tr><td><a href="../../software/sequelize-unit-testing-using-grunt-and-nodeunit/index.html">Sequelize unit testing using Grunt and Nodeunit</a></td></tr>
+<tr><td><a href="../../software/singleton-factory-and-mediator-patterns-in-javascript/index.html">Singleton, Factory and Mediator Patterns in Javascript</a></td></tr>
+<tr><td><a href="../../software/use-grunt-and-uglifyjs-to-combine-multiple-javascript-files-into-a-single-javascript-file/index.html">Use Grunt and Uglifyjs to combine multiple javascript files into a single javascript file</a></td></tr>
+<tr><td><a href="../../software/use-http-browserify-to-submit-formdata-and-images-easily/index.html">Using http-browserify to submit FormData and Images with ease</a></td></tr>
+<tr><td><a href="../../software/writing-software/index.html">Writing software is an act of thought</a></td></tr>
+<tr><td><a href="../../technology/silent-am1h-itx-development-workstation/index.html">Silent AM1H-ITX Development Workstation</a></td></tr>
+<tr><td><a href="../../think-again/index.html">Think Again</a></td></tr>
+<tr><td><a href="../../tones-of-the-web/index.html">Simple Sound Progression</a></td></tr>
+</tbody></table>
+    
+  
+
+</body></html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Java to Haskell in Zero Days</title>
+    <link rel="stylesheet" type="text/css" href="../../static/style/style.css">
+    <link rel="stylesheet" type="text/css" href="../../static/bundles/triangles/style.css">
+  </head>
+
+  <body>
+    <h2>Java to Haskell in Zero Days</h2>
+    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
+    <h4>Published: <time pubdate="pubdate">2017-04-05</time></h4>
+
+    <p>
+      Haskell is a language that is foreign to most programmers coming
+      from an imperitive language like Java, C#, C++, Python and the
+      like.  You find new concepts that make learning Haskell feel
+      like learning your first imperitive language.  The first step is
+      to acknowledge this, so you don't get frustrated right away when
+      you aren't productive immediately.  This acknowledgment allowed
+      me to pass through many frustrating moments trying to do
+      something useful.  I realized, I wasn't trying to write a web
+      service, I was trying to learn haskell by way of writing a web
+      service.
+    </p>
+
+    <p>
+      If you're a productive Java or C# developer and learning
+      Haskell, you might at times find yourself a little hazy on some
+      of the concepts and terminology.  This document is meant to
+      clear up confusion by using terminology you are familiar
+      with to describe Haskell's terminology and syntax.
+    </p>
+
+    <h2>Learn Haskell by picking a toy application you enjoy</h2>
+
+    Maybe you like to chain together processes, or write algorithms.
+    Whatever it is, do that so that you have some fun at the end of
+    each struggle.  Bite off small toy problems, and when you get too
+    ambitious, scale back and bite off something smaller.  When you're
+    stuck for hours, you know it's time to scale back and pick a smaller
+    topic within your toy problem domain to learn.
+
+    <h2>Java to Haskell translation</h2>
+        <table>
+          <tbody><tr>
+            <th>Feature</th>
+            <th>Java</th>
+            <th>Haskell</th>
+          </tr>
+          <tr>
+            <td>Functions</td>
+            <td>
+              <pre>static &lt;A, B&gt; String = f(A a, B b) {
+  return "hi"
+}
+              </pre>
+            </td>
+            <td>
+              <pre>f :: a -&gt; b -&gt; String
+f a b = "hi"
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Structs
+            </td>
+            <td>
+              <pre>class MyType {
+  String a;
+  String b;
+}
+              </pre>
+            </td>
+            <td>
+              <pre>data MyType = MyType {
+  a :: String,
+  b :: String
+}
+
+λ&gt; result = MyType "hi" "world"
+λ&gt; a
+a :: MyType -&gt; String
+λ&gt; a result
+"hi"
+λ&gt; b result
+"world"
+              </pre>
+            </td>
+          </tr><tr>
+            <td>
+              Typedef
+            </td>
+            <td>
+              <pre>interface PhoneBook extends Iterable&lt;Pair&lt;String,String&gt;&gt;
+              </pre>
+            </td>
+            <td>
+              <pre>type PhoneBook = [(String, String)]
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Interface
+            </td>
+            <td>
+              <pre>interface Add2 extends Add1 {
+  int add2(int number1, int number2);
+}
+              </pre>
+            </td>
+            <td>
+              <pre>class (Add1 a) =&gt; Add2 a where
+  add2 :: Integer -&gt; Integer -&gt; Integer        
+              </pre>
+            </td>
+          </tr>
+        </tbody></table>
+<p></p>
+<h3>Haskell documentation</h3>
+
+<p>
+Haskell documentation is found on hackage.  After some time you'll
+be able to read the definitions.  Sometimes the author has documented
+their package well with examples.  Until you're more familiar, you'll
+be better off learning the fundamentals, so go <a href="http://learnyouahaskell.com">learn you a haskell</a>.
+</p>
+        
+  <table id="related"><tbody>
+<tr><td><a href="../../about/index.html">About</a></td></tr>
+<tr><td><a href="../conscious-cosmos-and-personal-reality/index.html">Conscious cosmos and personal reality</a></td></tr>
+<tr><td><a href="../howto-install-docker-kubernets-local-registry/index.html">Running Kubernetes, Docker and a private Registry locally</a></td></tr>
+<tr><td><a href="../howto-local-minikube-registry/index.html">Private Minikube Docker Registry using Helm</a></td></tr>
+<tr><td><a href="index.html">Java to Haskell in Zero Days</a></td></tr>
+<tr><td><a href="../living-offgrid-on-a-solar-powered-boat/index.html">Living offgrid on my solar powered boat</a></td></tr>
+<tr><td><a href="../monadic-shell-scripts/index.html">Monadic shell scripts</a></td></tr>
+<tr><td><a href="../proxy-by-url-must-provide-a-proper-url/index.html">Proxy-by-url must provide proper url error</a></td></tr>
+<tr><td><a href="../shared-javascript-in-node-and-browser-browserify-tape/index.html">Share javascript in node and the browser using Browserify and Tape</a></td></tr>
+<tr><td><a href="../smoothie-charts-nodejs-arduino-stream-transform-test/index.html">Tutorial: Streaming Arduino Sensor Data to Smoothie Charts</a></td></tr>
+<tr><td><a href="../start-emacs-in-dired-mode/index.html">Starting emacs in dired mode</a></td></tr>
+<tr><td><a href="../thoughts-on-search/index.html">Thoughts on Search and APIs</a></td></tr>
+<tr><td><a href="../trading-journey/index.html">My Trading Journey</a></td></tr>
+<tr><td><a href="../traveling-without-moving/index.html">Traveling without moving</a></td></tr>
+<tr><td><a href="../use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/index.html">Browserify and Minifyify to Combine, Minify and
+    Obfuscate Multiple JavaScript Files</a></td></tr>
+<tr><td><a href="../webgl-using-gl-mat4-browserify-shader-and-browserify/index.html">WebGL using gl-mat4, browserify-shader and Browserify</a></td></tr>
+<tr><td><a href="../why-i-love-emacs-lisp/index.html">Why I love emacs lisp</a></td></tr>
+<tr><td><a href="../why-learn-haskell/index.html">Why Learn Haskell?</a></td></tr>
+<tr><td><a href="../why-run-docker-containers-and-kubernetes/index.html">Why run microservices using Docker and Kubernetes?</a></td></tr>
+<tr><td><a href="../../completed-ml-class-org-course/index.html">Completed ml-class.org course</a></td></tr>
+<tr><td><a href="../../electric-bike-article-on-madisonbikelife/index.html">Electric bike article on MadisonBikeLife</a></td></tr>
+<tr><td><a href="../../index.html">Home</a></td></tr>
+<tr><td><a href="../../logical-validity-explained/index.html">Logical validity explained</a></td></tr>
+<tr><td><a href="../../resume/index.html">Resume</a></td></tr>
+<tr><td><a href="../../shooting-weighted-dice-on-the-street/index.html">Shooting weighted dice on the street</a></td></tr>
+<tr><td><a href="../../slurp-some-nodejs-streams/index.html">slurp-some Nodejs streams</a></td></tr>
+<tr><td><a href="../../software/cross-environment-shared-logic-with-requirejs-karma-and-mocha/index.html">Cross environment Javascript with Requirejs, Karma and Mocha</a></td></tr>
+<tr><td><a href="../../software/eventemitter-vs-backbone-events-vs-diy-eventbus/index.html">Choosing an EventBus: DIY EventBus, EventEmitter or BackBone.Events</a></td></tr>
+<tr><td><a href="../../software/node-js-closing-jsonstream-and-other-system-resources-gracefully/index.html">Node.js closing JSONStream and other system resources gracefully</a></td></tr>
+<tr><td><a href="../../software/sequelize-unit-testing-using-grunt-and-nodeunit/index.html">Sequelize unit testing using Grunt and Nodeunit</a></td></tr>
+<tr><td><a href="../../software/singleton-factory-and-mediator-patterns-in-javascript/index.html">Singleton, Factory and Mediator Patterns in Javascript</a></td></tr>
+<tr><td><a href="../../software/use-grunt-and-uglifyjs-to-combine-multiple-javascript-files-into-a-single-javascript-file/index.html">Use Grunt and Uglifyjs to combine multiple javascript files into a single javascript file</a></td></tr>
+<tr><td><a href="../../software/use-http-browserify-to-submit-formdata-and-images-easily/index.html">Using http-browserify to submit FormData and Images with ease</a></td></tr>
+<tr><td><a href="../../software/writing-software/index.html">Writing software is an act of thought</a></td></tr>
+<tr><td><a href="../../technology/silent-am1h-itx-development-workstation/index.html">Silent AM1H-ITX Development Workstation</a></td></tr>
+<tr><td><a href="../../think-again/index.html">Think Again</a></td></tr>
+<tr><td><a href="../../tones-of-the-web/index.html">Simple Sound Progression</a></td></tr>
+</tbody></table>
+  
+  
+
+</body></html>

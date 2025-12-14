@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><!-- Always remember to leave space to breathe --><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Tutorial: Streaming Arduino Sensor Data to Smoothie Charts</title>
+  <link rel="stylesheet" type="text/css" href="../../static/style/style.css"></head>
+
+
+
+<body>
+
+
+  <article>
+
+    <header>
+
+      <h1>Tutorial: Streaming Arduino Sensor Data to a Smoothie Chart</h1>
+      <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>      
+      <p>Published: <time pubdate="pubdate">2014-12-07</time></p>
+
+    </header>
+
+    <p>
+
+      </p><h2>Requirements</h2>
+
+      <ul>
+	<li><a href="http://nodejs.org">Node.js</a></li>
+	<li><a href="http://www.amazon.com/gp/product/B00ASSQ9S6/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00ASSQ9S6&amp;linkCode=as2&amp;tag=inforgain-20&amp;linkId=W7QM2SG754UUZXFZ">Geeetech Iduino Nano 168 ATmega168 Board V3.0 5V/16Mhz compatible with Arduino's IDE</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=inforgain-20&amp;l=as2&amp;o=1&amp;a=B00ASSQ9S6" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;">
+	</li>
+	<li><a href="http://www.amazon.com/gp/product/B008B656PO/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B008B656PO&amp;linkCode=as2&amp;tag=inforgain-20&amp;linkId=QFKJ4ACDWYSNKZ7R">20A range Current Sensor Module ACS712 Module</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=inforgain-20&amp;l=as2&amp;o=1&amp;a=B008B656PO" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;">
+	</li>
+      </ul>
+
+      <p>First, install nodejs if you haven't already.  Then create a directory
+      to contain your project code.  Inside the new directory, run</p>
+      <pre><code class="language-bash">
+	  #Initialize your project
+	  npm init
+      </code></pre>
+
+      <p>Next, add dependencies to your project.  The json-streamer transform is written to buffer the basic json serial data
+	coming from the Arduino Nano.</p>
+      
+      <pre><code class="language-bash">
+	  npm install serialport --save
+	  npm install git://github.com/lakowske/json-streamer --save
+	  npm install git://github.com/lakowske/websocket-express --save
+      </code></pre>
+	
+      <p>Next, create a pipe using a series of stream transforms.  We'll pipe
+      the data into a smoothie chart.</p>
+
+      <pre><code class="language-javascript">
+
+	var SerialPort = require("serialport").SerialPort
+	var JSONReader = require('json-streamer');
+
+	var serialPort = new SerialPort("/dev/ttyUSB0", {
+	   baudrate: 57600
+	});
+      </code></pre>
+
+    <p></p>
+
+    <table id="related"><tbody>
+<tr><td><a href="../../about/index.html">About</a></td></tr>
+<tr><td><a href="../conscious-cosmos-and-personal-reality/index.html">Conscious cosmos and personal reality</a></td></tr>
+<tr><td><a href="../howto-install-docker-kubernets-local-registry/index.html">Running Kubernetes, Docker and a private Registry locally</a></td></tr>
+<tr><td><a href="../howto-local-minikube-registry/index.html">Private Minikube Docker Registry using Helm</a></td></tr>
+<tr><td><a href="../java-to-haskell-in-zero-days/index.html">Java to Haskell in Zero Days</a></td></tr>
+<tr><td><a href="../living-offgrid-on-a-solar-powered-boat/index.html">Living offgrid on my solar powered boat</a></td></tr>
+<tr><td><a href="../monadic-shell-scripts/index.html">Monadic shell scripts</a></td></tr>
+<tr><td><a href="../proxy-by-url-must-provide-a-proper-url/index.html">Proxy-by-url must provide proper url error</a></td></tr>
+<tr><td><a href="../shared-javascript-in-node-and-browser-browserify-tape/index.html">Share javascript in node and the browser using Browserify and Tape</a></td></tr>
+<tr><td><a href="index.html">Tutorial: Streaming Arduino Sensor Data to Smoothie Charts</a></td></tr>
+<tr><td><a href="../start-emacs-in-dired-mode/index.html">Starting emacs in dired mode</a></td></tr>
+<tr><td><a href="../thoughts-on-search/index.html">Thoughts on Search and APIs</a></td></tr>
+<tr><td><a href="../trading-journey/index.html">My Trading Journey</a></td></tr>
+<tr><td><a href="../traveling-without-moving/index.html">Traveling without moving</a></td></tr>
+<tr><td><a href="../use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/index.html">Browserify and Minifyify to Combine, Minify and
+    Obfuscate Multiple JavaScript Files</a></td></tr>
+<tr><td><a href="../webgl-using-gl-mat4-browserify-shader-and-browserify/index.html">WebGL using gl-mat4, browserify-shader and Browserify</a></td></tr>
+<tr><td><a href="../why-i-love-emacs-lisp/index.html">Why I love emacs lisp</a></td></tr>
+<tr><td><a href="../why-learn-haskell/index.html">Why Learn Haskell?</a></td></tr>
+<tr><td><a href="../why-run-docker-containers-and-kubernetes/index.html">Why run microservices using Docker and Kubernetes?</a></td></tr>
+<tr><td><a href="../../completed-ml-class-org-course/index.html">Completed ml-class.org course</a></td></tr>
+<tr><td><a href="../../electric-bike-article-on-madisonbikelife/index.html">Electric bike article on MadisonBikeLife</a></td></tr>
+<tr><td><a href="../../index.html">Home</a></td></tr>
+<tr><td><a href="../../logical-validity-explained/index.html">Logical validity explained</a></td></tr>
+<tr><td><a href="../../resume/index.html">Resume</a></td></tr>
+<tr><td><a href="../../shooting-weighted-dice-on-the-street/index.html">Shooting weighted dice on the street</a></td></tr>
+<tr><td><a href="../../slurp-some-nodejs-streams/index.html">slurp-some Nodejs streams</a></td></tr>
+<tr><td><a href="../../software/cross-environment-shared-logic-with-requirejs-karma-and-mocha/index.html">Cross environment Javascript with Requirejs, Karma and Mocha</a></td></tr>
+<tr><td><a href="../../software/eventemitter-vs-backbone-events-vs-diy-eventbus/index.html">Choosing an EventBus: DIY EventBus, EventEmitter or BackBone.Events</a></td></tr>
+<tr><td><a href="../../software/node-js-closing-jsonstream-and-other-system-resources-gracefully/index.html">Node.js closing JSONStream and other system resources gracefully</a></td></tr>
+<tr><td><a href="../../software/sequelize-unit-testing-using-grunt-and-nodeunit/index.html">Sequelize unit testing using Grunt and Nodeunit</a></td></tr>
+<tr><td><a href="../../software/singleton-factory-and-mediator-patterns-in-javascript/index.html">Singleton, Factory and Mediator Patterns in Javascript</a></td></tr>
+<tr><td><a href="../../software/use-grunt-and-uglifyjs-to-combine-multiple-javascript-files-into-a-single-javascript-file/index.html">Use Grunt and Uglifyjs to combine multiple javascript files into a single javascript file</a></td></tr>
+<tr><td><a href="../../software/use-http-browserify-to-submit-formdata-and-images-easily/index.html">Using http-browserify to submit FormData and Images with ease</a></td></tr>
+<tr><td><a href="../../software/writing-software/index.html">Writing software is an act of thought</a></td></tr>
+<tr><td><a href="../../technology/silent-am1h-itx-development-workstation/index.html">Silent AM1H-ITX Development Workstation</a></td></tr>
+<tr><td><a href="../../think-again/index.html">Think Again</a></td></tr>
+<tr><td><a href="../../tones-of-the-web/index.html">Simple Sound Progression</a></td></tr>
+</tbody></table>
+    
+  </article>
+
+
+
+
+
+
+</body></html>

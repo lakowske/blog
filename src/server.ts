@@ -96,6 +96,12 @@ async function dumpContent(index : Map<string, Content>, dir : string) {
         fs.mkdirSync(path.dirname(filePath), {recursive: true});
         fs.writeFileSync(filePath, data);
     }
+
+    // Create .nojekyll file for GitHub Pages
+    fs.writeFileSync(path.join(dir, '.nojekyll'), '');
+
+    // Create CNAME file for custom domain
+    fs.writeFileSync(path.join(dir, 'CNAME'), 'sethlakowske.com');
 }
 
 // Load the environment variables

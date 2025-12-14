@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sequelize unit testing using Grunt and Nodeunit</title> 
+  <link rel="stylesheet" type="text/css" href="../../static/style/style.css"> 
+  <link rel="stylesheet" type="text/css" href="../../static/bundles/triangles/style.css"></head> 
+ <body> 
+  <h2>Sequelize unit testing using Grunt and Nodeunit</h2>
+  <h2> </h2>
+  <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3> 
+  <div class="entry-content"> 
+   <p>If you want to persist Javascript objects (data) to a database using Node, then it is a good idea to test this mechanism is working. &nbsp;Below you will learn how to accomplish testing your data persistence mechanism. &nbsp;Sequelize, Nodeunit and Grunt are popular tools to accomplish this task. &nbsp;Sequelize is an Object Relational Mapper (ORM), Nodeunit is a unit testing framework and Grunt is a common test runner that will run all the tests you create.</p> 
+   <p>A project containing the result of this tutorial is available at <a href="https://github.com/lakowske/sequelize-grunt-nodeunit-example">https://github.com/lakowske/sequelize-grunt-nodeunit-example</a></p> 
+   <p><span style="text-decoration: underline;">Getting Started</span></p> 
+   <p>First, be sure you have installed Node and npm. &nbsp;Next, do the following:</p> 
+   <p>Install grunt command line interface</p> 
+   <pre><code class="language-bash">sudo npm -g install grunt-cli
+</code></pre> 
+   <p>Now go to your project directory. If you don’t already have a project directory, create one. If you don’t have a package.json file, create a basic one using</p> 
+   <pre><code class="language-bash">npm init</code></pre> 
+   <p>Next add dependencies to your project</p> 
+   <pre><code class="language-bash">npm install sequelize --save
+npm install sqlite3 --save
+npm install nodeunit --save-dev
+npm install grunt --save-dev
+npm install grunt-contrib-nodeunit --save-dev
+npm install async --save
+npm install uuid --save
+</code></pre> 
+   <p>Create a Gruntfile.js configured to run nodeunit tests.</p> 
+   <pre><code class="language-javascript">
+module.exports = function(grunt) {
+
+    // Project configuration.                                                                                                                                                                
+    grunt.initConfig({
+        nodeunit: {
+            all: ['./**/*Test.js']
+        }
+    });
+
+    // Load nodeunit task                                                                                                                                                                
+    grunt.loadNpmTasks('grunt-contrib-nodeunit');
+
+};
+</code></pre> 
+   <p>Next I created a SequelizeDatabase.js implementation. It contains a function that returns a sequelize sqlite instance.</p> 
+   <pre><code class="language-javascript">var Sequelize = require('Sequelize');
+
+exports.testDB = function testDB() {
+    return new Sequelize('database', 'username', 'password', {
+        // sqlite! now!                                                                                                                                                                
+        dialect: 'sqlite',
+
+        // the storage engine for sqlite                                                                                                                                                                
+        // - default ':memory:'                                                                                                                                                                
+        storage: __dirname + '/database.sqlite'
+    });
+}
+</code></pre> 
+   <p>I make the unit test SequelizeDatabaseTest.js.</p> 
+   <pre><code class="language-javascript">var db = require('./SequelizeDatabase');
+var uuid = require('uuid');
+
+exports.testSequelize = function (test) {
+    var  sequelize= db.testDB();
+
+    sequelize.query("DROP TABLE COMMANDLINES").success(function(myLines) {
+        console.log('drop table COMMANDLINES');
+    });
+
+    sequelize.query("CREATE TABLE IF NOT EXISTS COMMANDLINES (ID varchar(255), MYLINE TEXT)").success(function(myLines) {
+        console.log('create table COMMANDLINES');
+    });
+    // Generate a v1 (time-based) id                                                                                                                                                                                                                                                                                           
+    var id = uuid.v1(); // -&gt; '6c84fb90-12c4-11e1-840d-7b25c5ee775a'                                                                                                                                                                                                                                                           
+
+    sequelize.query("INSERT INTO COMMANDLINES (ID, MYLINE) VALUES ('" + id + "', 'aline')").success(function(myLines){
+        console.log('insert ' + id + " into commandlines");
+    });
+
+    sequelize.query("SELECT * FROM COMMANDLINES").success(function(myLines) {
+        var cmdLine = myLines[0];
+
+        test.equal(id, cmdLine.ID,"should be " + id);
+
+        test.equal("aline", cmdLine.MYLINE,"should be aline");
+
+        console.log(cmdLine.ID);
+        console.log(cmdLine.MYLINE);
+        console.log(myLines);
+        test.done();
+    });
+}
+</code></pre> 
+   <p>Finally, to establish the data persistence mechanism is working, run the unit test.</p> 
+   <pre><code class="language-bash">nodeunit SequelizeDatabaseTest.js
+</code></pre> 
+   <p>Or run all your tests using Grunt.</p> 
+   <pre><code class="language-bash">grunt nodeunit</code></pre> 
+  </div> 
+  <script src="../../static/bundles/triangles/bundle.js"></script> 
+  <table id="related"><tbody>
+<tr><td><a href="../../about/index.html">About</a></td></tr>
+<tr><td><a href="../../articles/conscious-cosmos-and-personal-reality/index.html">Conscious cosmos and personal reality</a></td></tr>
+<tr><td><a href="../../articles/howto-install-docker-kubernets-local-registry/index.html">Running Kubernetes, Docker and a private Registry locally</a></td></tr>
+<tr><td><a href="../../articles/howto-local-minikube-registry/index.html">Private Minikube Docker Registry using Helm</a></td></tr>
+<tr><td><a href="../../articles/java-to-haskell-in-zero-days/index.html">Java to Haskell in Zero Days</a></td></tr>
+<tr><td><a href="../../articles/living-offgrid-on-a-solar-powered-boat/index.html">Living offgrid on my solar powered boat</a></td></tr>
+<tr><td><a href="../../articles/monadic-shell-scripts/index.html">Monadic shell scripts</a></td></tr>
+<tr><td><a href="../../articles/proxy-by-url-must-provide-a-proper-url/index.html">Proxy-by-url must provide proper url error</a></td></tr>
+<tr><td><a href="../../articles/shared-javascript-in-node-and-browser-browserify-tape/index.html">Share javascript in node and the browser using Browserify and Tape</a></td></tr>
+<tr><td><a href="../../articles/smoothie-charts-nodejs-arduino-stream-transform-test/index.html">Tutorial: Streaming Arduino Sensor Data to Smoothie Charts</a></td></tr>
+<tr><td><a href="../../articles/start-emacs-in-dired-mode/index.html">Starting emacs in dired mode</a></td></tr>
+<tr><td><a href="../../articles/thoughts-on-search/index.html">Thoughts on Search and APIs</a></td></tr>
+<tr><td><a href="../../articles/trading-journey/index.html">My Trading Journey</a></td></tr>
+<tr><td><a href="../../articles/traveling-without-moving/index.html">Traveling without moving</a></td></tr>
+<tr><td><a href="../../articles/use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/index.html">Browserify and Minifyify to Combine, Minify and
+    Obfuscate Multiple JavaScript Files</a></td></tr>
+<tr><td><a href="../../articles/webgl-using-gl-mat4-browserify-shader-and-browserify/index.html">WebGL using gl-mat4, browserify-shader and Browserify</a></td></tr>
+<tr><td><a href="../../articles/why-i-love-emacs-lisp/index.html">Why I love emacs lisp</a></td></tr>
+<tr><td><a href="../../articles/why-learn-haskell/index.html">Why Learn Haskell?</a></td></tr>
+<tr><td><a href="../../articles/why-run-docker-containers-and-kubernetes/index.html">Why run microservices using Docker and Kubernetes?</a></td></tr>
+<tr><td><a href="../../completed-ml-class-org-course/index.html">Completed ml-class.org course</a></td></tr>
+<tr><td><a href="../../electric-bike-article-on-madisonbikelife/index.html">Electric bike article on MadisonBikeLife</a></td></tr>
+<tr><td><a href="../../index.html">Home</a></td></tr>
+<tr><td><a href="../../logical-validity-explained/index.html">Logical validity explained</a></td></tr>
+<tr><td><a href="../../resume/index.html">Resume</a></td></tr>
+<tr><td><a href="../../shooting-weighted-dice-on-the-street/index.html">Shooting weighted dice on the street</a></td></tr>
+<tr><td><a href="../../slurp-some-nodejs-streams/index.html">slurp-some Nodejs streams</a></td></tr>
+<tr><td><a href="../cross-environment-shared-logic-with-requirejs-karma-and-mocha/index.html">Cross environment Javascript with Requirejs, Karma and Mocha</a></td></tr>
+<tr><td><a href="../eventemitter-vs-backbone-events-vs-diy-eventbus/index.html">Choosing an EventBus: DIY EventBus, EventEmitter or BackBone.Events</a></td></tr>
+<tr><td><a href="../node-js-closing-jsonstream-and-other-system-resources-gracefully/index.html">Node.js closing JSONStream and other system resources gracefully</a></td></tr>
+<tr><td><a href="index.html">Sequelize unit testing using Grunt and Nodeunit</a></td></tr>
+<tr><td><a href="../singleton-factory-and-mediator-patterns-in-javascript/index.html">Singleton, Factory and Mediator Patterns in Javascript</a></td></tr>
+<tr><td><a href="../use-grunt-and-uglifyjs-to-combine-multiple-javascript-files-into-a-single-javascript-file/index.html">Use Grunt and Uglifyjs to combine multiple javascript files into a single javascript file</a></td></tr>
+<tr><td><a href="../use-http-browserify-to-submit-formdata-and-images-easily/index.html">Using http-browserify to submit FormData and Images with ease</a></td></tr>
+<tr><td><a href="../writing-software/index.html">Writing software is an act of thought</a></td></tr>
+<tr><td><a href="../../technology/silent-am1h-itx-development-workstation/index.html">Silent AM1H-ITX Development Workstation</a></td></tr>
+<tr><td><a href="../../think-again/index.html">Think Again</a></td></tr>
+<tr><td><a href="../../tones-of-the-web/index.html">Simple Sound Progression</a></td></tr>
+</tbody></table> 
+ 
+
+</body></html>

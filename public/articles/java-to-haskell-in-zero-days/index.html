@@ -55,8 +55,8 @@
             <td>Functions</td>
             <td>
               <pre>
-static &ltA, B&gt String = f(A a, B b) {
-  return "hi"
+static &lt;A, B&gt; String f(A a, B b) {
+  return "hi";
 }
               </pre>
             </td>
@@ -112,19 +112,451 @@ type PhoneBook = [(String, String)]
           </tr>
           <tr>
             <td>
-              Interface
+              Interface / Type Class
             </td>
             <td>
               <pre>
 interface Add2 extends Add1 {
   int add2(int number1, int number2);
 }
+
+class Calculator implements Add2 {
+  public int add2(int n1, int n2) {
+    return n1 + n2;
+  }
+}
               </pre>
             </td>
             <td>
               <pre>
 class (Add1 a) => Add2 a where
-  add2 :: Integer -> Integer -> Integer        
+  add2 :: a -> Integer -> Integer -> Integer
+
+-- Instance implementation
+instance Add2 Calculator where
+  add2 calc n1 n2 = n1 + n2
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Null Handling
+            </td>
+            <td>
+              <pre>
+String getName() {
+  return null; // or actual value
+}
+
+String name = getName();
+if (name != null) {
+  System.out.println(name);
+}
+              </pre>
+            </td>
+            <td>
+              <pre>
+getName :: Maybe String
+getName = Nothing -- or Just "value"
+
+-- Pattern matching
+case getName of
+  Nothing -> putStrLn "No name"
+  Just name -> putStrLn name
+
+-- Or using maybe function
+maybe (putStrLn "No name") putStrLn getName
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Lists/Arrays
+            </td>
+            <td>
+              <pre>
+List&lt;Integer&gt; numbers =
+  Arrays.asList(1, 2, 3, 4, 5);
+
+// Map
+List&lt;Integer&gt; doubled = numbers.stream()
+  .map(x -> x * 2)
+  .collect(Collectors.toList());
+
+// Filter
+List&lt;Integer&gt; evens = numbers.stream()
+  .filter(x -> x % 2 == 0)
+  .collect(Collectors.toList());
+              </pre>
+            </td>
+            <td>
+              <pre>
+numbers :: [Integer]
+numbers = [1, 2, 3, 4, 5]
+
+-- Map
+doubled = map (*2) numbers
+
+-- Filter
+evens = filter even numbers
+
+-- List comprehension
+evens = [x | x &lt;- numbers, even x]
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Loops vs Recursion
+            </td>
+            <td>
+              <pre>
+int sum(List&lt;Integer&gt; numbers) {
+  int total = 0;
+  for (int n : numbers) {
+    total += n;
+  }
+  return total;
+}
+              </pre>
+            </td>
+            <td>
+              <pre>
+-- Recursion
+sum :: [Integer] -> Integer
+sum [] = 0
+sum (x:xs) = x + sum xs
+
+-- Or using fold
+sum = foldl (+) 0
+
+-- Or using built-in
+sum numbers
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Enums vs ADTs
+            </td>
+            <td>
+              <pre>
+enum Color {
+  RED, GREEN, BLUE
+}
+
+enum Result {
+  SUCCESS,
+  ERROR
+}
+              </pre>
+            </td>
+            <td>
+              <pre>
+data Color = Red | Green | Blue
+  deriving (Show, Eq)
+
+data Result a = Success a | Error String
+  deriving (Show, Eq)
+
+-- Usage
+myResult :: Result Int
+myResult = Success 42
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Exception Handling
+            </td>
+            <td>
+              <pre>
+try {
+  int result = divide(10, 0);
+  System.out.println(result);
+} catch (ArithmeticException e) {
+  System.out.println("Error: " + e.getMessage());
+}
+              </pre>
+            </td>
+            <td>
+              <pre>
+divide :: Int -> Int -> Either String Int
+divide _ 0 = Left "Division by zero"
+divide x y = Right (x `div` y)
+
+-- Using the result
+case divide 10 0 of
+  Left err -> putStrLn $ "Error: " ++ err
+  Right val -> print val
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Lambda / Anonymous Functions
+            </td>
+            <td>
+              <pre>
+List&lt;Integer&gt; numbers = Arrays.asList(1,2,3);
+
+numbers.stream()
+  .map(x -> x * 2)
+  .forEach(x -> System.out.println(x));
+
+// BiFunction
+BiFunction&lt;Integer, Integer, Integer&gt; add =
+  (a, b) -> a + b;
+              </pre>
+            </td>
+            <td>
+              <pre>
+numbers = [1, 2, 3]
+
+-- Lambda syntax
+map (\x -> x * 2) numbers
+
+-- Partial application (more idiomatic)
+map (*2) numbers
+
+-- Lambda with multiple args
+add = \a b -> a + b
+-- Or more idiomatically
+add a b = a + b
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Function Composition
+            </td>
+            <td>
+              <pre>
+// Method chaining
+String result = getString()
+  .trim()
+  .toLowerCase()
+  .replace(" ", "_");
+
+// Composed function
+Function&lt;String, String&gt; process =
+  s -> s.trim().toLowerCase();
+              </pre>
+            </td>
+            <td>
+              <pre>
+-- Function composition (.)
+-- Reads right to left
+process = replace " " "_" . toLower . trim
+
+-- Or using application operator ($)
+result = replace " " "_" $ toLower $ trim getString
+
+-- Or using reverse application (&amp;)
+result = getString &amp; trim &amp; toLower &amp; replace " " "_"
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Conditionals
+            </td>
+            <td>
+              <pre>
+int abs(int x) {
+  if (x &lt; 0) {
+    return -x;
+  } else {
+    return x;
+  }
+}
+
+// Switch
+String describe(int x) {
+  switch(x) {
+    case 0: return "zero";
+    case 1: return "one";
+    default: return "other";
+  }
+}
+              </pre>
+            </td>
+            <td>
+              <pre>
+-- if-then-else (expression, not statement)
+abs x = if x &lt; 0 then -x else x
+
+-- Guards (more idiomatic)
+abs x
+  | x &lt; 0     = -x
+  | otherwise = x
+
+-- Pattern matching
+describe :: Int -> String
+describe 0 = "zero"
+describe 1 = "one"
+describe _ = "other"
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Generics / Type Parameters
+            </td>
+            <td>
+              <pre>
+class Box&lt;T&gt; {
+  private T value;
+
+  public Box(T value) {
+    this.value = value;
+  }
+
+  public T getValue() {
+    return value;
+  }
+}
+
+Box&lt;String&gt; box = new Box&lt;&gt;("hello");
+              </pre>
+            </td>
+            <td>
+              <pre>
+data Box a = Box a
+  deriving (Show, Eq)
+
+getValue :: Box a -> a
+getValue (Box v) = v
+
+-- Usage
+box :: Box String
+box = Box "hello"
+
+λ> getValue box
+"hello"
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Collections (Map)
+            </td>
+            <td>
+              <pre>
+import java.util.HashMap;
+import java.util.Map;
+
+Map&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();
+ages.put("Alice", 30);
+ages.put("Bob", 25);
+
+Integer age = ages.get("Alice");
+              </pre>
+            </td>
+            <td>
+              <pre>
+import qualified Data.Map as Map
+
+ages :: Map.Map String Integer
+ages = Map.fromList [("Alice", 30), ("Bob", 25)]
+
+-- Lookup
+age = Map.lookup "Alice" ages  -- Maybe Integer
+
+-- Insert
+ages' = Map.insert "Charlie" 35 ages
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Pattern Matching vs Getters
+            </td>
+            <td>
+              <pre>
+class Person {
+  private String name;
+  private int age;
+
+  public String getName() { return name; }
+  public int getAge() { return age; }
+}
+
+Person p = new Person("Alice", 30);
+System.out.println(p.getName());
+              </pre>
+            </td>
+            <td>
+              <pre>
+data Person = Person {
+  name :: String,
+  age :: Int
+} deriving Show
+
+-- Automatic accessor functions
+p = Person "Alice" 30
+
+λ> name p
+"Alice"
+
+-- Pattern matching
+greet (Person n a) =
+  "Hello " ++ n ++ ", age " ++ show a
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Static Methods vs Module Functions
+            </td>
+            <td>
+              <pre>
+class MathUtils {
+  public static int square(int x) {
+    return x * x;
+  }
+}
+
+int result = MathUtils.square(5);
+              </pre>
+            </td>
+            <td>
+              <pre>
+-- In module MathUtils
+module MathUtils (square) where
+
+square :: Int -> Int
+square x = x * x
+
+-- Usage
+import MathUtils
+result = square 5
+              </pre>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              String Operations
+            </td>
+            <td>
+              <pre>
+String s = "Hello World";
+String upper = s.toUpperCase();
+String[] words = s.split(" ");
+String joined = String.join(",", words);
+boolean contains = s.contains("World");
+              </pre>
+            </td>
+            <td>
+              <pre>
+import Data.Char (toUpper)
+import Data.List (isInfixOf)
+
+s = "Hello World"
+upper = map toUpper s
+words = split ' ' s  -- using Data.List.Split
+joined = intercalate "," words
+contains = "World" `isInfixOf` s
               </pre>
             </td>
           </tr>

@@ -48,6 +48,17 @@ npm run serve
 The previews serve `dump/` on port 8090. Cloudflare builds and serves the same
 static output in production.
 
+View without a server:
+
+```
+npm run dump
+```
+
+Then open `dump/index.html` in a browser. All internal links are
+document-relative, so `file://` navigation works. Directory URLs such as
+`/articles/` are not resolved by `file://`; use the links from the home page or
+open `dump/articles/index.html` directly.
+
 Environment variables
 ===
 * `PORT` — legacy; the static preview uses 8090.

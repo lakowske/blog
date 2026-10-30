@@ -41,6 +41,7 @@ A complete HTML document is allowed only with `layout: "raw"`. See
 | `evergreen` | No | `true` for intentionally undated articles. Do not combine with `date`. |
 | `tags` | Articles | Array of tags from `site.json`. |
 | `summary` | No | Plain-text override. If absent, one is derived from the first paragraph. |
+| `heading` | No | Visible h1 for pages. Defaults to `title`. |
 | `updated` | No | Same date formats as `date`. |
 | `layout` | No | `article` (default), `page`, `bare`, a named layout, or `raw`. |
 | `bodyClass` | No | Extra class on `<body>` for page-specific CSS. |
@@ -144,6 +145,21 @@ still read it:
 `scripts` and `styles` are document-relative to the page. External URLs are
 allowed. `bodyClass`, `showHeader: false`, and `showRelated: false` are available
 for smaller adjustments without creating a new layout.
+
+## Generated pages
+
+The build generates these without source files:
+
+- `/articles/` — all articles, grouped Dated / Evergreen / Date unknown, with a
+  tag index.
+- `/tags/<tag>/` — one page per used tag.
+- `/feed.xml` — RSS 2.0 for dated articles.
+- `/sitemap.xml` and `/robots.txt`.
+- `/404.html`.
+
+Home shows the evergreen posts, the last 10 dated posts, and an “All articles”
+link. Pages and articles get the shared nav/footer; articles also get a tags
+line and a tag-scored “Related” section.
 
 ## Tags
 

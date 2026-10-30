@@ -25,6 +25,9 @@ kept as a mirror for bookmarked URLs.
 - `npm run dump` first validates metadata and writes `dump/catalog.json` with
   `scripts/catalog.mjs`, then runs `scripts/render.mjs`, which renders the
   body fragments through the templates and writes `dump/`.
+- The renderer also generates `articles/index.html` (archive),
+  `tags/<tag>/index.html`, `feed.xml`, `sitemap.xml`, `robots.txt`, and
+  `404.html`.
 - Cloudflare runs both commands. Do not rename `public/` or `dump/`, or change
   the build command, without updating the Cloudflare project settings and this
   document in the same change.
@@ -58,9 +61,10 @@ kept as a mirror for bookmarked URLs.
   - `access-control-allow-origin: *`
 - Observed behavior:
   - `/index.html` returns a 308 redirect to `/`.
-  - Unknown paths return the home page with HTTP 200 (SPA-style fallback).
-  - `/robots.txt` and `/sitemap.xml` currently return the home page.
-  - Phase 3 adds a real `404.html`, `robots.txt`, and `sitemap.xml`.
+  - A top-level `404.html` is generated. Cloudflare Pages serves it for unknown
+    paths once a top-level 404 exists; the previous SPA fallback was because no
+    top-level 404 was present.
+  - `/robots.txt` and `/sitemap.xml` are generated with the site build.
 
 ## GitHub Pages mirror
 

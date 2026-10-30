@@ -155,7 +155,7 @@ Design rules:
 
 | Phase | Name | Primary outcome | Depends on | Status |
 | --- | --- | --- | --- | --- |
-| 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | In progress |
+| 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | In progress (PR #3) |
 | 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D1–D3 | Not started |
 | 2 | Templates and normalization | One layout; content files are body fragments; consistent markup | 1 | Not started |
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8 | Not started |
@@ -225,7 +225,8 @@ before any structural work begins.
 - `CNAME` is ambiguous: GitHub Pages reports no custom domain, but the file is
   still generated. Leave it for now and revisit in Phase 5.
 
-**Status:** In progress
+**Status:** In progress — implementation complete; PR #3 CI and Cloudflare
+preview pass. Awaiting review/merge and mirror verification.
 
 ---
 

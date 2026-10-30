@@ -26,11 +26,6 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
-const args = process.argv.slice(2);
-const strict = args.includes("--strict");
-const rootArg = args.find((arg) => !arg.startsWith("--")) ?? "dump";
-const root = path.resolve(rootArg);
-
 // Temporary allowlist for the two known-broken WebGL references. Remove in
 // Phase 2 when the page is normalized.
 const KNOWN_BROKEN = new Set([
@@ -40,7 +35,27 @@ const KNOWN_BROKEN = new Set([
 
 const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i;
 
-function decodeEntities(value) {
+const WARNING_LABELS = {
+  date: "missing publish date",
+  byline: "missing byline",
+  related: "missing related placeholder",
+  description: "missing meta description",
+  canonical: "missing canonical link",
+  heading: "heading count is not exactly 1",
+  timeFormat: "<time> without a valid datetime",
+};
+
+// ---------------------------------------------------------------------------
+// Pure functions
+// ---------------------------------------------------------------------------
+
+export function parseArgs(argv) {
+  const strict = argv.includes("--strict");
+  const rootArg = argv.find((arg) => !arg.startsWith("--")) ?? "dump";
+  return { strict, rootArg };
+}
+
+export function decodeEntities(value) {
   return value
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
@@ -49,36 +64,55 @@ function decodeEntities(value) {
     .replace(/&gt;/g, ">");
 }
 
-function stripUrl(value) {
+export function stripUrl(value) {
   return decodeEntities(value).split("#")[0].split("?")[0].trim();
 }
 
-async function walk(dir) {
-  const entries = await readdir(dir, { withFileTypes: true });
-  const files = [];
-  for (const entry of entries) {
-    const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...(await walk(full)));
-    } else if (entry.isFile() && entry.name.endsWith(".html")) {
-      files.push(full);
+export function isExternal(value) {
+  return EXTERNAL.test(value);
+}
+
+export function attrs(html, name) {
+  const pattern = new RegExp(`(?:^|\\s)${name}\\s*=\\s*("([^"]*)"|'([^']*)')`, "gi");
+  const values = [];
+  let match;
+  while ((match = pattern.exec(html)) !== null) {
+    values.push(match[2] ?? match[3] ?? "");
+  }
+  return values;
+}
+
+export function countMatches(html, pattern) {
+  return (html.match(pattern) ?? []).length;
+}
+
+export function titleOf(html) {
+  return html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1].trim() ?? "";
+}
+
+export function duplicateIds(html) {
+  const seen = new Set();
+  const duplicates = new Set();
+  for (const id of attrs(html, "id")) {
+    if (seen.has(id)) {
+      duplicates.add(id);
     }
+    seen.add(id);
   }
-  return files;
+  return [...duplicates];
 }
 
-async function exists(target) {
-  try {
-    await stat(target);
-    return true;
-  } catch {
-    return false;
-  }
+export function referencesIn(html) {
+  return [...attrs(html, "href"), ...attrs(html, "src")];
 }
 
-async function resolveTarget(pageFile, url) {
+/**
+ * Resolve a link to a path relative to the generated site root.
+ * Returns null for external, empty, or fragment-only links.
+ */
+export function resolveReference(pageRel, url) {
   const clean = stripUrl(url);
-  if (!clean || EXTERNAL.test(clean)) {
+  if (!clean || isExternal(clean)) {
     return null;
   }
 
@@ -90,154 +124,198 @@ async function resolveTarget(pageFile, url) {
   }
 
   if (decoded.startsWith("/")) {
-    return path.join(root, decoded);
+    return path.posix.normalize(decoded.slice(1));
   }
-  return path.resolve(path.dirname(pageFile), decoded);
+  return path.posix.normalize(path.posix.join(path.posix.dirname(pageRel), decoded));
 }
 
-async function targetExists(target) {
+export function timeStatus(html) {
+  if (!/<time\b/i.test(html)) {
+    return "missing";
+  }
+  const tags = html.match(/<time\b[^>]*>/gi) ?? [];
+  const invalid = tags.some((tag) => {
+    const value = tag.match(/\bdatetime\s*=\s*["']([^"']+)["']/i)?.[1];
+    return !value || !/^\d{4}-\d{2}-\d{2}$/.test(value);
+  });
+  return invalid ? "invalid" : "ok";
+}
+
+export function hasByline(html) {
+  return /Posted by/i.test(html);
+}
+
+export function hasRelatedPlaceholder(html) {
+  return /id\s*=\s*["']related["']/i.test(html);
+}
+
+export function hasDescription(html) {
+  return /<meta\b[^>]*name\s*=\s*["']description["']/i.test(html);
+}
+
+export function hasCanonical(html) {
+  return /<link\b[^>]*rel\s*=\s*["']canonical["']/i.test(html);
+}
+
+export function headingCount(html) {
+  return countMatches(html, /<h1\b/gi);
+}
+
+export function emptyWarnings() {
+  return Object.fromEntries(Object.keys(WARNING_LABELS).map((kind) => [kind, []]));
+}
+
+export function formatReport({ rootLabel, fileCount, errors, warnings }) {
+  const lines = [`Checked ${fileCount} HTML files in ${rootLabel}`];
+
+  if (errors.length > 0) {
+    lines.push("", `ERRORS (${errors.length})`, ...errors.map((error) => `  ${error}`));
+  }
+
+  let warningCount = 0;
+  for (const [kind, label] of Object.entries(WARNING_LABELS)) {
+    const pages = warnings[kind] ?? [];
+    warningCount += pages.length;
+    if (pages.length === 0) {
+      continue;
+    }
+    lines.push("", `WARN ${label} (${pages.length})`, ...pages.map((page) => `  ${page}`));
+  }
+
+  lines.push("", `${errors.length} error(s), ${warningCount} warning(s)`);
+  return lines.join("\n");
+}
+
+// ---------------------------------------------------------------------------
+// Filesystem helpers
+// ---------------------------------------------------------------------------
+
+async function listHtmlFiles(dir) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await listHtmlFiles(full)));
+    } else if (entry.isFile() && entry.name.endsWith(".html")) {
+      files.push(full);
+    }
+  }
+  return files;
+}
+
+async function fileExists(root, target) {
+  if (!target || target.startsWith("..") || path.isAbsolute(target)) {
+    return false;
+  }
+
+  const full = path.join(root, target);
   try {
-    const info = await stat(target);
+    const info = await stat(full);
     if (info.isFile()) {
       return true;
     }
     if (info.isDirectory()) {
       // A directory URL such as /about/ is served by its index.html.
-      return await exists(path.join(target, "index.html"));
+      const index = await stat(path.join(full, "index.html"));
+      return index.isFile();
     }
   } catch {
-    // Fall through to false.
+    // Missing or unreadable paths are broken references.
   }
   return false;
 }
 
-function attrs(html, name) {
-  const pattern = new RegExp(`(?:^|\\s)${name}\\s*=\\s*("([^"]*)"|'([^']*)')`, "gi");
-  const values = [];
-  let match;
-  while ((match = pattern.exec(html)) !== null) {
-    values.push(match[2] ?? match[3] ?? "");
-  }
-  return values;
-}
+// ---------------------------------------------------------------------------
+// Composition and side effects
+// ---------------------------------------------------------------------------
 
-function countMatches(html, pattern) {
-  return (html.match(pattern) ?? []).length;
-}
+export async function validatePage({ rel, html, fileExists: targetExists }) {
+  const errors = [];
+  const warnings = [];
 
-function summarize(label, pages) {
-  if (pages.length === 0) {
-    return;
-  }
-  console.log(`WARN ${label} (${pages.length})`);
-  for (const page of pages) {
-    console.log(`  ${page}`);
-  }
-}
-
-let files;
-try {
-  files = await walk(root);
-} catch (error) {
-  console.error(`Cannot read ${root}: ${error.message}`);
-  process.exit(1);
-}
-const errors = [];
-const warnings = {
-  date: [],
-  byline: [],
-  related: [],
-  description: [],
-  canonical: [],
-  heading: [],
-  timeFormat: [],
-};
-
-for (const file of files) {
-  const rel = path.relative(root, file).split(path.sep).join("/");
-  const html = await readFile(file, "utf8");
-
-  const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
-  if (!title || title[1].trim() === "") {
+  if (titleOf(html) === "") {
     errors.push(`${rel}: missing or empty <title>`);
   }
 
-  const ids = attrs(html, "id");
-  const seen = new Set();
-  const duplicates = new Set();
-  for (const id of ids) {
-    if (seen.has(id)) {
-      duplicates.add(id);
-    }
-    seen.add(id);
-  }
-  for (const id of duplicates) {
+  for (const id of duplicateIds(html)) {
     errors.push(`${rel}: duplicate id "${id}"`);
   }
 
-  for (const value of [...attrs(html, "href"), ...attrs(html, "src")]) {
-    const key = `${rel}|${value}`;
+  for (const reference of referencesIn(html)) {
+    const key = `${rel}|${reference}`;
     if (KNOWN_BROKEN.has(key)) {
       continue;
     }
-    const target = await resolveTarget(file, value);
+    const target = resolveReference(rel, reference);
     if (target && !(await targetExists(target))) {
-      errors.push(`${rel}: broken reference "${value}"`);
+      errors.push(`${rel}: broken reference "${reference}"`);
     }
   }
 
-  if (!/<time\b/i.test(html)) {
-    warnings.date.push(rel);
-  } else {
-    const timeTags = html.match(/<time\b[^>]*>/gi) ?? [];
-    const bad = timeTags.some((tag) => {
-      const value = tag.match(/\bdatetime\s*=\s*["']([^"']+)["']/i)?.[1];
-      return !value || !/^\d{4}-\d{2}-\d{2}$/.test(value);
-    });
-    if (bad) {
-      warnings.timeFormat.push(rel);
+  const time = timeStatus(html);
+  if (time === "missing") {
+    warnings.push({ kind: "date", detail: rel });
+  } else if (time === "invalid") {
+    warnings.push({ kind: "timeFormat", detail: rel });
+  }
+
+  if (!hasByline(html)) {
+    warnings.push({ kind: "byline", detail: rel });
+  }
+  if (!hasRelatedPlaceholder(html)) {
+    warnings.push({ kind: "related", detail: rel });
+  }
+  if (!hasDescription(html)) {
+    warnings.push({ kind: "description", detail: rel });
+  }
+  if (!hasCanonical(html)) {
+    warnings.push({ kind: "canonical", detail: rel });
+  }
+
+  const headings = headingCount(html);
+  if (headings !== 1) {
+    warnings.push({ kind: "heading", detail: `${rel} (${headings})` });
+  }
+
+  return { errors, warnings };
+}
+
+export async function run({ root, strict = false }) {
+  const files = await listHtmlFiles(root);
+  const errors = [];
+  const warnings = emptyWarnings();
+  const targetExists = (target) => fileExists(root, target);
+
+  for (const file of files) {
+    const rel = path.relative(root, file).split(path.sep).join("/");
+    const html = await readFile(file, "utf8");
+    const result = await validatePage({ rel, html, fileExists: targetExists });
+    errors.push(...result.errors);
+    for (const warning of result.warnings) {
+      warnings[warning.kind].push(warning.detail);
     }
   }
 
-  if (!/Posted by/i.test(html)) {
-    warnings.byline.push(rel);
-  }
-  if (!/id\s*=\s*["']related["']/i.test(html)) {
-    warnings.related.push(rel);
-  }
-  if (!/<meta\b[^>]*name\s*=\s*["']description["']/i.test(html)) {
-    warnings.description.push(rel);
-  }
-  if (!/<link\b[^>]*rel\s*=\s*["']canonical["']/i.test(html)) {
-    warnings.canonical.push(rel);
-  }
+  const warningCount = Object.values(warnings).reduce((sum, pages) => sum + pages.length, 0);
+  const exitCode = errors.length > 0 || (strict && warningCount > 0) ? 1 : 0;
 
-  const h1Count = countMatches(html, /<h1\b/gi);
-  if (h1Count !== 1) {
-    warnings.heading.push(`${rel} (${h1Count})`);
+  return { fileCount: files.length, errors, warnings, exitCode };
+}
+
+export async function main(argv = process.argv.slice(2), io = console) {
+  const { strict, rootArg } = parseArgs(argv);
+  const root = path.resolve(rootArg);
+
+  try {
+    const report = await run({ root, strict });
+    const rootLabel = path.relative(process.cwd(), root) || ".";
+    io.log(formatReport({ ...report, rootLabel }));
+    process.exitCode = report.exitCode;
+  } catch (error) {
+    io.error(`Cannot read ${root}: ${error.message}`);
+    process.exitCode = 1;
   }
 }
 
-console.log(`Checked ${files.length} HTML files in ${path.relative(process.cwd(), root) || "."}`);
-
-if (errors.length > 0) {
-  console.log(`\nERRORS (${errors.length})`);
-  for (const error of errors) {
-    console.log(`  ${error}`);
-  }
-}
-
-summarize("missing publish date", warnings.date);
-summarize("missing byline", warnings.byline);
-summarize("missing related placeholder", warnings.related);
-summarize("missing meta description", warnings.description);
-summarize("missing canonical link", warnings.canonical);
-summarize("heading count is not exactly 1", warnings.heading);
-summarize("<time> without a valid datetime", warnings.timeFormat);
-
-const warningCount = Object.values(warnings).reduce((sum, list) => sum + list.length, 0);
-console.log(`\n${errors.length} error(s), ${warningCount} warning(s)`);
-
-if (errors.length > 0 || (strict && warningCount > 0)) {
-  process.exitCode = 1;
-}
+main();

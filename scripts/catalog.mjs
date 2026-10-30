@@ -592,6 +592,7 @@ export async function runCatalog(argv = process.argv.slice(2), io = console) {
     return;
   }
 
+  // Gather the paths
   const root = path.resolve(REPO_ROOT, args.root);
   const outFile = args.out ? path.resolve(REPO_ROOT, args.out) : null;
   const outDir = outFile ? path.dirname(outFile) : null;

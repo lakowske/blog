@@ -1,37 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Monadic shell scripts</title>
-    <link rel="stylesheet" type="text/css"
-          href="../../static/style/style.css">
-    <link rel="stylesheet" type="text/css"
-          href="../../static/bundles/triangles/style.css">
-  </head>
-
-  <body>
-  <!--meta
-  {
-    "title": "Monadic shell scripts",
-    "type": "article",
-    "date": "2016-12-03",
-    "tags": [
-      "haskell",
-      "linux"
-    ]
-  }
-  -->
-    <h2>Monadic shell scripts</title>
-    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
-    <h4>Published: <time datetime="2016-12-03">2016-12-03</time></h4>
-
-    <p>
+<!--meta
+{
+  "title": "Monadic shell scripts",
+  "type": "article",
+  "date": "2016-12-03",
+  "tags": [
+    "haskell",
+    "linux"
+  ]
+}
+-->
+<p>
       Shell scripts can be monad like in their construction.  When
       shell scripts are chained together with pipes, you get a sense
       of their composability. I'll walk you through a few examples to
       give you a concrete example of this composability.
     </p>
-      
+
     <p>
       Copies my .ssh directory to a remote computer
     </p>
@@ -53,9 +37,3 @@
 alias k8s-keys='docker run -i lakowske/k8s-keys'
 alias tout='tar -cf -'
 alias tin='tar -xf -'</code></pre>
-
-    <table id="related"></table>
-    
-</body>
-
-

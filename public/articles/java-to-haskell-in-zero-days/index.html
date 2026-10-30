@@ -1,31 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Java to Haskell in Zero Days</title>
-    <link rel="stylesheet" type="text/css"
-          href="../../static/style/style.css">
-    <link rel="stylesheet" type="text/css"
-          href="../../static/bundles/triangles/style.css">
-  </head>
-
-  <body>
-  <!--meta
-  {
-    "title": "Java to Haskell in Zero Days",
-    "type": "article",
-    "date": "2017-04-05",
-    "tags": [
-      "haskell",
-      "learning"
-    ]
-  }
-  -->
-    <h2>Java to Haskell in Zero Days</h2>
-    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
-    <h4>Published: <time datetime="2017-04-05">2017-04-05</time></h4>
-
-    <p>
+<!--meta
+{
+  "title": "Java to Haskell in Zero Days",
+  "type": "article",
+  "date": "2017-04-05",
+  "tags": [
+    "haskell",
+    "learning"
+  ]
+}
+-->
+<p>
       Haskell is a language that is foreign to most programmers coming
       from an imperitive language like Java, C#, C++, Python and the
       like.  You find new concepts that make learning Haskell feel
@@ -46,7 +30,7 @@
       with to describe Haskell's terminology and syntax.
     </p>
 
-    <H2>Learn Haskell by picking a toy application you enjoy</H2>
+    <h2>Learn Haskell by picking a toy application you enjoy</h2>
 
     Maybe you like to chain together processes, or write algorithms.
     Whatever it is, do that so that you have some fun at the end of
@@ -55,9 +39,9 @@
     stuck for hours, you know it's time to scale back and pick a smaller
     topic within your toy problem domain to learn.
 
-    <H2>Java to Haskell translation</H2>
+    <h2>Java to Haskell translation</h2>
         <table>
-          <tr>
+          <tbody><tr>
             <th>Feature</th>
             <th>Java</th>
             <th>Haskell</th>
@@ -65,15 +49,13 @@
           <tr>
             <td>Functions</td>
             <td>
-              <pre>
-static &lt;A, B&gt; String f(A a, B b) {
+              <pre>static &lt;A, B&gt; String f(A a, B b) {
   return "hi";
 }
               </pre>
             </td>
             <td>
-              <pre>
-f :: a -> b -> String
+              <pre>f :: a -&gt; b -&gt; String
 f a b = "hi"
               </pre>
             </td>
@@ -83,41 +65,37 @@ f a b = "hi"
               Structs
             </td>
             <td>
-              <pre>
-class MyType {
+              <pre>class MyType {
   String a;
   String b;
 }
               </pre>
             </td>
             <td>
-              <pre>
-data MyType = MyType {
+              <pre>data MyType = MyType {
   a :: String,
   b :: String
 }
 
-λ> result = MyType "hi" "world"
-λ> a
-a :: MyType -> String
-λ> a result
+λ&gt; result = MyType "hi" "world"
+λ&gt; a
+a :: MyType -&gt; String
+λ&gt; a result
 "hi"
-λ> b result
+λ&gt; b result
 "world"
               </pre>
             </td>
-          <tr>
+          </tr><tr>
             <td>
               Typedef
             </td>
             <td>
-              <pre>
-interface PhoneBook extends Iterable&ltPair&ltString,String&gt&gt
+              <pre>interface PhoneBook extends Iterable&lt;Pair&lt;String,String&gt;&gt;
               </pre>
             </td>
             <td>
-              <pre>
-type PhoneBook = [(String, String)]
+              <pre>type PhoneBook = [(String, String)]
               </pre>
             </td>
           </tr>
@@ -126,8 +104,7 @@ type PhoneBook = [(String, String)]
               Interface / Type Class
             </td>
             <td>
-              <pre>
-interface Add2 extends Add1 {
+              <pre>interface Add2 extends Add1 {
   int add2(int number1, int number2);
 }
 
@@ -139,9 +116,8 @@ class Calculator implements Add2 {
               </pre>
             </td>
             <td>
-              <pre>
-class (Add1 a) => Add2 a where
-  add2 :: a -> Integer -> Integer -> Integer
+              <pre>class (Add1 a) =&gt; Add2 a where
+  add2 :: a -&gt; Integer -&gt; Integer -&gt; Integer
 
 -- Instance implementation
 instance Add2 Calculator where
@@ -154,8 +130,7 @@ instance Add2 Calculator where
               Null Handling
             </td>
             <td>
-              <pre>
-String getName() {
+              <pre>String getName() {
   return null; // or actual value
 }
 
@@ -166,14 +141,13 @@ if (name != null) {
               </pre>
             </td>
             <td>
-              <pre>
-getName :: Maybe String
+              <pre>getName :: Maybe String
 getName = Nothing -- or Just "value"
 
 -- Pattern matching
 case getName of
-  Nothing -> putStrLn "No name"
-  Just name -> putStrLn name
+  Nothing -&gt; putStrLn "No name"
+  Just name -&gt; putStrLn name
 
 -- Or using maybe function
 maybe (putStrLn "No name") putStrLn getName
@@ -185,24 +159,22 @@ maybe (putStrLn "No name") putStrLn getName
               Lists/Arrays
             </td>
             <td>
-              <pre>
-List&lt;Integer&gt; numbers =
+              <pre>List&lt;Integer&gt; numbers =
   Arrays.asList(1, 2, 3, 4, 5);
 
 // Map
 List&lt;Integer&gt; doubled = numbers.stream()
-  .map(x -> x * 2)
+  .map(x -&gt; x * 2)
   .collect(Collectors.toList());
 
 // Filter
 List&lt;Integer&gt; evens = numbers.stream()
-  .filter(x -> x % 2 == 0)
+  .filter(x -&gt; x % 2 == 0)
   .collect(Collectors.toList());
               </pre>
             </td>
             <td>
-              <pre>
-numbers :: [Integer]
+              <pre>numbers :: [Integer]
 numbers = [1, 2, 3, 4, 5]
 
 -- Map
@@ -221,8 +193,7 @@ evens = [x | x &lt;- numbers, even x]
               Loops vs Recursion
             </td>
             <td>
-              <pre>
-int sum(List&lt;Integer&gt; numbers) {
+              <pre>int sum(List&lt;Integer&gt; numbers) {
   int total = 0;
   for (int n : numbers) {
     total += n;
@@ -232,9 +203,8 @@ int sum(List&lt;Integer&gt; numbers) {
               </pre>
             </td>
             <td>
-              <pre>
--- Recursion
-sum :: [Integer] -> Integer
+              <pre>-- Recursion
+sum :: [Integer] -&gt; Integer
 sum [] = 0
 sum (x:xs) = x + sum xs
 
@@ -251,8 +221,7 @@ sum numbers
               Enums vs ADTs
             </td>
             <td>
-              <pre>
-enum Color {
+              <pre>enum Color {
   RED, GREEN, BLUE
 }
 
@@ -263,8 +232,7 @@ enum Result {
               </pre>
             </td>
             <td>
-              <pre>
-data Color = Red | Green | Blue
+              <pre>data Color = Red | Green | Blue
   deriving (Show, Eq)
 
 data Result a = Success a | Error String
@@ -281,8 +249,7 @@ myResult = Success 42
               Exception Handling
             </td>
             <td>
-              <pre>
-try {
+              <pre>try {
   int result = divide(10, 0);
   System.out.println(result);
 } catch (ArithmeticException e) {
@@ -291,15 +258,14 @@ try {
               </pre>
             </td>
             <td>
-              <pre>
-divide :: Int -> Int -> Either String Int
+              <pre>divide :: Int -&gt; Int -&gt; Either String Int
 divide _ 0 = Left "Division by zero"
 divide x y = Right (x `div` y)
 
 -- Using the result
 case divide 10 0 of
-  Left err -> putStrLn $ "Error: " ++ err
-  Right val -> print val
+  Left err -&gt; putStrLn $ "Error: " ++ err
+  Right val -&gt; print val
               </pre>
             </td>
           </tr>
@@ -308,30 +274,28 @@ case divide 10 0 of
               Lambda / Anonymous Functions
             </td>
             <td>
-              <pre>
-List&lt;Integer&gt; numbers = Arrays.asList(1,2,3);
+              <pre>List&lt;Integer&gt; numbers = Arrays.asList(1,2,3);
 
 numbers.stream()
-  .map(x -> x * 2)
-  .forEach(x -> System.out.println(x));
+  .map(x -&gt; x * 2)
+  .forEach(x -&gt; System.out.println(x));
 
 // BiFunction
 BiFunction&lt;Integer, Integer, Integer&gt; add =
-  (a, b) -> a + b;
+  (a, b) -&gt; a + b;
               </pre>
             </td>
             <td>
-              <pre>
-numbers = [1, 2, 3]
+              <pre>numbers = [1, 2, 3]
 
 -- Lambda syntax
-map (\x -> x * 2) numbers
+map (\x -&gt; x * 2) numbers
 
 -- Partial application (more idiomatic)
 map (*2) numbers
 
 -- Lambda with multiple args
-add = \a b -> a + b
+add = \a b -&gt; a + b
 -- Or more idiomatically
 add a b = a + b
               </pre>
@@ -342,8 +306,7 @@ add a b = a + b
               Function Composition
             </td>
             <td>
-              <pre>
-// Method chaining
+              <pre>// Method chaining
 String result = getString()
   .trim()
   .toLowerCase()
@@ -351,12 +314,11 @@ String result = getString()
 
 // Composed function
 Function&lt;String, String&gt; process =
-  s -> s.trim().toLowerCase();
+  s -&gt; s.trim().toLowerCase();
               </pre>
             </td>
             <td>
-              <pre>
--- Function composition (.)
+              <pre>-- Function composition (.)
 -- Reads right to left
 process = replace " " "_" . toLower . trim
 
@@ -373,8 +335,7 @@ result = getString &amp; trim &amp; toLower &amp; replace " " "_"
               Conditionals
             </td>
             <td>
-              <pre>
-int abs(int x) {
+              <pre>int abs(int x) {
   if (x &lt; 0) {
     return -x;
   } else {
@@ -393,8 +354,7 @@ String describe(int x) {
               </pre>
             </td>
             <td>
-              <pre>
--- if-then-else (expression, not statement)
+              <pre>-- if-then-else (expression, not statement)
 abs x = if x &lt; 0 then -x else x
 
 -- Guards (more idiomatic)
@@ -403,7 +363,7 @@ abs x
   | otherwise = x
 
 -- Pattern matching
-describe :: Int -> String
+describe :: Int -&gt; String
 describe 0 = "zero"
 describe 1 = "one"
 describe _ = "other"
@@ -415,8 +375,7 @@ describe _ = "other"
               Generics / Type Parameters
             </td>
             <td>
-              <pre>
-class Box&lt;T&gt; {
+              <pre>class Box&lt;T&gt; {
   private T value;
 
   public Box(T value) {
@@ -432,18 +391,17 @@ Box&lt;String&gt; box = new Box&lt;&gt;("hello");
               </pre>
             </td>
             <td>
-              <pre>
-data Box a = Box a
+              <pre>data Box a = Box a
   deriving (Show, Eq)
 
-getValue :: Box a -> a
+getValue :: Box a -&gt; a
 getValue (Box v) = v
 
 -- Usage
 box :: Box String
 box = Box "hello"
 
-λ> getValue box
+λ&gt; getValue box
 "hello"
               </pre>
             </td>
@@ -453,8 +411,7 @@ box = Box "hello"
               Collections (Map)
             </td>
             <td>
-              <pre>
-import java.util.HashMap;
+              <pre>import java.util.HashMap;
 import java.util.Map;
 
 Map&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();
@@ -465,8 +422,7 @@ Integer age = ages.get("Alice");
               </pre>
             </td>
             <td>
-              <pre>
-import qualified Data.Map as Map
+              <pre>import qualified Data.Map as Map
 
 ages :: Map.Map String Integer
 ages = Map.fromList [("Alice", 30), ("Bob", 25)]
@@ -484,8 +440,7 @@ ages' = Map.insert "Charlie" 35 ages
               Pattern Matching vs Getters
             </td>
             <td>
-              <pre>
-class Person {
+              <pre>class Person {
   private String name;
   private int age;
 
@@ -498,8 +453,7 @@ System.out.println(p.getName());
               </pre>
             </td>
             <td>
-              <pre>
-data Person = Person {
+              <pre>data Person = Person {
   name :: String,
   age :: Int
 } deriving Show
@@ -507,7 +461,7 @@ data Person = Person {
 -- Automatic accessor functions
 p = Person "Alice" 30
 
-λ> name p
+λ&gt; name p
 "Alice"
 
 -- Pattern matching
@@ -521,8 +475,7 @@ greet (Person n a) =
               Static Methods vs Module Functions
             </td>
             <td>
-              <pre>
-class MathUtils {
+              <pre>class MathUtils {
   public static int square(int x) {
     return x * x;
   }
@@ -532,11 +485,10 @@ int result = MathUtils.square(5);
               </pre>
             </td>
             <td>
-              <pre>
--- In module MathUtils
+              <pre>-- In module MathUtils
 module MathUtils (square) where
 
-square :: Int -> Int
+square :: Int -&gt; Int
 square x = x * x
 
 -- Usage
@@ -550,8 +502,7 @@ result = square 5
               String Operations
             </td>
             <td>
-              <pre>
-String s = "Hello World";
+              <pre>String s = "Hello World";
 String upper = s.toUpperCase();
 String[] words = s.split(" ");
 String joined = String.join(",", words);
@@ -559,8 +510,7 @@ boolean contains = s.contains("World");
               </pre>
             </td>
             <td>
-              <pre>
-import Data.Char (toUpper)
+              <pre>import Data.Char (toUpper)
 import Data.List (isInfixOf)
 
 s = "Hello World"
@@ -571,8 +521,8 @@ contains = "World" `isInfixOf` s
               </pre>
             </td>
           </tr>
-        </table>
-</p>
+        </tbody></table>
+
 <h3>Haskell documentation</h3>
 
 <p>
@@ -581,8 +531,3 @@ be able to read the definitions.  Sometimes the author has documented
 their package well with examples.  Until you're more familiar, you'll
 be better off learning the fundamentals, so go <a href="http://learnyouahaskell.com">learn you a haskell</a>.
 </p>
-        
-  <table id="related"></table>
-  </body>
-  
-</html>

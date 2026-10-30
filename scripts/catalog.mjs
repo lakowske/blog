@@ -46,6 +46,11 @@ const ALLOWED_FIELDS = new Set([
   "summary",
   "updated",
   "draft",
+  "layout",
+  "bodyClass",
+  "showHeader",
+  "showRelated",
+  "triangles",
   "related",
   "scripts",
   "styles",
@@ -298,6 +303,20 @@ export function validateMetadata({ rel, metadata, html, site }) {
     errors.push(`${rel}: draft content must live outside public/`);
   }
 
+  if (metadata.layout !== undefined) {
+    if (typeof metadata.layout !== "string" || !/^[a-z0-9-]+$/.test(metadata.layout)) {
+      errors.push(`${rel}: layout must be a lowercase slug`);
+    }
+  }
+  if (metadata.bodyClass !== undefined && typeof metadata.bodyClass !== "string") {
+    errors.push(`${rel}: bodyClass must be a string`);
+  }
+  for (const field of ["showHeader", "showRelated", "triangles"]) {
+    if (metadata[field] !== undefined && typeof metadata[field] !== "boolean") {
+      errors.push(`${rel}: ${field} must be a boolean`);
+    }
+  }
+
   const tags = metadata.tags ?? [];
   if (!Array.isArray(tags)) {
     errors.push(`${rel}: tags must be an array`);
@@ -328,25 +347,37 @@ export function validateMetadata({ rel, metadata, html, site }) {
   }
 
   for (const field of ["related", "scripts", "styles"]) {
-    if (metadata[field] !== undefined && !Array.isArray(metadata[field])) {
+    if (metadata[field] === undefined) {
+      continue;
+    }
+    if (!Array.isArray(metadata[field])) {
       errors.push(`${rel}: ${field} must be an array`);
+      continue;
+    }
+    for (const value of metadata[field]) {
+      if (typeof value !== "string" || value.trim() === "") {
+        errors.push(`${rel}: ${field} entries must be non-empty strings`);
+      }
     }
   }
 
-  const pageTitle = extractTitle(html);
-  if (title && pageTitle && title !== pageTitle) {
-    warnings.push({ kind: "titleMismatch", detail: `${rel}: "${title}" vs "${pageTitle}"` });
-  }
-
-  const times = extractTimeValues(html);
-  if (metadata.date) {
-    if (times.length === 0) {
-      warnings.push({ kind: "missingVisibleDate", detail: rel });
-    } else if (!times.includes(metadata.date)) {
-      warnings.push({ kind: "dateMismatch", detail: `${rel}: "${metadata.date}" vs "${times.join(', ')}"` });
+  // Fragments do not contain <title> or <time>; the renderer supplies them.
+  if (/<body\b/i.test(html)) {
+    const pageTitle = extractTitle(html);
+    if (title && pageTitle && title !== pageTitle) {
+      warnings.push({ kind: "titleMismatch", detail: `${rel}: "${title}" vs "${pageTitle}"` });
     }
-  } else if (times.length > 0) {
-    warnings.push({ kind: "unexpectedVisibleDate", detail: `${rel}: ${times.join(", ")}` });
+
+    const times = extractTimeValues(html);
+    if (metadata.date) {
+      if (times.length === 0) {
+        warnings.push({ kind: "missingVisibleDate", detail: rel });
+      } else if (!times.includes(metadata.date)) {
+        warnings.push({ kind: "dateMismatch", detail: `${rel}: "${metadata.date}" vs "${times.join(', ')}"` });
+      }
+    } else if (times.length > 0) {
+      warnings.push({ kind: "unexpectedVisibleDate", detail: `${rel}: ${times.join(", ")}` });
+    }
   }
 
   return { errors, warnings };
@@ -375,6 +406,14 @@ export function toCatalogEntry({ rel, metadata, html, site }) {
     summarySource: metadata.summary ? "manual" : summary ? "generated" : "none",
     section: deriveSection(id),
     updated: metadata.updated ?? null,
+    layout: metadata.layout ?? (metadata.type === "page" ? "page" : "article"),
+    bodyClass: metadata.bodyClass ?? "",
+    showHeader: metadata.showHeader ?? metadata.type === "article",
+    showRelated: metadata.showRelated ?? true,
+    triangles: metadata.triangles === true,
+    scripts: Array.isArray(metadata.scripts) ? metadata.scripts : [],
+    styles: Array.isArray(metadata.styles) ? metadata.styles : [],
+    related: Array.isArray(metadata.related) ? metadata.related : [],
   };
 }
 

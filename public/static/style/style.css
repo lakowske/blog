@@ -18,8 +18,13 @@ body {
     }
 }
 
-.title .byline .date {
-    text-align:center;
+.byline {
+    font-size: 1.17em;
+    font-weight: bold;
+}
+
+.date {
+    font-weight: bold;
 }
 
 table#related {

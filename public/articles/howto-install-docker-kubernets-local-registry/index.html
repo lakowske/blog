@@ -1,31 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Running Kubernetes, Docker and a private Registry locally</title>
-    <link rel="stylesheet" type="text/css"
-          href="../../static/style/style.css">
-    <link rel="stylesheet" type="text/css"
-          href="../../static/bundles/triangles/style.css">
-  </head>
-
-  <body>
-  <!--meta
-  {
-    "title": "Running Kubernetes, Docker and a private Registry locally",
-    "type": "article",
-    "date": "2016-06-04",
-    "tags": [
-      "docker",
-      "kubernetes"
-    ]
-  }
-  -->
-    <h2>Running Kubernetes, Docker and a private Registry locally</h2>
-    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
-    <h4>Published: <time datetime="2016-06-04">2016-06-04</time></h4>
-
-    <p>
+<!--meta
+{
+  "title": "Running Kubernetes, Docker and a private Registry locally",
+  "type": "article",
+  "date": "2016-06-04",
+  "tags": [
+    "docker",
+    "kubernetes"
+  ]
+}
+-->
+<p>
       This guide will walk you through the steps to setting up an
       environment to run Kubernetes (K8S) on your laptop or workstation.
       You'll need to install Docker if you haven't already and
@@ -35,9 +19,9 @@
       checkout <a href="../howto-local-minikube-registry">Run a
       Minikube Local Docker Registry and Dashboard using Helm</a>
 
-      
+
     </p>
-    <H2>Requirements</H2>
+    <h2>Requirements</h2>
     <ul>
       <li>
         <b>Docker:</b>
@@ -51,7 +35,7 @@
       </li>
     </ul>
 
-    <H2>Run Kubernetes using Docker</H2>
+    <h2>Run Kubernetes using Docker</h2>
 
     Once you have Docker Toolbox installed, you can leverage Docker to
     run Kubernetes with <a href="https://github.com/kubernetes/kubernetes/tree/master/cluster/images/hyperkube">hyperkube</a>.  First, setup the Kubernetes version environment
@@ -84,7 +68,7 @@ gcr.io/google_containers/hyperkube-${ARCH}:${K8S_VERSION} \
 --cluster-dns=8.8.8.8 \
 --cluster-domain=cluster.local \
 --allow-privileged --v=2</code></pre>
-    
+
     Verify your setup is running.  You should see a number of kubernetes
     containers in the list.
     <pre><code class="language-bash">docker ps</code></pre>
@@ -93,8 +77,8 @@ gcr.io/google_containers/hyperkube-${ARCH}:${K8S_VERSION} \
     <pre><code class="language-bash">kubectl get pods --all-namespaces</code></pre>
     Note for macOS users: If that doesn't work, you may need to port forward to the virtual machine vm.
     <pre><code class="language-bash">docker-machine ssh `docker-machine active` -N -L 8080:localhost:8080</code></pre>
-    
-    <H3>Run a private local registry</H3>
+
+    <h3>Run a private local registry</h3>
     Start a private local registry that Docker always restarts if the container dies.
     <pre><code class="language-bash">docker run -d -p 5000:5000 --restart=always --name registry registry:2</code></pre>
     Build an image and tag it.
@@ -105,24 +89,17 @@ docker tag hello-node localhost:5000/hello-node</code></pre>
     Now run a deployment in Kubernetes using the image located on your
     local registry.
     <pre><code class="language-bash">kubectl run hello-node --image=localhost:5000/hello-node --port=8888</code></pre>
-    
-    <H3 style="color: orange">Conclusion</H3>
+
+    <h3 style="color: orange">Conclusion</h3>
     <p>
     You should now have a deployment of your image, in my case hello-node, running using your
     private local registry, Kubernetes and Docker.  You can verify by
-    running <span><pre><code class="language-bash">kubectl get deployments</code></pre></span>
-    </p>
-    
+    running <span></span></p><pre><code class="language-bash">kubectl get deployments</code></pre>
+
+
     <p>
       You may also connect to your pod via port forwarding to verify
       connectivity.  For example, I forward traffic from 8090 on
       my localhost to port 8080 on a jenkins pod.  Now when I point
       my browser to localhost:8090, I talk to the jenkins web service.
-      <pre><code class="language-bash">kubectl port-forward jenkins-3828317938-il1gc 8090:8080</code></pre>
-    </p>
-      
-    
-    <table id="related"></table>
-    
-  </body>
-</html>
+      </p><pre><code class="language-bash">kubectl port-forward jenkins-3828317938-il1gc 8090:8080</code></pre>

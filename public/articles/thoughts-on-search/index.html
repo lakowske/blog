@@ -1,57 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Thoughts on Search and APIs</title>
-    <link rel="stylesheet" type="text/css"
-          href="../../static/style/style.css">
-    <link rel="stylesheet" type="text/css"
-          href="../../static/bundles/triangles/style.css">
-  </head>
-
-  <body>
-  <!--meta
-  {
-    "title": "Thoughts on Search and APIs",
-    "type": "article",
-    "date": "2022-08-13",
-    "tags": [
-      "search"
-    ]
-  }
-  -->
-    <h2>Thoughts on Search and APIs</h2>
-    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
-    <h4>Published: <time datetime="2022-08-13">2022-08-13</time></h4>
-
-    <H2>Searching and APIs</H2>
+<!--meta
+{
+  "title": "Thoughts on Search and APIs",
+  "type": "article",
+  "date": "2022-08-13",
+  "tags": [
+    "search"
+  ]
+}
+-->
+<h2>Searching and APIs</h2>
     <ul>
       <li>
-	      <H3>APIs that are a subset of search</H3>
+	      <h3>APIs that are a subset of search</h3>
         Often an API is a subset of search.  Anytime a user of the API
         gets a list of items back matching some criteria, it might
         be a search query written as an API call.  One can often
         turn search queries into an API call.  For example, give me objects that were created on day X (date: xx/yy/zzzz).
-        <pre><code class="language-java">List&ltObjectType&gt getObjectsCreatedOn(Date someDay)</code></pre>
+        <pre><code class="language-java">List&lt;ObjectType&gt; getObjectsCreatedOn(Date someDay)</code></pre>
         So some API calls have a corresponding search query.
       </li>
       <li>
-        <H3>Search is a desired/required feature</H3>
+        <h3>Search is a desired/required feature</h3>
         If users want to search some criteria to
         display, debug or measure datasets, then they may want a search
         API.  It's better to have the search API early to leverage it later on,
         when it's  worthwile.
       </li>
       <li>
-        <H3>One search API vs many equivalent API calls</H3>
+        <h3>One search API vs many equivalent API calls</h3>
         One can reduce many equivalent API calls to a single
         search API.  One still needs typing for the search result
         objects and potentially transforming objects from a serialized
-        form to a reified form (e.g. bytes -> plain old objects).
+        form to a reified form (e.g. bytes -&gt; plain old objects).
       </li>
     </ul>
-        
-    <table id="related"></table>
-    
-  </body>
-</html>

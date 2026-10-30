@@ -4,27 +4,32 @@ This guide covers the metadata and conventions for pages under `public/`.
 
 ## Metadata
 
-Each page has a JSON metadata comment immediately after `<body>` during Phase 1.
-After Phase 2 converts pages to body fragments, the comment sits at the top of
-the fragment. The catalog parser supports both forms.
+The standard content file is a JSON metadata comment plus a raw HTML body
+fragment. The fragment does not contain `<!DOCTYPE>`, `<html>`, `<head>`, or
+`<body>`; the renderer supplies the document envelope.
 
 ```html
-<body>
-  <!--meta
-  {
-    "title": "Why Learn Haskell?",
-    "type": "article",
-    "date": "2016-04-25",
-    "tags": ["haskell", "learning"]
-  }
-  -->
-  <h1>Why Learn Haskell?</h1>
-  ...
-</body>
+<!--meta
+{
+  "title": "Why Learn Haskell?",
+  "type": "article",
+  "date": "2016-04-25",
+  "tags": ["haskell", "learning"]
+}
+-->
+<p>Haskell is a language that is foreign to most programmers...</p>
+<h2>Why it is worth learning</h2>
+<ul>
+  <li>Type system improves correctness...</li>
+</ul>
 ```
 
 The comment is stripped from the rendered output. It is source metadata, not
-part of the page.
+part of the page. The body can contain any HTML: sections, lists, tables,
+images, SVG, canvas, custom elements, inline styles, `<style>`, or `<script>`.
+
+A complete HTML document is allowed only with `layout: "raw"`. See
+[Layouts](#layouts).
 
 ### Fields
 
@@ -37,9 +42,14 @@ part of the page.
 | `tags` | Articles | Array of tags from `site.json`. |
 | `summary` | No | Plain-text override. If absent, one is derived from the first paragraph. |
 | `updated` | No | Same date formats as `date`. |
+| `layout` | No | `article` (default), `page`, `bare`, a named layout, or `raw`. |
+| `bodyClass` | No | Extra class on `<body>` for page-specific CSS. |
+| `showHeader` | No | `false` hides the default title/byline/date header. |
+| `showRelated` | No | `false` omits the related table. |
+| `triangles` | No | `true` enables the triangles background CSS and script. |
 | `related` | No | Array of article IDs for manual related-link overrides. |
-| `scripts` | No | Array of page-specific script paths, for Phase 2. |
-| `styles` | No | Array of page-specific stylesheet paths, for Phase 2. |
+| `scripts` | No | Array of page-specific script paths or external URLs. |
+| `styles` | No | Array of page-specific stylesheet paths. |
 
 `title` and `type` are required. Articles must declare either a `date` or
 `evergreen: true`.
@@ -74,6 +84,66 @@ Partial dates are valid and display without false precision:
 - `2014` → year
 - `2014-08` → month
 - `2014-05-15` → day
+
+## Layouts
+
+Most pages should use the standard envelope.
+
+- **`article`** (default for `type: article`): shared head and styles, title,
+  byline, date if dated, and the related table.
+- **`page`** (default for `type: page`): shared head and styles, content, and
+  the related table. The page content owns its visible heading.
+
+Use an exception only when the standard envelope does not fit:
+
+- **`bare`**: shared head and styles, but no title, byline, date, or related
+  table.
+- **Named layout**: set `layout` to a file name under
+  `templates/layouts/`. The layout can customize the envelope.
+- **`raw`**: the source file is a complete HTML document. The renderer copies
+  it as-is (stripping the metadata comment) and still catalogs it. It does not
+  add the shared head, styles, or related table. Include a `#related` marker if
+  you want related links injected.
+
+Examples:
+
+```json
+{ "type": "article", "layout": "bare" }
+```
+
+```json
+{
+  "type": "article",
+  "layout": "demo",
+  "styles": ["demo.css"],
+  "scripts": ["demo.js"]
+}
+```
+
+A raw document puts the metadata comment inside `<body>` so the catalog can
+still read it:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>...</head>
+<body>
+  <!--meta
+  {
+    "title": "Full-screen WebGL experiment",
+    "type": "article",
+    "layout": "raw"
+  }
+  -->
+  <canvas id="scene"></canvas>
+  <script src="scene.js"></script>
+</body>
+</html>
+```
+
+`scripts` and `styles` are document-relative to the page. External URLs are
+allowed. `bodyClass`, `showHeader: false`, and `showRelated: false` are available
+for smaller adjustments without creating a new layout.
 
 ## Tags
 

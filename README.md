@@ -11,13 +11,15 @@ Documentation
 
 Run
 ===
-Build and generate the static site:
+Install dependencies and generate the static site:
 
 ```
 npm ci
-npm run build
 npm run dump
 ```
+
+`npm run build` still compiles the legacy TypeScript server; the static dump no
+longer uses it. It remains until the Phase 4 cleanup.
 
 Validate metadata and review generated summaries:
 
@@ -31,18 +33,24 @@ Validate the generated site:
 npm test
 ```
 
-Preview the generated site:
+Serve an existing build:
 
 ```
-python3 -m http.server -d dump 8090
+npm run preview
 ```
 
-`npm run serve` starts the legacy in-memory Node server. It is not the
-production deployment; Cloudflare builds and serves `dump/`.
+Build and serve in one step:
+
+```
+npm run serve
+```
+
+The previews serve `dump/` on port 8090. Cloudflare builds and serves the same
+static output in production.
 
 Environment variables
 ===
-* `PORT` — port for the legacy local server (default: 8090).
+* `PORT` — legacy; the static preview uses 8090.
 * `USE_CACHE` — legacy; the current dump pipeline does not use the on-disk
   cache.
 

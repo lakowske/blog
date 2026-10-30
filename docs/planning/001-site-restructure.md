@@ -159,7 +159,7 @@ Design rules:
 | 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | Done (PR #4, `8882a01`) |
 | 2 | Templates and normalization | Standard article/page layouts; fragments; explicit bare/custom/raw exceptions | 1, D18 | Done (PR #5, `399cfb3`) |
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8, D19–D21 | Done (PR #6, `cb975c9`) |
-| 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | In progress (D9 deferred) |
+| 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Done (PR #7, `8e8cdaf`; D9 deferred) |
 | 5 | Cutover and verification | Production verified; plan closed; deviations logged | 0–4 | Not started |
 
 ## 8. Phase details
@@ -542,7 +542,9 @@ mirror, all 57 sitemap URLs, the feed, and the 404 verified. See the
 - Keep the `pre-removal` tag and branch so the cleanup can be reverted
   independently.
 
-**Status:** Implementation complete; awaiting PR verification.
+**Status:** Done — merged as `8e8cdaf`. CI, Cloudflare, the canonical site, all
+57 sitemap URLs, the feed, and the 404 verified. D9 remains deferred. See the
+[implementation log](implementation-log.md) for details.
 
 ---
 
@@ -1038,3 +1040,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.12 | Phase 3 feedback: Home and the archive use one combined post list with no Dated/Evergreen/Date unknown headings; dates are shown only where known. | Seth |
 | 2026-10-30 | 0.13 | Phase 3 merged as `cb975c9` and verified: 404, 57 sitemap URLs, RSS, archive, tags, related links, and combined Home/archive lists. | Seth |
 | 2026-10-30 | 0.14 | Approved D5 (plain ESM), D6 (drop the legacy server), and a zero-dependency preview server. Deferred D9 (`private/` stays tracked). | Seth |
+| 2026-10-30 | 0.15 | Phase 4 merged as `8e8cdaf` and verified: zero dependencies, clean audit, unchanged output, both hosts green. | Seth |

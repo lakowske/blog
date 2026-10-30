@@ -52,9 +52,9 @@ kept as a mirror for bookmarked URLs.
 ## Cloudflare details
 
 - Product: Workers & Pages (confirmed by Seth, 2026-10-29).
-- Build command: `npm run build; npm run dump`. This still works because
-  `npm run build` is an alias for `npm run dump`; change it to `npm run dump`
-  when convenient to avoid rendering twice.
+- Build command: `npm run build; npm run dump`. Verified 2026-10-30 after the
+  Phase 4 cleanup: the `build` alias keeps this working; change it to
+  `npm run dump` when convenient to avoid rendering twice.
 - Output directory: `dump` (inferred from the live output; confirm in the
   project settings).
 - Node version: configured in the Cloudflare project. If it is not pinned there,

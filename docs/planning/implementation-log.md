@@ -4,9 +4,49 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 4 implementation complete; awaiting PR verification.
+**Current status:** Phase 4 complete. Phase 5 (cutover and verification) not started.
 
 ---
+
+## 2026-10-30 — Phase 4 merged and verified
+
+- **Phase:** 4
+- **Type:** completion
+- **Summary:** PR #7 merged as `8e8cdaf`. The site builds, tests, and previews
+  with Node alone; production output is unchanged and both hosts serve it.
+- **Details:**
+  - Merge: rebase merge of PR #7. Branch `restructure/phase-4` deleted locally
+    and remotely. Rebase hashes: `e19a708` → `2b884e8`, `79068d0` → `8e8cdaf`.
+  - Rollback anchor: tag `pre-removal` (`17de886`), pushed.
+  - CI `validate`: pass (run 41086137132).
+  - Deploy Blog to GitHub Pages: pass (run 41086137096); the TypeScript step is
+    gone from the workflow.
+  - Cloudflare Pages production check: pass. The project still runs
+    `npm run build; npm run dump`; the `build` alias made this a no-op rewrite,
+    confirming the compatibility decision was correct.
+  - `npm test` on `master`: 27 tests pass; checker 0 errors, 0 warnings; 58 HTML
+    pages; 8 expected unknown-date warnings.
+  - Catalog version unchanged from Phase 3:
+    `a05014643de4e76a73545e38d405b4b0ba9a2ccec8567dbf3ccef7fbcc19a11c`.
+  - Byte parity with the live site: `index.html`, `articles/index.html`,
+    `tags/javascript/index.html`, `articles/why-learn-haskell/index.html`,
+    `feed.xml`, `sitemap.xml`, and `catalog.json` all match the local `dump/`.
+  - Live: home, archive, tag page, feed, sitemap, robots, and catalog return 200
+    on the canonical site; home, archive, and catalog return 200 on the mirror.
+  - Feed: 21 items. Sitemap: 57 URLs, all resolving on both hosts. One transient
+    connection reset on the canonical `/logical-validity-explained/` returned 200
+    on three retries.
+  - Unknown paths return 404 with the custom page on both hosts.
+  - `npm audit`: 0 vulnerabilities.
+- **Impact on plan:** Phase 4 complete. D5 and D6 decided; D9 deferred.
+- **Follow-up:**
+  - Phase 5: cutover and verification items, including the `dump/CNAME`
+    question and the `private/` decision.
+  - Optional: change the Cloudflare build command to `npm run dump` to avoid the
+    duplicate render.
+  - Optional: upgrade GitHub Actions majors; the workflows still emit Node 20
+    runtime deprecation warnings for `checkout@v4`, `setup-node@v4`, and
+    `upload-artifact@v4`.
 
 ## 2026-10-30 — Phase 4: dependency and code cleanup
 

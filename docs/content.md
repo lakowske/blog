@@ -206,7 +206,10 @@ Do not edit `catalog.json` by hand. Change the metadata and rebuild.
 npm run catalog          # validate metadata
 npm run catalog:report   # validate and print titles, dates, and summaries
 npm run dump             # validate, generate catalog.json, build the site
-npm test                 # build, dump, catalog validation, output checks
+npm run serve            # dump, then preview dump/ at http://localhost:8090/
+npm run preview          # serve an existing build (npm run preview 8000)
+npm run watch            # rebuild on changes to public/, templates/, site.json
+npm test                 # dump, catalog tests, render tests, output checks
 ```
 
 ## Adding a page
@@ -215,7 +218,7 @@ npm test                 # build, dump, catalog validation, output checks
 2. Add the metadata comment immediately after `<body>`.
 3. Use document-relative links so the GitHub Pages mirror keeps working.
 4. Run `npm run catalog:report` and `npm test`.
-5. Preview with `npm run preview` after `npm run dump`.
+5. Preview with `npm run serve` (or `npm run preview 8000` for a different port).
 
 Drafts should live in `private/`, which is not built or published.
 

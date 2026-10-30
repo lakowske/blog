@@ -4,7 +4,81 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 3 complete. Phase 4 not started.
+**Current status:** Phase 4 implementation complete; awaiting PR verification.
+
+---
+
+## 2026-10-30 — Phase 4: dependency and code cleanup
+
+- **Phase:** 4
+- **Type:** implementation
+- **Summary:** Removed the legacy TypeScript/jsdom server and every dependency.
+  The repository now needs only Node 22: build, validation, tests, and preview
+  use the standard library alone.
+- **Decisions:**
+  - D5 approved: plain ESM only; TypeScript has no remaining consumer.
+  - D6 approved: the content-injecting Node server is removed; a zero-dependency
+    static preview server replaces it.
+  - D9 deferred by Seth: `private/` stays tracked and unpublished. Noted in the
+    plan that the repository is public, so that content is visible on GitHub and
+    in history.
+- **Removed:**
+  - `src/Content.ts`, `src/ContentUtils.ts`, `src/server.ts`, `tsconfig.json`.
+    This also removes the dead code listed in the plan: `storeIndex`,
+    `loadIndexFromCache`, `isCached`, `loadFromCache`, `embeddings`,
+    `LoadContext.cacheDir`, `Content.addRelated`, `getHtmlTitles`, and the unused
+    `links` result.
+  - `blog.service`, `cloudflare.service` (never installed; not the deployment
+    source of truth).
+  - `.dockerignore` (there is no Dockerfile in the repository and it referenced
+    the removed `src/` and `tsconfig.json`).
+  - The `dist` rule in `.gitignore` (no compiled output remains).
+  - Dependencies: `jsdom`, `dotenv`, `mime` (runtime) and `typescript`,
+    `@types/node`, `nodemon` (dev). `package-lock.json` shrank from a full npm
+    tree to 16 lines.
+- **Added:**
+  - `scripts/dump.mjs` — single build entry point (catalog, then render), so the
+    build no longer depends on shell chaining.
+  - `scripts/serve.mjs` — zero-dependency preview server using `node:http`:
+    directory URLs resolve to `index.html`, unknown paths return the generated
+    `404.html` with status 404, paths are confined to the served root, and
+    `PORT`/`DUMP_DIR` override the defaults.
+  - `scripts/serve.test.mjs` — 3 tests: content types, path confinement (including
+    encoded traversal), and live requests against `dump/`.
+- **Changed:**
+  - `package.json`: no dependencies; `dump` uses `scripts/dump.mjs`; `watch` uses
+    `node --watch-path=public --watch-path=templates --watch-path=site.json`;
+    `preview` uses `scripts/serve.mjs`; `build` remains an alias for `dump` so
+    the existing Cloudflare build command keeps working; `engines` raised to
+    Node 22; marked `private` and versioned 1.0.0.
+  - `.github/workflows/deploy.yml`: dropped the TypeScript build step.
+  - `README.md`: rewritten for the dependency-free build, new commands, layout,
+    and environment variables.
+  - `docs/deployment.md`: build command is `npm run dump`; documents the `build`
+    alias and Cloudflare's existing command; records the removal of the legacy
+    files.
+  - `docs/content.md`: command list now includes `serve`, `preview`, and `watch`.
+- **Deviations:** advantage taken of the cleanup to replace the `python3`
+  preview dependency with `scripts/serve.mjs`, which was not in the original
+  Phase 4 task list.
+- **Verification:**
+  - `npm test`: 27 tests pass (24 previous + 3 new); output checker 0 errors,
+    0 warnings; 58 HTML pages; catalog version unchanged at
+    `a05014643de4e76a73545e38d405b4b0ba9a2ccec8567dbf3ccef7fbcc19a11c`,
+    confirming rendered output is unaffected.
+  - `npm audit`: 0 vulnerabilities (previously 1 critical, 1 high, 1 low from the
+    `jsdom` and `nodemon` trees).
+  - Preview server: `/`, `/articles/`, `/articles/index.html`,
+    `/tags/javascript/`, `/feed.xml`, `/catalog.json`, `/robots.txt`, and the
+    stylesheet return 200; an unknown path returns 404 with the custom page;
+    traversal attempts do not escape `dump/`.
+  - `npm run watch`: rebuilds and reports
+    `Waiting for file changes before restarting`.
+- **Impact on plan:** Phase 4 implementation done; D5 and D6 decided; D9
+  deferred. Rollback tag `pre-removal` created on `master` before the cleanup.
+- **Follow-up:** open and merge the Phase 4 PR, verify both hosts, and update the
+  Cloudflare build command to `npm run dump` (optional; the alias keeps it
+  working).
 
 ## How to use this log
 

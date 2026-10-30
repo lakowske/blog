@@ -297,7 +297,7 @@ export async function run({ root, strict = false }) {
   return { fileCount: files.length, errors, warnings, exitCode };
 }
 
-export async function main(argv = process.argv.slice(2), io = console) {
+export async function runCheck(argv = process.argv.slice(2), io = console) {
   const { strict, rootArg } = parseArgs(argv);
   const root = path.resolve(rootArg);
 
@@ -312,4 +312,4 @@ export async function main(argv = process.argv.slice(2), io = console) {
   }
 }
 
-main();
+runCheck();

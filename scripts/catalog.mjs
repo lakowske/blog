@@ -579,7 +579,7 @@ async function writeCatalog(outFile, catalog) {
   );
 }
 
-export async function main(argv = process.argv.slice(2), io = console) {
+export async function runCatalog(argv = process.argv.slice(2), io = console) {
   const args = parseArgs(argv);
   if (args.check && args.out) {
     io.error("Use either --check or --out, not both");
@@ -646,5 +646,5 @@ export async function main(argv = process.argv.slice(2), io = console) {
 
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
-  main();
+  runCatalog();
 }

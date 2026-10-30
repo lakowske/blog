@@ -498,7 +498,7 @@ export async function run({ root = "public", out = "dump", site } = {}) {
   return { ...result, outRoot, written, exceptions };
 }
 
-export async function main(argv = process.argv.slice(2), io = console) {
+export async function runRender(argv = process.argv.slice(2), io = console) {
   const args = parseArgs(argv);
   const site = JSON.parse(await readFile(path.join(REPO_ROOT, "site.json"), "utf8"));
   let result;
@@ -535,5 +535,5 @@ export async function main(argv = process.argv.slice(2), io = console) {
 
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
-  main();
+  runRender();
 }

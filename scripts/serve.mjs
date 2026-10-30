@@ -102,7 +102,7 @@ export function createStaticServer(root) {
   });
 }
 
-export async function main(argv = process.argv.slice(2), io = console) {
+export async function runServe(argv = process.argv.slice(2), io = console) {
   const portArg = argv.find((arg) => /^\d+$/.test(arg));
   const port = Number(portArg ?? process.env.PORT ?? 8090);
   const root = path.resolve(REPO_ROOT, process.env.DUMP_DIR ?? "dump");
@@ -120,5 +120,5 @@ export async function main(argv = process.argv.slice(2), io = console) {
 
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
-  main();
+  runServe();
 }

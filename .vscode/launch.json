@@ -1,0 +1,58 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Build site (dump)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/dump.mjs",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Catalog check (report)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/catalog.mjs",
+      "args": ["--check", "--report"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Render pages",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/render.mjs",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Serve preview (build first)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/serve.mjs",
+      "args": ["8090"],
+      "console": "integratedTerminal",
+      "preLaunchTask": "dump",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug current test file",
+      "type": "node",
+      "request": "launch",
+      "program": "${file}",
+      "runtimeArgs": ["--test"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Run all tests (npm test)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["test"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

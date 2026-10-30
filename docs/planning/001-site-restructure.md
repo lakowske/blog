@@ -1,6 +1,6 @@
 # 001 — Site Restructure Plan
 
-**Status:** Phase 0 approved 2026-10-29. Phases 1–5 draft.
+**Status:** Phase 0 complete. Phase 1 in progress.
 **Created:** 2026-10-29
 **Owner:** Seth Lakowske
 **Companion:** [implementation-log.md](implementation-log.md)
@@ -156,7 +156,7 @@ Design rules:
 | Phase | Name | Primary outcome | Depends on | Status |
 | --- | --- | --- | --- | --- |
 | 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | Done (PR #3, `d4331b2`) |
-| 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D1–D3 | Not started |
+| 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | In progress |
 | 2 | Templates and normalization | One layout; content files are body fragments; consistent markup | 1 | Not started |
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8 | Not started |
 | 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Not started |
@@ -238,46 +238,96 @@ generate navigation and site pages without guessing.
 
 **Tasks**
 
-- [ ] Confirm the front matter format (D2).
-- [ ] Define the schema:
+- [x] Confirm the metadata format (D2: HTML comment) and authoring format
+  (D3: HTML fragments).
+- [x] Add `site.json` at the repository root with the site title, author, base
+  URL, tag vocabulary, and navigation.
+- [x] Define the schema:
   - required: `title`, `type` (`article` or `page`);
-  - required for articles: `date` (`YYYY-MM-DD`);
-  - recommended: `tags`, `summary`;
-  - optional: `updated`, `draft`, `aliases`, `related` (manual overrides).
-- [ ] Write a one-off migration script that infers title and date from the
-  existing `<title>` and `<time>` tags and reports gaps.
-- [ ] Fill metadata for the pages listed in
-  [Appendix B](#appendix-b--metadata-gaps). This is the only manual content work
-  in the plan.
-- [ ] Normalize dates: `2021-06-1` becomes `2021-06-01`; replace obsolete
-  `pubdate` with `datetime`.
-- [ ] Generate a deterministic catalog (sorted by date descending, then slug)
-  as `catalog.json` in the build output, and keep it in memory for rendering.
-- [ ] Add validation that fails the build on missing titles, invalid dates, or
-  duplicate slugs; warn on missing tags/summary.
-- [ ] Decide the type of `about`, `resume`, and `index`: `page`, not `article`.
-- [ ] Record any URL aliases; none are expected if output paths are preserved.
+  - articles: `date` as `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`, or `date: null`;
+  - `evergreen: true` marks intentionally undated articles;
+  - `date: null` without `evergreen` means “time-bound, date unknown” and
+    produces a warning;
+  - `tags`: controlled vocabulary, required for articles (warning until filled);
+  - `summary`: optional; generated from the first paragraph when absent;
+  - optional: `updated`, `draft`, `related`, `scripts`, `styles`.
+- [x] Write a one-off migration script that:
+  - inserts the metadata comment as the first child of `<body>`;
+  - infers titles from `<title>` and dates from `<time>`;
+  - applies the agreed date and tag mapping;
+  - reports pages that still need manual metadata.
+- [x] Add visible dates to the four time-bound pages:
+  - `technology/silent-am1h-itx-development-workstation`: `2014-05-15`
+  - `electric-bike-article-on-madisonbikelife`: `2014-08`
+  - `think-again`: `2013-05`
+  - `completed-ml-class-org-course`: `2012-01`
+- [x] Mark the five evergreen articles with `date: null` and
+  `evergreen: true`:
+  - `logical-validity-explained`
+  - `software/writing-software`
+  - `articles/why-i-love-emacs-lisp`
+  - `articles/conscious-cosmos-and-personal-reality`
+  - `articles/traveling-without-moving`
+- [x] Mark the eight time-bound articles with unknown dates as
+  `date: null`, `evergreen: false`:
+  - `slurp-some-nodejs-streams`
+  - the seven technical `software/` posts (eventemitter, use-http-browserify,
+    node-js-closing-jsonstream, singleton-factory, cross-environment-requirejs,
+    use-grunt-uglifyjs, sequelize-unit-testing).
+- [x] Normalize dates: `2021-06-1` becomes `2021-06-01`; replace obsolete
+  `pubdate` with `datetime`; allow partial ISO dates.
+- [x] Implement `scripts/catalog.mjs` with pure functions and a single
+  `main()`:
+  - parse metadata comments and validate them;
+  - derive `id`, `url`, `section`, `dateStatus`, and an effective summary;
+  - build the catalog in a deterministic order;
+  - support `--check`, `--out`, `--clean`, `--report`, and `--strict`;
+  - write `catalog.json` with a content hash and count;
+  - verify every public HTML page maps to exactly one catalog entry.
+- [x] Generate a `_headers` entry so `/catalog.json` is served with
+  `Cache-Control: no-cache`.
+- [x] Integrate catalog validation into `npm run dump` and `npm test`.
+- [x] Update `scripts/check.mjs` to accept partial ISO dates.
+- [x] Strip the metadata comment from rendered HTML in `Content.load()`.
+- [x] Add `docs/content.md` as the authoring guide for metadata, tags, dates,
+  summaries, and validation commands.
+- [x] Record the metadata and summary report in the implementation log.
 
 **Deliverables**
 
-- Front matter on all 37 pages.
-- Catalog generator and validator.
-- A metadata gap report in the implementation log.
+- `site.json`.
+- Metadata on all 37 pages.
+- `scripts/catalog.mjs` and `dump/catalog.json`.
+- `docs/content.md`.
+- A metadata and summary report.
 
 **Acceptance criteria**
 
-- 37 / 37 pages pass validation.
+- 37 / 37 pages pass metadata validation.
+- `catalog.json` contains every public HTML page exactly once, is sorted
+  deterministically, and includes a version hash and count.
 - Running the build twice produces byte-identical `catalog.json`.
-- The build fails with a clear message when a title or date is missing.
+- The build fails on missing title/type, invalid dates, duplicate IDs, or
+  unknown types.
+- Missing tags, missing summaries, unknown dates, and title/date mismatches are
+  warnings.
+- `npm test` passes.
+- URLs do not change.
+- Metadata comments do not appear in the rendered output.
 
 **Risks / rollback**
 
-- Missing historical dates may be unknown. Mark them `date: null` and treat them
-  as undated pages rather than inventing dates.
-- Front matter inserted into full HTML pages must not break rendering. During
-  this phase it sits as the first child of `<body>`; the build strips it.
+- Metadata comments inserted into full HTML pages must not break rendering. They
+  sit as the first child of `<body>` and are stripped before serialization.
+- Evergreen and unknown-date articles are both undated but mean different
+  things. `evergreen: true` is required for intentional omissions; the absence
+  of a date elsewhere is a warning, not an error.
+- Generated summaries are derived at build time when no manual summary exists.
+  Add a `summary` override where the first paragraph makes a poor excerpt.
+- Catalog completeness depends on the source walk; a page added without
+  metadata fails the build.
 
-**Status:** Not started
+**Status:** In progress
 
 ---
 
@@ -614,6 +664,41 @@ marked *Blocking* must be settled before the phase that needs them.
   [002-source-html-validation.md](002-source-html-validation.md).
 - **Status:** Approved 2026-10-30.
 
+### D15 — Date policy *(Needed by: Phase 1)*
+
+- **Options:** require a date for every article; allow undated articles; use a
+  single `date: null` for both evergreen and unknown dates.
+- **Recommendation:** distinguish three states:
+  - dated: `date` is `YYYY`, `YYYY-MM`, or `YYYY-MM-DD`;
+  - evergreen: `date: null` and `evergreen: true`; no date is displayed;
+  - unknown: `date: null` and no `evergreen` (or `evergreen: false`); treated
+    as time-bound but not yet dated, with a validation warning.
+- **Rationale:** some posts are intentionally timeless; others are technical
+  posts whose date is a useful time cue. A single `null` conflates the two.
+- **Status:** Approved 2026-10-30.
+
+### D16 — Catalog freshness *(Needed by: Phase 1)*
+
+- **Options:** commit `catalog.json`; generate it on every build; keep it
+  internal only.
+- **Recommendation:** generate it on every build from the metadata, never commit
+  it, and publish it. Add completeness and determinism checks, a content hash and
+  count, and `Cache-Control: no-cache` for `/catalog.json`.
+- **Rationale:** a derived file cannot drift if it is rebuilt from the same
+  metadata used to render the pages. The hash lets consumers detect changes
+  without a timestamp.
+- **Status:** Approved 2026-10-30.
+
+### D17 — Summary policy *(Needed by: Phase 1)*
+
+- **Options:** require summaries; leave them empty; generate them at build time.
+- **Recommendation:** `summary` is an optional manual override. When absent,
+  derive one from the first meaningful paragraph at build time. Print the
+  generated summaries during Phase 1 for review.
+- **Rationale:** every article gets a usable excerpt without maintaining 37
+  stored summaries that could go stale.
+- **Status:** Approved 2026-10-30.
+
 ## 10. Tracking conventions
 
 - **Plan status** lives in the phase table and in each phase's `Status` line.
@@ -833,3 +918,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-29 | 0.2 | Corrected the deployment model: Cloudflare Workers & Pages is canonical; GitHub Pages is a mirror. Approved D1 (keep `public/`/`dump/`), D4 (document-relative URLs), D10 (untrack `dump/`), and D12 (keep the mirror). Moved the server work to Phase 4. | Seth |
 | 2026-10-30 | 0.3 | Approved D14: keep jsdom in the legacy pipeline, keep the checker zero-dependency, and remove jsdom after templates. Added future work for source HTML validation (002). | Seth |
 | 2026-10-30 | 0.4 | Phase 0 merged as `d4331b2` and verified on Cloudflare and GitHub Pages. | Seth |
+| 2026-10-30 | 0.5 | Approved Phase 1 decisions: HTML comment metadata, HTML fragments, three-state date policy (dated/evergreen/unknown), generated catalog with freshness checks, and build-time summary fallbacks. | Seth |

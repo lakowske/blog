@@ -4,7 +4,7 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 0 complete. Phase 1 not started.
+**Current status:** Phase 0 complete. Phase 1 in progress.
 
 ## How to use this log
 
@@ -30,6 +30,91 @@ way.
 ```
 
 ---
+
+## 2026-10-30 — Phase 1 metadata and catalog implemented
+
+- **Phase:** 1
+- **Type:** completion
+- **Summary:** Added metadata to all 37 pages, a zero-dependency catalog
+  generator/validator, the tag vocabulary, the authoring guide, and generated
+  summary drafts.
+- **Details:**
+  - 37 metadata comments, one per page, as the first child of `<body>`.
+  - Date states: 21 dated, 5 evergreen, 8 time-bound with unknown dates, and
+    3 pages.
+  - New visible dates:
+    - `technology/silent-am1h-itx-development-workstation`: `2014-05-15`
+    - `electric-bike-article-on-madisonbikelife`: `2014-08`
+    - `think-again`: `2013-05`
+    - `completed-ml-class-org-course`: `2012-01`
+  - Normalized `2021-06-1` to `2021-06-01` and replaced every `pubdate`
+    attribute with `datetime`.
+  - Evergreen: `logical-validity-explained`, `software/writing-software`,
+    `articles/why-i-love-emacs-lisp`,
+    `articles/conscious-cosmos-and-personal-reality`,
+    `articles/traveling-without-moving`.
+  - Unknown date: `slurp-some-nodejs-streams` and the seven technical
+    `software/` posts.
+  - Added `site.json` with the approved tag vocabulary and navigation.
+  - Added `scripts/catalog.mjs` with pure parsing/validation/catalog functions
+    and a single `main()`. Supports `--check`, `--out`, `--clean`, `--report`,
+    and `--strict`. Writes `catalog.json` with a SHA-256 version hash, count,
+    and counts, plus a `_headers` rule for `Cache-Control: no-cache`.
+  - `npm run dump` validates metadata and writes `dump/catalog.json` before
+    dumping pages. `npm test` includes it.
+  - `src/Content.ts` strips the metadata comment before serialization.
+  - `scripts/check.mjs` accepts partial ISO dates.
+  - Added `docs/content.md` and linked it from the README.
+  - Catalog result: 37 entries (34 articles, 3 pages), 0 errors, 8 warnings
+    (unknown dates). Version `d6d8aa90…`; two runs produce byte-identical
+    catalogs.
+  - Added `scripts/catalog.test.mjs` with 5 `node:test` cases for ID/URL
+    derivation, date validation, summary truncation, date states, and sorting.
+    All pass.
+  - Output checker result: 0 errors, 125 warnings.
+  - Manual summary overrides: `tones-of-the-web`,
+    `articles/smoothie-charts-nodejs-arduino-stream-transform-test`,
+    `articles/why-i-love-emacs-lisp`, `index`, `about`, `resume`.
+  - The remaining summaries are generated from the first paragraph or list
+    item. Review with `npm run catalog:report`.
+- **Impact on plan:** Phase 1 implementation is complete; awaiting review and
+  PR verification.
+- **Follow-up:** Review the generated summaries, open PR #4, confirm the
+  Cloudflare preview, then start Phase 2.
+
+## 2026-10-30 — Phase 1 decisions approved
+
+- **Phase:** 1
+- **Type:** decision
+- **Summary:** Approved the Phase 1 metadata design, including the three-state
+  date policy and a build-time catalog.
+- **Details:**
+  - Metadata lives in an HTML comment (D2) and content stays as HTML fragments
+    (D3).
+  - Dates have three states (D15): dated, intentionally evergreen
+    (`date: null`, `evergreen: true`), and time-bound with an unknown date
+    (`date: null`, no `evergreen`; warning).
+  - Evergreen: `logical-validity-explained`, `software/writing-software`,
+    `articles/why-i-love-emacs-lisp`,
+    `articles/conscious-cosmos-and-personal-reality`,
+    `articles/traveling-without-moving`.
+  - Time-bound with known dates: `silent-am1h` (`2014-05-15`),
+    `electric-bike` (`2014-08`), `think-again` (`2013-05`),
+    `completed-ml-class` (`2012-01`, certificate month).
+  - Time-bound with unknown dates: `slurp-some-nodejs-streams` and seven
+    technical `software/` posts. They remain undated for now but are not
+    evergreen.
+  - Tags use the approved starter vocabulary; the draft mapping will be in the
+    Phase 1 PR.
+  - Summaries are optional overrides; otherwise derived at build time from the
+    first meaningful paragraph (D17).
+  - The catalog is generated on every build, never committed, and published
+    with completeness/determinism checks, a content hash, a count, and
+    `no-cache` headers (D16).
+- **Impact on plan:** Plan updated to v0.5. Phase 1 implementation started on
+  branch `restructure/phase-1`.
+- **Follow-up:** Implement metadata migration, catalog generator, validation,
+  authoring guide, and summary report; then open PR #4.
 
 ## 2026-10-30 — Phase 0 merged and verified
 
@@ -247,7 +332,7 @@ way.
 | Phase | Status | Started | Completed | Notes |
 | --- | --- | --- | --- | --- |
 | 0 — Baseline and guardrails | Done | 2026-10-29 | 2026-10-30 | Merged as `d4331b2`; CI, Cloudflare, canonical, and mirror verified |
-| 1 — Metadata and catalog | Not started | — | — | Depends on D2–D3 |
+| 1 — Metadata and catalog | In progress | 2026-10-30 | — | Implementation complete; awaiting review and PR verification |
 | 2 — Templates and normalization | Not started | — | — | Depends on Phase 1; D4 approved |
 | 3 — Generated navigation | Not started | — | — | Depends on Phase 2, D7, D8 |
 | 4 — Dependency and code cleanup | Not started | — | — | Depends on Phases 2–3, D5, D6, D9 |

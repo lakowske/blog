@@ -12,7 +12,8 @@ publishes it.
 | [002-source-html-validation.md](002-source-html-validation.md) | Future work: catch malformed source HTML before jsdom or templates repair it. **Not scheduled.** |
 | [implementation-log.md](implementation-log.md) | Append-only record of what was actually done, what differed from the plan, and what was learned. |
 
-Deployment details live in [../deployment.md](../deployment.md), outside this
+Deployment details live in [../deployment.md](../deployment.md), and authoring
+conventions live in [../content.md](../content.md). Both are outside this
 directory because they apply to the whole repository, not just the plan.
 
 Future plans should use the same numbering convention: `NNN-short-slug.md`.

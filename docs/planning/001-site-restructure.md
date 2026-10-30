@@ -159,7 +159,7 @@ Design rules:
 | 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | Done (PR #4, `8882a01`) |
 | 2 | Templates and normalization | Standard article/page layouts; fragments; explicit bare/custom/raw exceptions | 1, D18 | Done (PR #5, `399cfb3`) |
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8, D19–D21 | Done (PR #6, `cb975c9`) |
-| 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Not started |
+| 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | In progress (D9 deferred) |
 | 5 | Cutover and verification | Production verified; plan closed; deviations logged | 0–4 | Not started |
 
 ## 8. Phase details
@@ -500,46 +500,49 @@ mirror, all 57 sitemap URLs, the feed, and the 404 verified. See the
 
 **Tasks**
 
-- [ ] Remove `jsdom`. After Phases 2 and 3, the build owns the templates and
+- [x] Remove `jsdom`. After Phases 2 and 3, the build owns the templates and
   metadata, so no DOM parsing is required.
-- [ ] Replace `dotenv` with Node's `process.loadEnvFile()` (Node 20.12+) or
-  remove it and rely on the environment.
-- [ ] Replace `mime` with a small extension map, or remove it if the build no
-  longer serves files.
-- [ ] Replace `nodemon` with `node --watch`.
-- [ ] Decide TypeScript vs plain ESM (D5).
-- [ ] Remove dead code:
-  - `storeIndex`, `loadIndexFromCache`, `isCached`, `loadFromCache`;
-  - `embeddings` and `LoadContext.cacheDir` if the cache is not used;
-  - `Content.addRelated`, `getHtmlTitles`, and the unused `links` result.
-- [ ] Update the README to match reality: commands, directory layout,
+- [x] Remove `dotenv`; the build needs no environment file.
+- [x] Replace `mime` with a small extension map in the preview server.
+- [x] Replace `nodemon` with `node --watch`.
+- [x] Decide TypeScript vs plain ESM (D5): plain ESM only.
+- [x] Remove the legacy server and its dead code (`src/`, `tsconfig.json`,
+  `storeIndex`, `loadIndexFromCache`, `isCached`, `loadFromCache`, `embeddings`,
+  `cacheDir`, `addRelated`, `getHtmlTitles`, the unused `links` result).
+- [x] Add `scripts/dump.mjs` as the single build entry point, so the build no
+  longer depends on shell chaining.
+- [x] Add a zero-dependency preview server, `scripts/serve.mjs`, replacing the
+  `python3 -m http.server` preview.
+- [x] Update the README to match reality: commands, directory layout,
   environment variables, and deployment.
-- [ ] Remove or archive the legacy `blog.service` and `cloudflare.service` files
-  after confirming they are unused.
-- [ ] Confirm `npm audit` is clean.
-- [ ] Resolve the `private/` directory (D9).
+- [x] Remove the unused `blog.service` and `cloudflare.service` files.
+- [x] Remove the unused `.dockerignore` (no Dockerfile exists) and the `dist`
+  ignore rule.
+- [x] Confirm `npm audit` is clean.
+- [ ] Resolve the `private/` directory (D9) — deferred by Seth; Phase 4 leaves
+  it tracked and unpublished.
 
 **Deliverables**
 
-- Zero runtime dependencies (or a documented exception).
+- Zero runtime dependencies.
 - Accurate README.
 - No unused exports.
 
 **Acceptance criteria**
 
-- `npm ci` installs only dev tooling, or nothing at all.
+- `npm ci` installs nothing but the project itself.
 - `npm audit` reports no vulnerabilities.
 - The build works from a clean checkout with no environment file.
 - README instructions reproduce the build and preview.
 
 **Risks / rollback**
 
-- Removing TypeScript is a larger diff than removing a library. If the types are
-  useful, keep TypeScript and remove only the runtime dependencies.
-- Keep a tag or branch before the cleanup commit so it can be reverted
+- Removing TypeScript is a larger diff than removing a library. It is now a pure
+  deletion; `master` keeps the old files in history.
+- Keep the `pre-removal` tag and branch so the cleanup can be reverted
   independently.
 
-**Status:** Not started
+**Status:** Implementation complete; awaiting PR verification.
 
 ---
 
@@ -633,8 +636,9 @@ marked *Blocking* must be settled before the phase that needs them.
 - **Recommendation:** plain ESM for the new build and validator. Keep
   TypeScript for the existing server if the type checking is valued; it is a
   dev-only cost. The Phase 0 validator is plain `.mjs` either way.
-- **Status:** Open; deferred to Phase 4. Phase 0 uses plain ESM for
-  `scripts/check.mjs`.
+- **Decision:** plain ESM only. The legacy server is removed, so TypeScript has
+  no consumer.
+- **Status:** Approved 2026-10-30.
 
 ### D6 — Keep the custom Node server? *(Needed by: Phase 4)*
 
@@ -643,7 +647,9 @@ marked *Blocking* must be settled before the phase that needs them.
 - **Recommendation:** the Node server is not production; Cloudflare builds and
   serves static output. Drop the content-injecting server once the build
   generates static pages, and use a small static preview server for local work.
-- **Status:** Deferred to Phase 4. Phase 0 leaves `src/server.ts` untouched.
+- **Decision:** drop the server. `scripts/serve.mjs` is the zero-dependency
+  preview server.
+- **Status:** Approved 2026-10-30.
 
 ### D7 — Related-links scoring *(Needed by: Phase 3)*
 
@@ -670,7 +676,9 @@ marked *Blocking* must be settled before the phase that needs them.
 - **Options:** keep in this repo; move to a separate private repo; gitignore it.
 - **Recommendation:** if this repository is public, move it out. The directory
   is not published by the build, but it is still in git history.
-- **Status:** Open
+- **Status:** Deferred 2026-10-30 by Seth: `private/` stays tracked and
+  unpublished. The repository is public, so the content is visible on GitHub and
+  in history. Revisit after Phase 4.
 
 ### D10 — Remove `dump/` from git *(Blocking: Phase 0)*
 
@@ -1029,3 +1037,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.11 | Phase 3 implementation complete: 58 generated pages, 24 tests, 0 checker warnings; related scoring, archive, tags, RSS, sitemap, robots, 404, nav/footer, headings. Awaiting PR verification. | Seth |
 | 2026-10-30 | 0.12 | Phase 3 feedback: Home and the archive use one combined post list with no Dated/Evergreen/Date unknown headings; dates are shown only where known. | Seth |
 | 2026-10-30 | 0.13 | Phase 3 merged as `cb975c9` and verified: 404, 57 sitemap URLs, RSS, archive, tags, related links, and combined Home/archive lists. | Seth |
+| 2026-10-30 | 0.14 | Approved D5 (plain ESM), D6 (drop the legacy server), and a zero-dependency preview server. Deferred D9 (`private/` stays tracked). | Seth |

@@ -9,7 +9,7 @@ Last verified: 2026-10-30
 | Host | Cloudflare Workers & Pages | GitHub Pages |
 | URL | <https://sethlakowske.com> | <https://lakowske.github.io/blog/> |
 | Trigger | Git integration on push to `master` | `.github/workflows/deploy.yml` on push to `master` |
-| Build command | `npm run build; npm run dump` | `npm run build`, then `npm run dump` |
+| Build command | `npm run dump` | `npm run dump` |
 | Output directory | `dump` | `dump` |
 | Custom domain | `sethlakowske.com` | none (`cname: null`) |
 
@@ -20,11 +20,14 @@ kept as a mirror for bookmarked URLs.
 
 - Source content: `public/`
 - Generated output: `dump/`
-- `npm run build` compiles the legacy TypeScript server to `dist/`. The static
-  dump no longer uses it; it remains until the Phase 4 cleanup.
-- `npm run dump` first validates metadata and writes `dump/catalog.json` with
-  `scripts/catalog.mjs`, then runs `scripts/render.mjs`, which renders the
-  body fragments through the templates and writes `dump/`.
+- `npm run dump` runs `scripts/dump.mjs`, which first validates metadata and
+  writes `dump/catalog.json` with `scripts/catalog.mjs`, then runs
+  `scripts/render.mjs` to render the body fragments through the templates and
+  write `dump/`.
+- `npm run build` is an alias for `npm run dump`. It is kept only so the older
+  Cloudflare build command (`npm run build; npm run dump`) keeps working; new
+  configuration should use `npm run dump` alone.
+- The build has no dependencies. Node 22 is the only requirement.
 - The renderer also generates `articles/index.html` (archive),
   `tags/<tag>/index.html`, `feed.xml`, `sitemap.xml`, `robots.txt`, and
   `404.html`.
@@ -49,7 +52,9 @@ kept as a mirror for bookmarked URLs.
 ## Cloudflare details
 
 - Product: Workers & Pages (confirmed by Seth, 2026-10-29).
-- Build command: `npm run build; npm run dump`.
+- Build command: `npm run build; npm run dump`. This still works because
+  `npm run build` is an alias for `npm run dump`; change it to `npm run dump`
+  when convenient to avoid rendering twice.
 - Output directory: `dump` (inferred from the live output; confirm in the
   project settings).
 - Node version: configured in the Cloudflare project. If it is not pinned there,
@@ -81,18 +86,16 @@ kept as a mirror for bookmarked URLs.
 
 ## Legacy deployment files
 
-- `blog.service` and `cloudflare.service` are not installed on the Pi or
-  `ubuntu-box`.
-- `/home/seth/bin/blog` on `ubuntu-box` points at `~/Software/blog`, an old
-  checkout at `1f35dfa` with uncommitted changes. It is not serving production.
+- Phase 4 removed `blog.service`, `cloudflare.service`, `src/`, `tsconfig.json`,
+  and `.dockerignore`. They were never installed on the Pi or `ubuntu-box`, and
+  `/home/seth/bin/blog` on `ubuntu-box` points at an old checkout that never
+  served production. Git history retains them.
 - Nothing is listening on port 8090, and no `cloudflared` tunnel is running for
-  the blog.
-- These files are not the deployment source of truth. They are candidates for
-  removal in Phase 4 or 5.
+  the blog. The preview server is local-only and not part of deployment.
 
 ## Verifying a deployment
 
-1. `npm ci && npm run build && npm run dump`
+1. `npm run dump`
 2. `node scripts/check.mjs dump`
 3. Compare a sample page on both hosts:
    - <https://sethlakowske.com/articles/why-learn-haskell/>

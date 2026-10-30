@@ -8,7 +8,8 @@ publishes it.
 
 | Document | Purpose |
 | --- | --- |
-| [001-site-restructure.md](001-site-restructure.md) | Phased plan for normalizing page structure, adding metadata, and generating navigation. **Draft for review.** |
+| [001-site-restructure.md](001-site-restructure.md) | Phased plan for normalizing page structure, adding metadata, and generating navigation. **Phase 0 approved; Phases 1–5 draft.** |
+| [002-source-html-validation.md](002-source-html-validation.md) | Future work: catch malformed source HTML before jsdom or templates repair it. **Not scheduled.** |
 | [implementation-log.md](implementation-log.md) | Append-only record of what was actually done, what differed from the plan, and what was learned. |
 
 Deployment details live in [../deployment.md](../deployment.md), outside this

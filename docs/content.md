@@ -150,15 +150,15 @@ for smaller adjustments without creating a new layout.
 
 The build generates these without source files:
 
-- `/articles/` — all articles, grouped Dated / Evergreen / Date unknown, with a
-  tag index.
+- `/articles/` — all articles in one list, dates shown where known, followed by
+  a tag index.
 - `/tags/<tag>/` — one page per used tag.
 - `/feed.xml` — RSS 2.0 for dated articles.
 - `/sitemap.xml` and `/robots.txt`.
 - `/404.html`.
 
-Home shows the evergreen posts, the last 10 dated posts, and an “All articles”
-link. Pages and articles get the shared nav/footer; articles also get a tags
+Home shows the last 10 dated posts and the evergreen posts in one list, plus
+an “All articles” link. Pages and articles get the shared nav/footer; articles also get a tags
 line and a tag-scored “Related” section.
 
 ## Tags

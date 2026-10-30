@@ -31,6 +31,25 @@ way.
 
 ---
 
+## 2026-10-30 — Phase 3 feedback: combine post lists
+
+- **Phase:** 3
+- **Type:** deviation
+- **Summary:** Removed the separate Dated/Evergreen/Date unknown headings. Home
+  and the archive now render one combined post list with dates only where
+  known.
+- **Details:**
+  - Home: last 10 dated posts, then all 5 evergreen posts, in one list, plus
+    the “All articles” link.
+  - Archive: all 34 articles in one list (dated newest first, then evergreen,
+    then date-unknown), followed by the tag index.
+  - No “Dated”, “Evergreen”, or “Date unknown” section headings.
+  - Unknown-date posts remain undated but no longer have a separate note.
+  - Tests updated; `site-pages.mjs` builders simplified.
+- **Impact on plan:** Phase 3 archive/home presentation changed to a single
+  list. Plan revision 0.12.
+- **Follow-up:** Re-run `npm test`, preview via file:///http, and push to PR #6.
+
 ## 2026-10-30 — Phase 3 implementation complete
 
 - **Phase:** 3

@@ -434,14 +434,12 @@ and page headings.
 - [x] Fix `deriveSection`: top-level articles are `root`, pages are `pages`.
 - [x] Render related links as `<nav id="related" class="related">` with a list.
 - [x] Add a “Tags: …” line to articles and tag links.
-- [x] Generate the archive at `/articles/`:
-  - Dated, newest first;
-  - Evergreen, alphabetical, no date;
-  - Date unknown, alphabetical, with a note;
-  - tag index with counts.
+- [x] Generate the archive at `/articles/` as one list: dated newest first,
+  then evergreen, then date-unknown articles, with dates shown only where
+  known; follow it with a tag index.
 - [x] Generate `/tags/<tag>/` for all used tags.
-- [x] Home: profile + all 5 evergreen posts + the last 10 dated posts +
-  “All articles” links.
+- [x] Home: profile + the last 10 dated posts + all 5 evergreen posts in one
+  list, plus “All articles” links.
 - [x] Remove related tables from pages; pages use the archive and nav.
 - [x] Add the approved nav and footer: Home · About · Articles · Resume.
 - [x] Add the `heading` field and render one h1 for Home/About/Resume.
@@ -459,7 +457,7 @@ and page headings.
 **Deliverables**
 
 - Related navigation, tags, archive, tag pages.
-- Home recent/evergreen list.
+- Home combined recent/evergreen list.
 - Nav/footer and page headings.
 - RSS 2.0 feed, sitemap, robots, 404.
 - Updated tests and authoring docs.
@@ -467,10 +465,11 @@ and page headings.
 **Acceptance criteria**
 
 - Every article shows 3–5 related links, never itself, never a page.
-- The archive lists all 34 articles, grouped Dated/Evergreen/Date unknown, plus
+- The archive lists all 34 articles in one list, with dates where known, plus
   all used tags.
 - Each of the 19 used tags has a page.
-- Home shows 5 evergreen + 10 dated articles and a link to all articles.
+- Home shows the last 10 dated + all 5 evergreen articles in one list and a
+  link to all articles.
 - RSS 2.0 validates and contains the dated articles only.
 - The sitemap contains every public source and generated page except 404.
 - A top-level `404.html` is served for unknown paths on both hosts.
@@ -658,10 +657,10 @@ marked *Blocking* must be settled before the phase that needs them.
 ### D8 — Home page vs About page *(Needed by: Phase 3)*
 
 - **Options:** keep both as-is; merge them; home = profile + recent articles.
-- **Recommendation:** home = profile + evergreen posts + the last 10 dated
-  posts + an “All articles” link; About remains the profile/bio. The archive is
-  the full view of all 34 articles. This keeps a substantial landing page while
-  removing the exact duplication.
+- **Recommendation:** home = profile + one combined list of the last 10 dated
+  posts and all evergreen posts + an “All articles” link; About remains the
+  profile/bio. The archive is the full view of all 34 articles in one list.
+  This keeps a substantial landing page while removing the exact duplication.
 - **Status:** Approved 2026-10-30.
 
 ### D9 — `private/` content *(Needed by: Phase 4)*
@@ -1026,3 +1025,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.9 | Phase 2 merged as `399cfb3` and verified on Cloudflare and GitHub Pages: 37 standard layouts, 0 checker warnings, all URLs and sample pages match. | Seth |
 | 2026-10-30 | 0.10 | Approved Phase 3: related scoring, Home evergreen + 10 dated + all link, archive/tag pages, nav/footer, page headings, RSS 2.0, top-level 404. | Seth |
 | 2026-10-30 | 0.11 | Phase 3 implementation complete: 58 generated pages, 24 tests, 0 checker warnings; related scoring, archive, tags, RSS, sitemap, robots, 404, nav/footer, headings. Awaiting PR verification. | Seth |
+| 2026-10-30 | 0.12 | Phase 3 feedback: Home and the archive use one combined post list with no Dated/Evergreen/Date unknown headings; dates are shown only where known. | Seth |

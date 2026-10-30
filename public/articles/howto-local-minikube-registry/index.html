@@ -1,38 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Private Minikube Docker Registry using Helm</title>
-    <link rel="stylesheet" type="text/css"
-          href="../../static/style/style.css">
-    <link rel="stylesheet" type="text/css"
-          href="../../static/bundles/triangles/style.css">
-  </head>
-
-  <body>
-  <!--meta
-  {
-    "title": "Private Minikube Docker Registry using Helm",
-    "type": "article",
-    "date": "2017-12-08",
-    "tags": [
-      "docker",
-      "kubernetes"
-    ]
-  }
-  -->
-    <h2>Private Minikube Docker Registry using Helm</h2>
-    <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
-    <h4>Published: <time datetime="2017-12-08">2017-12-08</time></h4>
-
-    <p>
+<!--meta
+{
+  "title": "Private Minikube Docker Registry using Helm",
+  "type": "article",
+  "date": "2017-12-08",
+  "tags": [
+    "docker",
+    "kubernetes"
+  ]
+}
+-->
+<p>
       These steps walk you through setting up
       a password protected Docker Registry and Nginx
       Ingress controller on your laptop or workstation.
       You'll need a Docker client, Minikube, Helm and
       Kubernetes client (kubectl).
     </p>
-    <H2>Requirements</H2>
+    <h2>Requirements</h2>
     <ul>
       <li>
         <b>Docker:</b>
@@ -48,21 +32,21 @@
       </li>
       <li>
 	<b>Minikube:</b>
-	Install <a href="https://kubernetes.io/docs/tasks/tools/install-minikube"/>Minikube</a>
+	Install <a href="https://kubernetes.io/docs/tasks/tools/install-minikube">Minikube</a>
       </li>
       <li>
 	<b>Helm:</b>
-	Install <a href="https://github.com/kubernetes/helm/blob/master/docs/install.md"/>Helm</a>
+	Install <a href="https://github.com/kubernetes/helm/blob/master/docs/install.md">Helm</a>
       </li>
     </ul>
 
-    <H2>Run Kubernetes using Minikube</H2>
+    <h2>Run Kubernetes using Minikube</h2>
 
     Start Minikube with a generous helping of resources if you run large
     work loads.  For me that means running 4 cpus, 6 GB of RAM and 100
     GB Storage.  Another key is to add an insecure registry flag so
     docker will push to our registry over plaintext http port 80.
-    
+
     <pre><code class="language-bash">minikube start --cpus 4 --disk-size 100g --memory 6000 --insecure-registry registry.minikube.st81ess.com:80</code></pre>
 
     Requests to registry.minikube.st81ess.com will resolve to your
@@ -77,8 +61,8 @@
     *.minikube.mydomain.com to do the same.  Feel free to do so, we'll
     be using registry.minikube.st81ess.com in these examples, which
     will point to your local Minikube virtualbox.
-    
-    <H3>Run a local private registry</H3>
+
+    <h3>Run a local private registry</h3>
 
     Add a chart repo and initialize helm.  Feel free to checkout my <a href="http://github.com/lakowske/charts">charts</a> repo to view the contents of these charts.
     <pre><code class="language-bash">helm repo add lakowske https://lakowske.github.io/charts
@@ -106,13 +90,13 @@ kubectl create secret generic registry-auth --from-file=auth</code></pre>
     blocks on the
     excellent <a href="https://github.com/kubernetes/charts">kubernetes
     charts</a> repo.
-    
+
     <pre><code class="language-bash">helm install lakowske/minikube-registry</code></pre>
-    
+
     To import the Docker environment into your current shell.
 
     <pre><code class="language-bash">eval $(minikube docker-env)</code></pre>
-    
+
     Build an image and tag it.
     <pre><code class="language-bash">git clone https://bitbucket.org/seth_lakowske/hello-node.git
 cd hello-node
@@ -123,17 +107,11 @@ docker tag hello-node registry.minikube.st81ess.com:80/hello-node</code></pre>
     Now run a deployment in Kubernetes using the image located on your
     local registry.
     <pre><code class="language-bash">kubectl run hello-node --image=registry.minikube.st81ess.com:80/hello-node --port=8888</code></pre>
-    
-    <H3 style="color: orange">Conclusion</H3>
+
+    <h3 style="color: orange">Conclusion</h3>
     <p>
     You should now have a deployment of your image, in my case hello-node, running using your
     private local registry, Kubernetes and Docker.  You can verify by
-    running <span><pre><code class="language-bash">kubectl get deployments</code></pre></span>
+    running <span></span></p><pre><code class="language-bash">kubectl get deployments</code></pre>
     - or -<br>
     <a href="http://dashboard.minikube.st81ess.com">http://dashboard.minikube.st81ess.com</a> and view your deployments.
-    </p>
-    
-    <table id="related"></table>
-    
-  </body>
-</html>

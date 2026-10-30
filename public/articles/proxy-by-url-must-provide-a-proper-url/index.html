@@ -1,36 +1,19 @@
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Proxy-by-url must provide proper url error</title>
-<link rel="stylesheet" type="text/css" href="../../static/style/style.css">
-<link rel="stylesheet" type="text/css" href="../../static/bundles/triangles/style.css">
-<link rel="stylesheet" type="text/css" href="../../static/style/prism.css">
-</head>
-<body>
-  <!--meta
-  {
-    "title": "Proxy-by-url must provide proper url error",
-    "type": "article",
-    "date": "2015-01-16",
-    "tags": [
-      "javascript",
-      "nodejs"
-    ]
-  }
-  -->
-  <h1>Error: proxy-by-url must provide proper url</h1>
-  <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
-  <p>Published: <time datetime="2015-01-16">2015-01-16</time></p>
-
-
-
-  <p>
+<!--meta
+{
+  "title": "Proxy-by-url must provide proper url error",
+  "type": "article",
+  "date": "2015-01-16",
+  "tags": [
+    "javascript",
+    "nodejs"
+  ]
+}
+-->
+<p>
     I get the following error using v0.0.3 of proxy-by-url from github:
   </p>
   <pre><code class="language-bash">
-19:55:27/seth/boltzman~/workspace/proxy-service-directory> node index.js 
+19:55:27/seth/boltzman~/workspace/proxy-service-directory&gt; node index.js
 
 /home/seth/workspace/proxy-service-directory/node_modules/http-proxy/lib/http-proxy/index.js:119
 throw err;
@@ -43,8 +26,8 @@ at ProxyServer.<anonymous> (/home/seth/workspace/proxy-service-directory/node_mo
   at HTTPParser.parserOnHeadersComplete [as onHeadersComplete] (http.js:121:23)
   at Socket.socket.ondata (http.js:1966:22)
   at TCP.onread (net.js:527:27)
-        
-</code></pre>
+
+</anonymous></code></pre>
   <p>
     Using the example in the README.md
   </p>
@@ -54,8 +37,8 @@ require('http-proxy').createServer(require('proxy-by-url')({
 })).listen(8000)
   </code></pre>
   <p>
-    The problem comes from an API change to http-proxy.  http-proxy v1.0 has a new API which is incompatible with proxy-by-url v0.0.3. 
-    So, I created a new module called proxy-by-directory that is inspired by proxy-by-url and works with http-proxy v1.0.  It's 
+    The problem comes from an API change to http-proxy.  http-proxy v1.0 has a new API which is incompatible with proxy-by-url v0.0.3.
+    So, I created a new module called proxy-by-directory that is inspired by proxy-by-url and works with http-proxy v1.0.  It's
     on npm and <a href="http://github.com/lakowske/proxy-by-directory">github</a>.  You use proxy-by-directory like this:
   </p>
   <pre><code class="language-bash">
@@ -64,8 +47,3 @@ var server = require('http').createServer(require('proxy-by-directory')({
     '/' : { target : 'http://sethlakowske.com:7777' }
 })).listen(8000)
   </code></pre>
-
-  <table id="related"></table>
-
-</body>
-</html>

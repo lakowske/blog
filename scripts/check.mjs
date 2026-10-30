@@ -26,13 +26,6 @@
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
-// Temporary allowlist for the two known-broken WebGL references. Remove in
-// Phase 2 when the page is normalized.
-const KNOWN_BROKEN = new Set([
-  "articles/webgl-using-gl-mat4-browserify-shader-and-browserify/index.html|../webgl-using-gl-mat4-browserify-shader-and-browserify/node_modules/prismjs-package/prism.css",
-  "articles/webgl-using-gl-mat4-browserify-shader-and-browserify/index.html|3dify/bundle.js",
-]);
-
 const EXTERNAL = /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i;
 
 const WARNING_LABELS = {
@@ -243,24 +236,25 @@ export async function validatePage({ rel, html, fileExists: targetExists }) {
   }
 
   for (const reference of referencesIn(html)) {
-    const key = `${rel}|${reference}`;
-    if (KNOWN_BROKEN.has(key)) {
-      continue;
-    }
     const target = resolveReference(rel, reference);
     if (target && !(await targetExists(target))) {
       errors.push(`${rel}: broken reference "${reference}"`);
     }
   }
 
+  const type = html.match(/data-type\s*=\s*["']([^"']+)["']/i)?.[1] ?? "article";
+  const dateStatus = html.match(/data-date-status\s*=\s*["']([^"']+)["']/i)?.[1] ?? "";
+  const isPage = type === "page";
+
   const time = timeStatus(html);
-  if (time === "missing") {
+  const intentionalNoDate = ["none", "evergreen", "unknown"].includes(dateStatus);
+  if (time === "missing" && !intentionalNoDate) {
     warnings.push({ kind: "date", detail: rel });
   } else if (time === "invalid") {
     warnings.push({ kind: "timeFormat", detail: rel });
   }
 
-  if (!hasByline(html)) {
+  if (!isPage && !hasByline(html)) {
     warnings.push({ kind: "byline", detail: rel });
   }
   if (!hasRelatedPlaceholder(html)) {
@@ -274,7 +268,7 @@ export async function validatePage({ rel, html, fileExists: targetExists }) {
   }
 
   const headings = headingCount(html);
-  if (headings !== 1) {
+  if (!isPage && headings !== 1) {
     warnings.push({ kind: "heading", detail: `${rel} (${headings})` });
   }
 

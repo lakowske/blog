@@ -20,10 +20,11 @@ kept as a mirror for bookmarked URLs.
 
 - Source content: `public/`
 - Generated output: `dump/`
-- `npm run build` compiles `src/*.ts` to `dist/`.
+- `npm run build` compiles the legacy TypeScript server to `dist/`. The static
+  dump no longer uses it; it remains until the Phase 4 cleanup.
 - `npm run dump` first validates metadata and writes `dump/catalog.json` with
-  `scripts/catalog.mjs`, then runs `dist/server.js dump`, which indexes
-  `public/`, injects the related links, and writes `dump/`.
+  `scripts/catalog.mjs`, then runs `scripts/render.mjs`, which renders the
+  body fragments through the templates and writes `dump/`.
 - Cloudflare runs both commands. Do not rename `public/` or `dump/`, or change
   the build command, without updating the Cloudflare project settings and this
   document in the same change.

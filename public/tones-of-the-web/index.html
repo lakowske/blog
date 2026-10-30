@@ -1,32 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Simple Sound Progression</title>
-    <link rel="stylesheet" type="text/css"
-          href="../static/style/style.css">
-    <link rel="stylesheet" type="text/css"
-          href="../static/bundles/triangles/style.css">    
-</head>
-<body>
-  <!--meta
-  {
-    "title": "Simple Sound Progression",
-    "type": "article",
-    "date": "2024-04-06",
-    "summary": "A short Strudel experiment with a simple sound progression.",
-    "tags": [
-      "audio",
-      "javascript"
-    ]
-  }
-  -->
-    <h1>Simple Sound Progression</h1>
-    <h3>Posted by: <a href="http://sethlakowske.com">Seth Lakowske</a></h3>
-    <h4>Published: <time datetime="2024-04-06">2024-04-06</time></h4>
-
-    <script src="https://unpkg.com/@strudel/repl@latest"></script>
-    <strudel-editor>
+<!--meta
+{
+  "title": "Simple Sound Progression",
+  "type": "article",
+  "date": "2024-04-06",
+  "summary": "A short Strudel experiment with a simple sound progression.",
+  "tags": [
+    "audio",
+    "javascript"
+  ],
+  "scripts": [
+    "https://unpkg.com/@strudel/repl@latest"
+  ]
+}
+-->
+<strudel-editor>
       <!--
 note("c5 c5 c5 c5 c5 c5 c5")
   .s("sine")
@@ -34,6 +21,3 @@ note("c5 c5 c5 c5 c5 c5 c5")
   .gain(sine)
     -->
     </strudel-editor>
-    <table id="related"></table>      
-</body>
-</html>

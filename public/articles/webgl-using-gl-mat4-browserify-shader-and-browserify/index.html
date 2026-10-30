@@ -1,54 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebGL using gl-mat4, browserify-shader and Browserify</title>
-<link rel="stylesheet" type="text/css" href="../../static/style/style.css">
-<link rel="stylesheet" type="text/css" href="../webgl-using-gl-mat4-browserify-shader-and-browserify/node_modules/prismjs-package/prism.css">
-</head>
-<body>
-  <!--meta
-  {
-    "title": "WebGL using gl-mat4, browserify-shader and Browserify",
-    "type": "article",
-    "date": "2015-09-22",
-    "tags": [
-      "javascript",
-      "webgl",
-      "browserify"
-    ]
-  }
-  -->
-  <h1>WebGL using gl-mat4, browserify-shader and Browserify</h1>
-  <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>
-  <h4>Published: <time datetime="2015-09-22">2015-09-22</time></h4>
-
-  <p>
+<!--meta
+{
+  "title": "WebGL using gl-mat4, browserify-shader and Browserify",
+  "type": "article",
+  "date": "2015-09-22",
+  "tags": [
+    "javascript",
+    "webgl",
+    "browserify"
+  ],
+  "scripts": [
+    "bundle.js"
+  ]
+}
+-->
+<p>
     Pare down your WebGL scripts with Browserify and a few supporting
     modules on simple scenes.  The result is a smaller Javascript bundle with only the required
     code. While Three.js is a nice comprehensive library, including it can be overkill for a basic scene.
   </p>
 
-  <p>
-    <H2>Install Browserify</H2>
-    
+  <h2>Install Browserify</h2>
+
     To get started, install Browserify and checkout my <a href="../use-browserify-and-minifyify-to-combine-minify-and-obfuscate-multiple-javascript-files/index.html">Browserify
     Tutorial</a> on combining source files and their dependencies into
     one bundle - including your GLSL.  GLSL shader programs have made the
     OpenGL graphics pipeline more configurable since their introduction.  browserify-shader will
     allow you to easily bundle GLSL shaders in with your Javascript.
-  <p>
-    <H2>Init the project</H2>
+  <h2>Init the project</h2>
     Create a project directory and run <code>npm init</code> to
     create a package.json.  This file defines project dependencies.
 
 <pre><code class="language-bash">mkdir 3dify
 cd 3dify
 npm init</code></pre>
-  </p>
 
-  <p>
-    <H2>Install dependencies</H2>
+
+  <h2>Install dependencies</h2>
     <a href="https://www.npmjs.com/package/browserify-shader">browserify-shader</a> is a development dependency
     that allow you to include a shader using node-style require
     statements.  <a href="https://www.npmjs.com/package/gl-mat4">glmat-4</a> is a matrix library useful for doing 3d math
@@ -56,24 +43,22 @@ npm init</code></pre>
 
 <pre><code class="language-bash">npm install browserify-shader --save-dev
 npm install glmat-4 --save</code></pre>
-  </p>
 
 
-  <H2>Draw a Rotating Triangle using gl-mat4</H2>
+
+  <h2>Draw a Rotating Triangle using gl-mat4</h2>
   We'll fill in index.html, index.js, fragment.c and vertex.c with code
   necessary to draw a rotating triangle.  This code and our dependencies are sufficient to draw a simple scene.
 
 
-  <p>
-  <H3>index.html</H3>
+  <h3>index.html</h3>
   index.html is an extremely simple file including only the browserify
   bundle, in this case I named it bundle.js. <br>
 
-  <pre data-src="index.html" class="langauge-markup">
-    <code id="sample" class="language-markup">
+  <pre data-src="index.html" class="langauge-markup">    <code id="sample" class="language-markup">
   </code></pre>
-  </p>
-  <H3>index.js</H3>
+
+  <h3>index.js</h3>
   Notice the glsl files, vertex.c and fragment.c, required at the top
   of the script.  Our browserify-shader dependency provides this
   feature.  If you'd like more information about WebGL, see the
@@ -91,7 +76,7 @@ setup();
 function setup() {
     var body     = document.getElementsByTagName('body')[0];
     var glCanvas = getCanvas(body);
-    
+
     //create a simple renderer and a simple triangle
     var renderer = simpleRenderer(glCanvas.gl, 1, new Float32Array([-0.5,-0.5,-1.0,0.0,0.5,-1.0,0.5,-0.5,-1.0]));
 
@@ -119,7 +104,7 @@ function getCanvas(parent) {
     canvas.setAttribute('width', '400');
     canvas.setAttribute('height', '400');
     parent.appendChild(canvas);
-    
+
     var gl     = canvas.getContext('webgl');
     return {canvas: canvas, gl : gl}
 }
@@ -130,18 +115,18 @@ function simpleRenderer(gl, aspect, vertices) {
     var vertexShader = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vertexShader, svs());
     gl.compileShader(vertexShader);
-    
+
     var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
     gl.shaderSource(fragmentShader, sfs());
     gl.compileShader(fragmentShader);
-    
+
     var shaders = [vertexShader, fragmentShader];
     var program = gl.createProgram();
     shaders.forEach(function(shader) {
         gl.attachShader(program, shader);
     })
     gl.linkProgram(program);
-    
+
     return function(parentNode, color) {
         gl.clear(gl.GL_COLOR_BUFFER_BIT);
 
@@ -156,25 +141,25 @@ function simpleRenderer(gl, aspect, vertices) {
         var perspective = mat4.perspective(mat4.create(), fieldOfView, aspect, nearEdgeOfScene, farEdgeOfScene);
         //Apply perspective to the parent transformation (translate + rotation)
         var projection = mat4.multiply(mat4.create(), perspective, parentNode);
-        
+
         gl.useProgram(program);
-        
+
         var matrixLocation = gl.getUniformLocation(program, "u_matrix");
-    
+
         // Set the matrix.
         gl.uniformMatrix4fv(matrixLocation, false, projection);
 
         // set the color
         var colorLocation = gl.getUniformLocation(program, "u_color");
         gl.uniform4f(colorLocation, color[0], color[1], color[2], 1.0);
-        
+
         // Create a buffer for the positions
         var vertexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-        
+
         // look up where the vertex data needs to go.
         var positionLocation = gl.getAttribLocation(program, "a_position");
-    
+
         gl.enableVertexAttribArray(positionLocation);
         gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
 
@@ -185,7 +170,7 @@ function simpleRenderer(gl, aspect, vertices) {
 }
   </code></pre>
 
-  <H3>fragment.c</H3>
+  <h3>fragment.c</h3>
   This simple fragment shader sets the color to a constant. u_color is populated by the javascript code above.
   <pre><code class="language-glsl">
 precision mediump float;
@@ -199,7 +184,7 @@ void main() {
 }
   </code></pre>
 
-  <H3>vertex.c</H3>
+  <h3>vertex.c</h3>
   This vertex shader transforms the triangle vertices using a
   4x4 matrix.  The matrix is passed in on each render and defines
   the linear transformations, mainly rotation, used to animate the triangle.
@@ -213,7 +198,7 @@ void main() {
 }
   </code></pre>
 
-  <H3>Watchify</H3>
+  <h3>Watchify</h3>
   <p>Run watchify to watch files and compile them into a single
   bundle.js javascript file.  Here the use of browserify-shader
   plugin allows the GLSL shaders to be require'd into the
@@ -221,17 +206,6 @@ void main() {
   <pre><code class="language-bash">
  watchify --debug -t browserify-shader index.js -o bundle.js
   </code></pre>
- <H3>Result</H3>
+ <h3>Result</h3>
   <p>To the right is an animation using the bundle.js created with the above
     source files and watchify.</p>
-  <script src="bundle.js"></script>
-  <script src="3dify/bundle.js"></script>
-
-  
-  <table id="related"></table>
-
-</body>
-</html>
-  
-
-

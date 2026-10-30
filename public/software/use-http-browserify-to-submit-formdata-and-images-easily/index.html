@@ -1,28 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Using http-browserify to submit FormData and Images with ease</title> 
-  <link rel="stylesheet" type="text/css" href="../../static/style/style.css"> 
-  <link rel="stylesheet" type="text/css" href="../../static/bundles/triangles/style.css"></head> 
- <body>
-  <!--meta
-  {
-    "title": "Using http-browserify to submit FormData and Images with ease",
-    "type": "article",
-    "date": null,
-    "evergreen": false,
-    "tags": [
-      "javascript",
-      "browserify"
-    ]
-  }
-  --> 
-  <h2>Using http-browserify to submit FormData and Images with ease</h2>
-  <h2> </h2>
-  <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3> 
-  <div class="entry-content"> 
-   <p>If you want to send an Image or other form data back to the server and like to use Node.js’s http module, then you are in luck. http-browserify will happily send a <code>FormData</code> object if you write it to the stream.</p> 
+<!--meta
+{
+  "title": "Using http-browserify to submit FormData and Images with ease",
+  "type": "article",
+  "date": null,
+  "evergreen": false,
+  "tags": [
+    "javascript",
+    "browserify"
+  ],
+  "triangles": true
+}
+-->
+<p>If you want to send an Image or other form data back to the server and like to use Node.js’s http module, then you are in luck. http-browserify will happily send a <code>FormData</code> object if you write it to the stream.</p>
    <pre><code>
 var req = http.request('http://myservice.com', function(res) {
         res.on('end', function() { console.log('all done'); });
@@ -33,7 +22,7 @@ var files = document.getElementById('filesToUpload').files;
 
 var file;
 for (var i = 0; file = files[i]; i++) {
-        var formData = new FormData();   
+        var formData = new FormData();
         formData.append('user', 'john');
         formData.append(file.name, file);
         req.write(formData);
@@ -41,11 +30,6 @@ for (var i = 0; file = files[i]; i++) {
 
 req.end();
 
-</code></pre> 
-   <p>The above code is an example of sending each user selected file to service myservice.com with http-browserify and a FormData.</p> 
-   <p>Citation:<br> <a href="https://github.com/substack/http-browserify/issues/43">https://github.com/substack/http-browserify/issues/43</a></p> 
-  </div> 
-  <script src="../../static/bundles/triangles/bundle.js"></script> 
-  <table id="related"></table> 
- </body>
-</html>
+</code></pre>
+   <p>The above code is an example of sending each user selected file to service myservice.com with http-browserify and a FormData.</p>
+   <p>Citation:<br> <a href="https://github.com/substack/http-browserify/issues/43">https://github.com/substack/http-browserify/issues/43</a></p>

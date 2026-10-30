@@ -1,50 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<!-- Always remember to leave space to breathe -->
-
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Tutorial: Streaming Arduino Sensor Data to Smoothie Charts</title>
-  <link rel="stylesheet" type="text/css" href="../../static/style/style.css"></head>
-
-
-
-<body>
-  <!--meta
-  {
-    "title": "Tutorial: Streaming Arduino Sensor Data to Smoothie Charts",
-    "type": "article",
-    "date": "2014-12-07",
-    "summary": "Tutorial: streaming Arduino sensor data into a Smoothie Chart with Node.js.",
-    "tags": [
-      "javascript",
-      "nodejs",
-      "hardware"
-    ]
-  }
-  -->
-
-
-  <article>
-
-    <header>
-
-      <h1>Tutorial: Streaming Arduino Sensor Data to a Smoothie Chart</h1>
-      <h3>Posted by: <a href="../../about/index.html">Seth Lakowske</a></h3>      
-      <p>Published: <time datetime="2014-12-07">2014-12-07</time></p>
-
-    </header>
-
-    <p>
-
-      <h2>Requirements</h2>
+<!--meta
+{
+  "title": "Tutorial: Streaming Arduino Sensor Data to Smoothie Charts",
+  "type": "article",
+  "date": "2014-12-07",
+  "summary": "Tutorial: streaming Arduino sensor data into a Smoothie Chart with Node.js.",
+  "tags": [
+    "javascript",
+    "nodejs",
+    "hardware"
+  ]
+}
+-->
+<h2>Requirements</h2>
 
       <ul>
 	<li><a href="http://nodejs.org">Node.js</a></li>
-	<li><a href="http://www.amazon.com/gp/product/B00ASSQ9S6/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B00ASSQ9S6&linkCode=as2&tag=inforgain-20&linkId=W7QM2SG754UUZXFZ">Geeetech Iduino Nano 168 ATmega168 Board V3.0 5V/16Mhz compatible with Arduino's IDE</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=inforgain-20&l=as2&o=1&a=B00ASSQ9S6" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+	<li><a href="http://www.amazon.com/gp/product/B00ASSQ9S6/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B00ASSQ9S6&amp;linkCode=as2&amp;tag=inforgain-20&amp;linkId=W7QM2SG754UUZXFZ">Geeetech Iduino Nano 168 ATmega168 Board V3.0 5V/16Mhz compatible with Arduino's IDE</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=inforgain-20&amp;l=as2&amp;o=1&amp;a=B00ASSQ9S6" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;">
 	</li>
-	<li><a href="http://www.amazon.com/gp/product/B008B656PO/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=B008B656PO&linkCode=as2&tag=inforgain-20&linkId=QFKJ4ACDWYSNKZ7R">20A range Current Sensor Module ACS712 Module</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=inforgain-20&l=as2&o=1&a=B008B656PO" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" />
+	<li><a href="http://www.amazon.com/gp/product/B008B656PO/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B008B656PO&amp;linkCode=as2&amp;tag=inforgain-20&amp;linkId=QFKJ4ACDWYSNKZ7R">20A range Current Sensor Module ACS712 Module</a><img src="http://ir-na.amazon-adsystem.com/e/ir?t=inforgain-20&amp;l=as2&amp;o=1&amp;a=B008B656PO" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;">
 	</li>
       </ul>
 
@@ -57,13 +30,13 @@
 
       <p>Next, add dependencies to your project.  The json-streamer transform is written to buffer the basic json serial data
 	coming from the Arduino Nano.</p>
-      
+
       <pre><code class="language-bash">
 	  npm install serialport --save
 	  npm install git://github.com/lakowske/json-streamer --save
 	  npm install git://github.com/lakowske/websocket-express --save
       </code></pre>
-	
+
       <p>Next, create a pipe using a series of stream transforms.  We'll pipe
       the data into a smoothie chart.</p>
 
@@ -76,15 +49,3 @@
 	   baudrate: 57600
 	});
       </code></pre>
-
-    </p>
-
-    <table id="related"></table>
-    
-  </article>
-
-</body>
-
-
-
-</html>

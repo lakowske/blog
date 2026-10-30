@@ -4,7 +4,7 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 2 complete. Phase 3 not started.
+**Current status:** Phase 2 complete. Phase 3 in progress.
 
 ## How to use this log
 
@@ -30,6 +30,76 @@ way.
 ```
 
 ---
+
+## 2026-10-30 — Phase 3 implementation complete
+
+- **Phase:** 3
+- **Type:** completion
+- **Summary:** Implemented scored related links, the archive, 19 tag pages,
+  Home evergreen/recent lists, nav/footer, page headings, RSS 2.0, sitemap,
+  robots, and a top-level 404.
+- **Details:**
+  - Fixed `deriveSection`: top-level articles are `root`, pages are `pages`.
+  - Related scoring: `3 × shared tags + 1` for `articles`/`software`/
+    `technology`; manual overrides first; self/pages excluded; 3–5 links.
+  - Added a semantic related nav and a “Tags: …” line to articles.
+  - Archive at `/articles/`: 21 dated, 5 evergreen, 8 date-unknown articles,
+    plus a 19-tag index.
+  - Generated `/tags/<tag>/` for all 19 used tags.
+  - Home shows 5 evergreen + 10 dated articles + “All articles”.
+  - Added nav/footer: Home · About · Articles · Resume.
+  - Added `heading`; Home/About h1 “Seth Lakowske”, Resume h1 “Seth's Resume”.
+  - Added RSS 2.0 `/feed.xml` (21 dated items, no evergreen/unknown).
+  - Added `sitemap.xml` (57 URLs: 37 source + archive + 19 tags) and
+    `robots.txt`.
+  - Added top-level `404.html`; no `_redirects` for 404.
+  - Generated pages are synthetic from templates, not in the catalog.
+  - Internal links use explicit `index.html` paths for `file://`; feed and
+    sitemap use canonical directory URLs.
+  - `npm test`: 24 tests pass; catalog 37 entries with 8 expected unknown-date
+    warnings; output checker 0 errors, 0 warnings; 58 HTML pages.
+  - Catalog version: `a05014643de4e76a73545e38d405b4b0ba9a2ccec8567dbf3ccef7fbcc19a11c`.
+  - `file:///.../dump/index.html` and representative article/archive/tag/404
+    pages render correctly in headless Chrome.
+  - `npm run preview` serves `/`, `/articles/`, `/tags/javascript/`,
+    `/feed.xml`, `/sitemap.xml`, `/robots.txt`, and `/404.html` with 200.
+  - Feed and sitemap are well-formed XML; all articles have 3–5 related links.
+  - Cloudflare 404 behavior is pending preview verification; the top-level
+    `404.html` should replace the previous SPA fallback.
+- **Impact on plan:** Phase 3 implementation complete; awaiting PR verification.
+- **Follow-up:** Open the Phase 3 PR, verify the Cloudflare preview (including a
+  random missing path), merge, and verify both hosts.
+
+## 2026-10-30 — Phase 3 decisions approved
+
+- **Phase:** 3
+- **Type:** decision
+- **Summary:** Approved related-link scoring, the Home/archive split, tag
+  pages, nav/footer, page headings, RSS 2.0, and a top-level 404 page.
+- **Details:**
+  - D7: `3 × shared tags + 1 if same section`; section bonus only for
+    `articles`/`software`/`technology`; exclude self/pages; manual overrides
+    first; max 5; fill to 3 with recent articles.
+  - Fix `deriveSection`: top-level articles become `root`; pages become
+    `pages`.
+  - D8: Home shows all 5 evergreen posts, the last 10 dated posts, and
+    “All articles” links. The archive is the full view of all 34 articles.
+  - Archive groups Dated / Evergreen / Date unknown and includes a tag index.
+  - Generate `/tags/<tag>/` for all 19 used tags; add a “Tags: …” line to
+    articles.
+  - Add nav/footer: Home · About · Articles · Resume.
+  - D20: add `heading`; Home/About use “Seth Lakowske”, Resume uses
+    “Seth's Resume”.
+  - D19: RSS 2.0 at `/feed.xml`, dated articles only.
+  - D21: top-level `404.html`; no `_redirects` for 404. Cloudflare Pages
+    serves it automatically; the current SPA behavior is because no top-level
+    404 exists.
+  - Archive, tag, and 404 pages are generated synthetically from templates, not
+    added to the content catalog.
+- **Impact on plan:** Plan updated for Phase 3. Branch
+  `restructure/phase-3`.
+- **Follow-up:** Implement related scoring, archive/tags, Home, nav/footer,
+  headings, RSS/sitemap/robots/404, checker updates, and file:// verification.
 
 ## 2026-10-30 — Phase 2 merged and verified
 

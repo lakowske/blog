@@ -78,9 +78,13 @@ way.
   modified, copied, or discarded.
 - **Impact on plan:** Phase 0 tasks are implemented. The plan’s baseline and
   deployment sections now match reality.
-- **Follow-up:** Review the branch and open a PR. Verify the Cloudflare build
-  still succeeds with the unchanged `npm run build; npm run dump` command.
-  Decide what to do with the old checkout’s work before Phase 2.
+- **Follow-up:** PR: <https://github.com/lakowske/blog/pull/3> (draft).
+  - GitHub Actions `validate` passed in 20 seconds.
+  - Cloudflare Pages preview check passed, confirming the unchanged
+    `npm run build; npm run dump` build works with `dump/` untracked.
+  - Awaiting review and merge. After merge, verify the GitHub Pages mirror still
+    serves the same URLs.
+  - Decide what to do with the old checkout’s work before Phase 2.
 
 ## 2026-10-29 — Deployment topology confirmed; Phase 0 approved
 

@@ -63,7 +63,8 @@ kept as a mirror for bookmarked URLs.
   - `/index.html` returns a 308 redirect to `/`.
   - A top-level `404.html` is generated. Cloudflare Pages serves it for unknown
     paths once a top-level 404 exists; the previous SPA fallback was because no
-    top-level 404 was present.
+    top-level 404 was present. Verified 2026-10-30: unknown paths return 404 on
+    both the canonical site and the GitHub Pages mirror.
   - `/robots.txt` and `/sitemap.xml` are generated with the site build.
 
 ## GitHub Pages mirror

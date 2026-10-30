@@ -158,7 +158,7 @@ Design rules:
 | 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | Done (PR #3, `d4331b2`) |
 | 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | Done (PR #4, `8882a01`) |
 | 2 | Templates and normalization | Standard article/page layouts; fragments; explicit bare/custom/raw exceptions | 1, D18 | Done (PR #5, `399cfb3`) |
-| 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8, D19–D21 | In progress |
+| 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8, D19–D21 | Done (PR #6, `cb975c9`) |
 | 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Not started |
 | 5 | Cutover and verification | Production verified; plan closed; deviations logged | 0–4 | Not started |
 
@@ -488,7 +488,9 @@ and page headings.
 - `file://` does not resolve directory URLs; nav/archive/tag links must use
   explicit `index.html` paths.
 
-**Status:** In progress — implementation complete; awaiting PR verification.
+**Status:** Done — merged as `cb975c9`. CI, Cloudflare, the canonical site, the
+mirror, all 57 sitemap URLs, the feed, and the 404 verified. See the
+[implementation log](implementation-log.md) for details.
 
 ---
 
@@ -1026,3 +1028,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.10 | Approved Phase 3: related scoring, Home evergreen + 10 dated + all link, archive/tag pages, nav/footer, page headings, RSS 2.0, top-level 404. | Seth |
 | 2026-10-30 | 0.11 | Phase 3 implementation complete: 58 generated pages, 24 tests, 0 checker warnings; related scoring, archive, tags, RSS, sitemap, robots, 404, nav/footer, headings. Awaiting PR verification. | Seth |
 | 2026-10-30 | 0.12 | Phase 3 feedback: Home and the archive use one combined post list with no Dated/Evergreen/Date unknown headings; dates are shown only where known. | Seth |
+| 2026-10-30 | 0.13 | Phase 3 merged as `cb975c9` and verified: 404, 57 sitemap URLs, RSS, archive, tags, related links, and combined Home/archive lists. | Seth |

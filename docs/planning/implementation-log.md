@@ -4,7 +4,7 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 2 complete. Phase 3 in progress.
+**Current status:** Phase 3 complete. Phase 4 not started.
 
 ## How to use this log
 
@@ -30,6 +30,45 @@ way.
 ```
 
 ---
+
+## 2026-10-30 — Phase 3 merged and verified
+
+- **Phase:** 3
+- **Type:** completion
+- **Summary:** PR #6 merged as `cb975c9`. Related scoring, archive, tags,
+  Home list, nav/footer, headings, RSS, sitemap, robots, and the custom 404 all
+  verified in production.
+- **Details:**
+  - Merge: rebase merge of PR #6. Branch `restructure/phase-3` deleted locally
+    and remotely.
+  - Rebase rewrote the branch hashes:
+    - implementation: `446dab0` → `e6a050d`
+    - implementation docs: `49a62f4` → `fb684fc`
+    - combined lists: `99e0242` → `f6b28b6`
+    - feedback docs: `d285dfe` → `cb975c9`
+  - CI `validate`: pass (run 41076051519).
+  - Deploy Blog to GitHub Pages: pass (run 41076051655).
+  - Cloudflare Pages production check: pass.
+  - `npm test` on `master`: 24 tests pass; catalog 37 entries with 8 expected
+    unknown-date warnings; output checker 0 errors, 0 warnings; 58 HTML pages.
+  - Catalog version: `a05014643de4e76a73545e38d405b4b0ba9a2ccec8567dbf3ccef7fbcc19a11c`.
+  - Canonical `/catalog.json`: 200, `cache-control: no-cache`.
+  - Mirror `/blog/catalog.json`: 200, `cache-control: max-age=600`.
+  - Canonical and mirror unknown paths: **404** with the custom “Page not
+    found” page. The top-level `404.html` removed the previous SPA fallback.
+  - `/articles/`, `/tags/javascript/`, `/feed.xml`, `/sitemap.xml`, and
+    `/robots.txt` return 200 on both hosts.
+  - Feed: 21 dated items, no evergreen/unknown.
+  - Sitemap: 57 URLs; the 404 page is excluded.
+  - All 57 sitemap URLs resolve on both hosts. One transient mirror 503 for
+    `/tones-of-the-web/` returned 200 on retry.
+  - Home and archive have no Dated/Evergreen/Date unknown/Recent posts
+    headings. Home and archive samples byte-match the local `dump/`.
+  - Article sample (`why-learn-haskell`) byte-matches the local build; tags
+    line, related nav, nav/footer, and one h1 verified.
+- **Impact on plan:** Phase 3 complete. Phase 4 can start.
+- **Follow-up:** Phase 4 — remove the legacy TypeScript/jsdom server, unused
+  dependencies, and dead cache code; update the README; decide `private/`.
 
 ## 2026-10-30 — Phase 3 feedback: combine post lists
 

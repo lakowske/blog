@@ -104,21 +104,12 @@ body {
     margin-left: 0.5em;
 }
 
-.home-section,
-.archive-section {
-    margin: 1.5em 0;
-}
-
 .tag-list {
     list-style: none;
     padding-left: 0;
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em 1em;
-}
-
-.note {
-    font-style: italic;
 }
 
 .all-articles {

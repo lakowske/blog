@@ -68,19 +68,21 @@ test("listUsedTags counts articles only", () => {
   ]);
 });
 
-test("home sections include evergreen, 10 dated, and all-articles link", () => {
+test("home is one list with evergreen, dated, and an all-articles link", () => {
   const html = buildHomeSections(entries, "index.html");
-  assert.match(html, /Evergreen/);
-  assert.match(html, /Recent posts/);
-  assert.match(html, /href="articles\/index\.html"/);
+  assert.doesNotMatch(html, /Evergreen|Recent posts|Dated|Date unknown/);
+  assert.match(html, /dated-new/);
+  assert.match(html, /evergreen/);
   assert.doesNotMatch(html, /unknown/);
+  assert.match(html, /href="articles\/index\.html"/);
 });
 
-test("archive groups dated, evergreen, and unknown", () => {
+test("archive is one list plus a tag index", () => {
   const html = buildArchiveSections(entries, "articles/index.html");
-  assert.match(html, /Dated/);
-  assert.match(html, /Evergreen/);
-  assert.match(html, /Date unknown/);
+  assert.doesNotMatch(html, /Dated|Evergreen|Date unknown/);
+  assert.match(html, /dated-new/);
+  assert.match(html, /evergreen/);
+  assert.match(html, /unknown/);
   assert.match(html, /Tags/);
   assert.match(html, /href="\.\.\/tags\/javascript\/index\.html"/);
 });

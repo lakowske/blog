@@ -76,24 +76,13 @@ export function renderArticleList(entries, pagePath, options = {}) {
 
 export function buildHomeSections(entries, pagePath) {
   const articles = entries.filter((entry) => entry.type === "article");
-  const evergreen = sortTitle(articles.filter((entry) => entry.dateStatus === "evergreen"));
   const recent = sortDated(articles).slice(0, 10);
-  const sections = [];
+  const evergreen = sortTitle(articles.filter((entry) => entry.dateStatus === "evergreen"));
 
-  if (evergreen.length > 0) {
-    sections.push(
-      `<section class="home-section">\n<h2>Evergreen</h2>\n${renderArticleList(evergreen, pagePath, { showDate: false })}\n</section>`,
-    );
-  }
-  if (recent.length > 0) {
-    sections.push(
-      `<section class="home-section">\n<h2>Recent posts</h2>\n${renderArticleList(recent, pagePath)}\n</section>`,
-    );
-  }
-  sections.push(
+  return [
+    renderArticleList([...recent, ...evergreen], pagePath),
     `<p class="all-articles"><a href="${escapeHtml(relativeLink(pagePath, "articles/index.html"))}">All articles</a></p>`,
-  );
-  return sections.join("\n");
+  ].join("\n");
 }
 
 export function buildArchiveSections(entries, pagePath) {
@@ -111,19 +100,7 @@ export function buildArchiveSections(entries, pagePath) {
     .join("\n");
 
   return [
-    `<section class="archive-section">`,
-    `<h2>Dated</h2>`,
-    renderArticleList(dated, pagePath),
-    `</section>`,
-    `<section class="archive-section">`,
-    `<h2>Evergreen</h2>`,
-    renderArticleList(evergreen, pagePath, { showDate: false }),
-    `</section>`,
-    `<section class="archive-section">`,
-    `<h2>Date unknown</h2>`,
-    `<p class="note">These technical posts are time-bound, but their publication date is not known.</p>`,
-    renderArticleList(unknown, pagePath, { showDate: false }),
-    `</section>`,
+    renderArticleList([...dated, ...evergreen, ...unknown], pagePath),
     `<section class="tag-index">`,
     `<h2>Tags</h2>`,
     `<ul class="tag-list">\n${tagItems}\n</ul>`,

@@ -1,15 +1,42 @@
 Blog
 ====
 
-Blog posts and articles
+Blog posts and articles by Seth Lakowske.
 
-A list of environment variables that are used by the blog
+Documentation
 ===
-* `PORT` - The port to serve the blog on (default: 8090)
-* `OPENAI_API` - The API key for OpenAI
-* `USE_CACHE` - Whether to use the cache (default: true). If false, usually in development, the server will load content
-    from the filesystem instead of the cache.
+* [Deployment](docs/deployment.md) — canonical host, mirror, build contract, and URL policy.
+* [Planning](docs/planning/README.md) — restructure plan and implementation log.
 
 Run
 ===
-`npm run serve`
+Build and generate the static site:
+
+```
+npm ci
+npm run build
+npm run dump
+```
+
+Validate the generated site:
+
+```
+npm test
+```
+
+Preview the generated site:
+
+```
+python3 -m http.server -d dump 8090
+```
+
+`npm run serve` starts the legacy in-memory Node server. It is not the
+production deployment; Cloudflare builds and serves `dump/`.
+
+Environment variables
+===
+* `PORT` — port for the legacy local server (default: 8090).
+* `USE_CACHE` — legacy; the current dump pipeline does not use the on-disk
+  cache.
+
+`OPENAI_API` is no longer used.

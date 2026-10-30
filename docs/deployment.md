@@ -21,12 +21,15 @@ kept as a mirror for bookmarked URLs.
 - Source content: `public/`
 - Generated output: `dump/`
 - `npm run build` compiles `src/*.ts` to `dist/`.
-- `npm run dump` runs `dist/server.js dump`, which indexes `public/`, injects
-  the related links, and writes `dump/`.
+- `npm run dump` first validates metadata and writes `dump/catalog.json` with
+  `scripts/catalog.mjs`, then runs `dist/server.js dump`, which indexes
+  `public/`, injects the related links, and writes `dump/`.
 - Cloudflare runs both commands. Do not rename `public/` or `dump/`, or change
   the build command, without updating the Cloudflare project settings and this
   document in the same change.
 - `dump/` is generated. It should not be tracked in git (Phase 0).
+- `dump/catalog.json` is generated from page metadata on every build. It is
+  published and served with `Cache-Control: no-cache` via `dump/_headers`.
 
 ## URL policy
 

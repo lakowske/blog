@@ -5,13 +5,15 @@
   "description": "A weblog by Seth Lakowske",
   "main": "index.js",
   "scripts": {
-      "test": "npm run build && npm run dump && node scripts/check.mjs dump",
+      "test": "npm run build && npm run dump && node --test scripts/catalog.test.mjs && node scripts/check.mjs dump",
       "check": "node scripts/check.mjs dump",
+      "catalog": "node scripts/catalog.mjs --check",
+      "catalog:report": "node scripts/catalog.mjs --check --report",
       "build": "./node_modules/.bin/tsc",
       "watch": "./node_modules/.bin/tsc --watch",
       "watchAndDump": "./node_modules/.bin/nodemon --watch ./public --ext js,html,css --exec \"npm run dump\"",
       "serve": "(cd ./dist; PORT=8090 node server.js serve)",
-      "dump": "(cd ./dist; node server.js dump)",
+      "dump": "node scripts/catalog.mjs --clean --out dump/catalog.json && (cd ./dist; node server.js dump)",
       "preview": "python3 -m http.server -d dump 8090"
   },
   "engines": {

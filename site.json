@@ -1,0 +1,33 @@
+{
+  "title": "Seth Lakowske",
+  "description": "Blog posts and articles by Seth Lakowske.",
+  "author": "Seth Lakowske",
+  "baseUrl": "https://sethlakowske.com",
+  "tags": [
+    "haskell",
+    "javascript",
+    "nodejs",
+    "browserify",
+    "docker",
+    "kubernetes",
+    "webgl",
+    "emacs",
+    "linux",
+    "trading",
+    "solar",
+    "philosophy",
+    "learning",
+    "career",
+    "search",
+    "hardware",
+    "audio",
+    "testing",
+    "biking"
+  ],
+  "nav": [
+    { "label": "Home", "path": "/" },
+    { "label": "About", "path": "/about/" },
+    { "label": "Articles", "path": "/articles/" },
+    { "label": "Resume", "path": "/resume/" }
+  ]
+}

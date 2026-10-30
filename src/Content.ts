@@ -75,7 +75,9 @@ export class Content {
         this.size = statInfo.size;
         let content : any;
         if (this.type == 'html') {
-            content = await readFile(this.file, 'utf8');
+            const raw = await readFile(this.file, 'utf8');
+            // Metadata lives in an HTML comment and is not part of the page.
+            content = raw.replace(/<!--\s*meta[\s\S]*?-->/i, '');
             this.jsdom = new JSDOM.JSDOM(content);
             const document = this.jsdom.window.document;
             const title = document.getElementsByTagName('title');

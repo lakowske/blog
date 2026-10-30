@@ -5,6 +5,7 @@ Blog posts and articles by Seth Lakowske.
 
 Documentation
 ===
+* [Content authoring](docs/content.md) — metadata, dates, tags, summaries, and commands.
 * [Deployment](docs/deployment.md) — canonical host, mirror, build contract, and URL policy.
 * [Planning](docs/planning/README.md) — restructure plan and implementation log.
 
@@ -16,6 +17,12 @@ Build and generate the static site:
 npm ci
 npm run build
 npm run dump
+```
+
+Validate metadata and review generated summaries:
+
+```
+npm run catalog:report
 ```
 
 Validate the generated site:

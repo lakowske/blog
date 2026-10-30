@@ -1,6 +1,6 @@
 # 001 — Site Restructure Plan
 
-**Status:** Phase 0 complete. Phase 1 in progress.
+**Status:** Phase 1 complete. Phase 2 in progress.
 **Created:** 2026-10-29
 **Owner:** Seth Lakowske
 **Companion:** [implementation-log.md](implementation-log.md)
@@ -157,7 +157,7 @@ Design rules:
 | --- | --- | --- | --- | --- |
 | 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | Done (PR #3, `d4331b2`) |
 | 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | Done (PR #4, `8882a01`) |
-| 2 | Templates and normalization | One layout; content files are body fragments; consistent markup | 1 | Not started |
+| 2 | Templates and normalization | Standard article/page layouts; fragments; explicit bare/custom/raw exceptions | 1, D18 | In progress |
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8 | Not started |
 | 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Not started |
 | 5 | Cutover and verification | Production verified; plan closed; deviations logged | 0–4 | Not started |
@@ -336,63 +336,82 @@ the mirror, and the catalog verified. See the
 ### Phase 2 — Templates and page normalization
 
 **Goal:** Keep exactly one copy of the document chrome and make every page use
-the same structure.
+the standard article or page envelope, while preserving an explicit escape
+hatch for pages that need a custom document.
 
 **Tasks**
 
-- [ ] Keep the `public/` → `dump/` build contract. Do not rename the source or
+- [x] Keep the `public/` → `dump/` build contract. Do not rename the source or
   output directories in this phase.
-- [ ] Create `templates/base.html` with slots for title, description, canonical,
-  Open Graph tags, nav, content, and footer.
-- [ ] Create `templates/article.html` and `templates/page.html` for the two
-  content shapes.
-- [ ] Convert the 37 pages to body fragments:
-  - remove `<!DOCTYPE>`, `<html>`, `<head>`, `<body>`, and duplicated nav;
-  - remove per-page byline/date markup (the template renders it from metadata);
-  - keep article-specific assets and scripts as front matter fields or
-    fragment-local includes.
-- [ ] Fix the malformed pages listed in Appendix A.
-- [ ] Standardize semantics:
-  - one `<h1>` per page, equal to the title;
-  - `<main><article>` for articles, `<main>` for pages;
-  - `<header>` with byline and `<time datetime="YYYY-MM-DD">`;
-  - `<footer>` with a consistent link back to the archive/about;
-  - `<nav aria-label="Related">` placeholder on every article.
-- [ ] Normalize assets:
-  - load one shared stylesheet on every page;
-  - decide whether the triangles background and Prism are global or opt-in;
-  - remove references to unused `syntax.css` and `static/bundles/bundle.js`;
-  - fix the two broken WebGL asset paths.
-- [ ] Add `meta name="description"`, `rel="canonical"`, and Open Graph tags from
-  metadata.
-- [ ] Preserve the current visual appearance. Capture before/after screenshots
-  of a representative set of pages.
-- [ ] Add redirects for any URL that changes (none expected).
+- [x] Add `scripts/render.mjs`, a zero-dependency renderer that uses the Phase 1
+  catalog metadata and templates.
+- [x] Add `templates/base.html`, `templates/article.html`,
+  `templates/page.html`, and `templates/layouts/bare.html`.
+- [x] Support the D18 layout model in metadata:
+  - `layout`: `article` (default), `page`, `bare`, a named layout under
+    `templates/layouts/`, or `raw`;
+  - `bodyClass`, `showHeader`, `showRelated`, `scripts`, `styles`.
+- [x] Extend the catalog entry with the render fields so the renderer and future
+  transformations share one source of truth.
+- [x] Convert the 37 pages to body fragments in batches:
+  - remove `<!DOCTYPE>`, `<html>`, `<head>`, `<body>`, title, byline, date,
+    `.entry-content`, and outer `<article>`/`<header>` wrappers;
+  - extract per-page scripts and styles into metadata;
+  - set `triangles: true` only on the pages that currently load the triangles
+    script;
+  - remove Prism stylesheet links;
+  - fix the malformed pages and demote extra `<h1>` headings.
+- [x] Preserve the current related table in Phase 2. Phase 3 changes both the
+  selection algorithm and the markup.
+- [x] Add `meta name="description"`, canonical, and Open Graph tags from the
+  catalog.
+- [x] Add `data-type` and `data-date-status` attributes to the rendered
+  envelope, and teach `scripts/check.mjs` to suppress intentional warnings for
+  pages, evergreen posts, and unknown-date posts.
+- [x] Preserve the current look. Capture before/after screenshots of
+  representative pages with headless Chrome and report any exceptions.
+- [x] Update `docs/content.md` with the layout modes, metadata fields, and
+  examples.
+- [x] Keep URLs unchanged; no redirects expected.
 
 **Deliverables**
 
-- Templates and a renderer.
+- `scripts/render.mjs` and templates.
 - Body-fragment content files.
-- Consistent pages that pass the Phase 0 checker.
+- A migration report listing any page that does not use the standard layout.
+- Before/after screenshots of representative pages.
 
 **Acceptance criteria**
 
-- No content file contains `<!DOCTYPE>`, `<head>`, or `<body>`.
-- All pages pass the link and HTML checks.
-- A visual spot check shows only intended differences (removed duplicate
-  bylines, fixed headings, consistent related placeholder).
-- Every page loads exactly one shared stylesheet.
-- All generated links are document-relative and work under both
-  `https://sethlakowske.com/` and `https://lakowske.github.io/blog/`.
+- Default content files contain no `<!DOCTYPE>`, `<head>`, or `<body>`.
+  Complete documents are allowed only with `layout: "raw"` and are listed in
+  the migration report.
+- Every article uses the standard `article` layout unless explicitly listed as
+  a `bare`, custom, or `raw` exception.
+- Every article has one `<h1>` equal to its title. Page heading behavior is
+  deferred to Phase 3.
+- Every page loads the shared stylesheet. Triangles are explicit opt-in; Prism
+  is removed.
+- Metadata comments do not appear in the rendered output.
+- Description, canonical, and Open Graph tags are present.
+- All URLs are unchanged and both deployment hosts work.
+- `npm test` passes, and the output checker warnings are reduced to the
+  intentional page exceptions.
 
 **Risks / rollback**
 
-- This is the largest mechanical change. Do it on a branch and migrate in
-  batches (articles, software, top-level posts, pages), committing each batch.
-- Keep the old `public/` tree until the new output is verified, then remove it
-  in one commit.
+- The renderer replaces the legacy dump path. `serve` becomes a static preview
+  of `dump/`; the old TypeScript/jsdom server is unused until Phase 4.
+- Source fragments are not standalone documents; preview them through
+  `npm run dump` and `npm run preview`.
+- The jsdom migration can repair malformed source. Review the fragment diffs and
+  keep 002 (source HTML validation) in mind.
+- Raw pages lose the shared chrome, related links, and automatic head metadata.
+  Use them only when the standard envelope genuinely does not fit.
+- Relative asset paths are sensitive to the page depth. Compute template asset
+  URLs from the page path and verify both hosts.
 
-**Status:** Not started
+**Status:** In progress — implementation complete; awaiting PR verification.
 
 ---
 
@@ -701,6 +720,27 @@ marked *Blocking* must be settled before the phase that needs them.
   stored summaries that could go stale.
 - **Status:** Approved 2026-10-30.
 
+### D18 — Layout model *(Needed by: Phase 2)*
+
+- **Options:** one rigid article template; full HTML pages with includes; a
+  layered model with standard layouts plus explicit escape hatches.
+- **Recommendation:** layered model:
+  - **article** (default): shared head/styles, title, byline, date, related
+    links;
+  - **page** (default for Home/About/Resume): shared head/styles, content;
+  - **bare**: shared head/styles only;
+  - **named layout**: a file under `templates/layouts/`;
+  - **raw**: a complete HTML document copied as-is, with metadata still
+    cataloged.
+- **Rationale:** most pages should share the standard envelope for consistency
+  and automation, but the body remains unrestricted HTML. Exceptional pages can
+  take over the envelope or the entire document without changing the renderer.
+- **Authoring rules:** the default content file is a metadata comment plus a
+  body fragment. Full documents are allowed only with `layout: "raw"` and are
+  listed in the migration report. Metadata fields `layout`, `bodyClass`,
+  `showHeader`, `showRelated`, `scripts`, and `styles` control the envelope.
+- **Status:** Approved 2026-10-30.
+
 ## 10. Tracking conventions
 
 - **Plan status** lives in the phase table and in each phase's `Status` line.
@@ -922,3 +962,5 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.4 | Phase 0 merged as `d4331b2` and verified on Cloudflare and GitHub Pages. | Seth |
 | 2026-10-30 | 0.5 | Approved Phase 1 decisions: HTML comment metadata, HTML fragments, three-state date policy (dated/evergreen/unknown), generated catalog with freshness checks, and build-time summary fallbacks. | Seth |
 | 2026-10-30 | 0.6 | Phase 1 merged as `8882a01` and verified on Cloudflare and GitHub Pages; catalog counts, version, and header behavior recorded. | Seth |
+| 2026-10-30 | 0.7 | Approved D18 (layered article/page/bare/custom/raw layouts) and the Phase 2 visual defaults: triangles opt-in, Prism removed, nav/footer and semantic related links deferred to Phase 3. | Seth |
+| 2026-10-30 | 0.8 | Phase 2 implementation complete: zero-dep renderer, templates, 37 fragments, standard layouts, 0 checker warnings. Awaiting PR verification. | Seth |

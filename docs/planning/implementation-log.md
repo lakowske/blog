@@ -4,7 +4,7 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 1 complete. Phase 2 not started.
+**Current status:** Phase 1 complete. Phase 2 in progress.
 
 ## How to use this log
 
@@ -30,6 +30,80 @@ way.
 ```
 
 ---
+
+## 2026-10-30 — Phase 2 metadata and templates implemented
+
+- **Phase:** 2
+- **Type:** completion
+- **Summary:** Added the zero-dependency renderer and templates, converted all
+  37 pages to fragments, and normalized the output to the standard article/page
+  envelope.
+- **Details:**
+  - Added `scripts/render.mjs` with pure helpers for template substitution,
+    relative URLs, date formatting, headers, styles/scripts, and the related
+    table. `main()` owns filesystem and logging side effects.
+  - Added `templates/base.html`, `article.html`, `page.html`, and
+    `layouts/bare.html`.
+  - Supported `layout`, `bodyClass`, `showHeader`, `showRelated`, `triangles`,
+    `scripts`, and `styles` in metadata and the catalog entry.
+  - Converted all 37 pages to metadata + body fragments. No page needed a
+    `bare`, named, or `raw` exception: 37 standard layouts, 0 exceptions.
+  - Extracted per-page assets:
+    - Browserify article: `bundle.js`, `style.css`
+    - WebGL article: `bundle.js` (the missing `3dify/bundle.js` reference was
+      dropped)
+    - JSONStream article: external Gist script
+    - Strudel article: external Strudel script
+  - Triangles are opt-in on the same 17 pages that previously loaded the
+    script. The 13 CSS-only pages no longer load the unused stylesheet.
+  - Removed all Prism links. Code blocks use the shared `pre/code` styles.
+  - Added description, canonical, and Open Graph tags.
+  - Added `data-type` and `data-date-status`; the checker now suppresses
+    intentional no-date warnings for pages, evergreen posts, and unknown-date
+    posts.
+  - Fixed migration artifacts: malformed monadic heading, Smoothie empty
+    paragraphs/header, `pre` inside `p`, missing body tags, extra h1s, and the
+    “Surprisingly productive” heading preserved as an h2.
+  - `npm test`: 14 tests pass; catalog 37 entries with 8 unknown-date warnings;
+    output checker 0 errors, 0 warnings.
+  - The output has the same set of paths as before: 37 HTML files and 73
+    total files. All URLs exist.
+  - `npm run serve` now builds and serves the static `dump/` output on 8090.
+    The legacy TypeScript/jsdom server remains unused until Phase 4.
+  - Representative before/after screenshots were captured with headless
+    Chrome. Intended visual differences: article titles are uniformly h1,
+    byline/date are uniformly bold, Prism styling is gone, and the related
+    table no longer includes the current page.
+- **Impact on plan:** Phase 2 implementation complete; awaiting PR verification.
+- **Follow-up:** Open the Phase 2 PR, verify the Cloudflare preview, merge, and
+  verify both hosts. Then start Phase 3 (related scoring, archive, nav/footer,
+  page headings).
+
+## 2026-10-30 — Phase 2 decisions approved
+
+- **Phase:** 2
+- **Type:** decision
+- **Summary:** Approved the layered layout model and the Phase 2 visual
+  defaults. Most pages will use standard article/page layouts; custom documents
+  are an explicit exception.
+- **Details:**
+  - D18 (approved): default `article`/`page` layouts; `bare`, named layouts,
+    and `raw` complete documents are explicit escape hatches.
+  - The body remains unrestricted HTML. The template owns only the envelope.
+  - Triangles: opt-in via metadata, enabled on the pages that currently load
+    the script.
+  - Prism: remove the Prism stylesheet links; use shared `pre/code` styles.
+  - Nav/footer and semantic/scored related links: deferred to Phase 3.
+  - Renderer: new zero-dependency `scripts/render.mjs` using the Phase 1
+    catalog. jsdom/server remain for `serve` until Phase 4.
+  - Page headings: deferred to Phase 3 with the Home/About decision.
+  - Per-page assets: `scripts`/`styles` metadata, extracted during migration.
+  - Migration: one-off jsdom conversion, batches, headless Chrome screenshots.
+  - Plan updated to v0.7. Phase 2 branch: `restructure/phase-2`.
+- **Impact on plan:** Phase 2 tasks and acceptance criteria updated. Default
+  content files are fragments; complete documents require `layout: "raw"`.
+- **Follow-up:** Implement the renderer/templates, migrate pages in batches,
+  update the checker for `data-type`/`data-date-status`, and verify both hosts.
 
 ## 2026-10-30 — Phase 1 merged and verified
 

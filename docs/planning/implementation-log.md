@@ -4,7 +4,7 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 0 in progress.
+**Current status:** Phase 0 complete. Phase 1 not started.
 
 ## How to use this log
 
@@ -30,6 +30,45 @@ way.
 ```
 
 ---
+
+## 2026-10-30 — Phase 0 merged and verified
+
+- **Phase:** 0
+- **Type:** completion
+- **Summary:** PR #3 was merged as `d4331b2`. CI, GitHub Pages, Cloudflare,
+  the canonical site, and the mirror all verified successfully.
+- **Details:**
+  - Merge: rebase merge of PR #3. Branch `restructure/phase-0` deleted from
+    local and remote.
+  - The rebase rewrote the branch commit hashes. Earlier references were
+    updated to the merged hashes:
+    - pending edit: `ffdbe57` → `342ebf7`
+    - guardrails: `42bd02f` → `8c4d4b3`
+    - checker refactor: `476299b` → `2d70661`
+  - CI `validate`: pass (run 41006428768).
+  - Deploy Blog to GitHub Pages: pass (run 41006428796).
+  - Cloudflare Pages production check: pass.
+  - `npm test` on `master`: 37 files, 0 errors, 146 warnings.
+  - `git status` is clean after a build; `git ls-files dump` returns 0.
+  - Canonical site <https://sethlakowske.com/>:
+    - `/`, `/about/`, `/articles/why-learn-haskell/`, and
+      `/articles/conscious-cosmos-and-personal-reality/` return 200.
+    - `/articles/why-learn-haskell/index.html` returns 308 to the directory
+      URL. Browsers follow it, so bookmarks still work.
+  - GitHub Pages mirror <https://lakowske.github.io/blog/>:
+    - `/` and the same article URLs return 200.
+    - The explicit `index.html` form returns 200.
+  - Live canonical and mirror pages for `why-learn-haskell` and
+    `conscious-cosmos` byte-match the local `dump/`.
+  - Canonical and mirror responses are identical.
+  - GitHub Actions annotates that Node 20 is deprecated for action runtimes
+    (`actions/checkout@v4`, `actions/setup-node@v4`,
+    `actions/upload-artifact@v4`). This is about the action runtime, not our
+    `node-version: 22`.
+- **Impact on plan:** Phase 0 complete. Phase 1 can start.
+- **Follow-up:** Schedule source HTML validation (002) after Phase 2; decide
+  what to do with the old checkout’s work before Phase 2; consider upgrading
+  GitHub Actions to current majors.
 
 ## 2026-10-30 — Recorded HTML parsing decision and future source validation
 
@@ -63,7 +102,7 @@ way.
 - **Summary:** Refactored `scripts/check.mjs` so pure helpers contain the
   parsing and validation logic and `main()` owns all side effects.
 - **Details:**
-  - Commit `476299b`.
+  - Commit `2d70661` (branch hash `476299b` before the rebase merge).
   - Parsing, URL resolution, and page validation are pure functions.
   - Filesystem access, logging, and exit-code handling are bundled in `main()`.
   - The script root calls `main()` once.
@@ -84,8 +123,10 @@ way.
   `restructure/phase-0`: deployment documentation, untracked `dump/`, pinned
   Node, a zero-dependency validator, and PR CI.
 - **Details:**
-  - Guardrails commit: `42bd02f`.
-  - Pending-edit commit: `ffdbe57`.
+  - Guardrails commit: `8c4d4b3` (branch hash `42bd02f` before the rebase
+    merge).
+  - Pending-edit commit: `342ebf7` (branch hash `ffdbe57` before the rebase
+    merge).
   - Added `docs/deployment.md` and updated the plan to v0.2.
   - Added `.nvmrc` (`22`), `engines.node` (`>=20.12`), and
     `scripts/check.mjs`.
@@ -205,7 +246,7 @@ way.
 
 | Phase | Status | Started | Completed | Notes |
 | --- | --- | --- | --- | --- |
-| 0 — Baseline and guardrails | In progress | 2026-10-29 | — | Approved; implementation underway |
+| 0 — Baseline and guardrails | Done | 2026-10-29 | 2026-10-30 | Merged as `d4331b2`; CI, Cloudflare, canonical, and mirror verified |
 | 1 — Metadata and catalog | Not started | — | — | Depends on D2–D3 |
 | 2 — Templates and normalization | Not started | — | — | Depends on Phase 1; D4 approved |
 | 3 — Generated navigation | Not started | — | — | Depends on Phase 2, D7, D8 |

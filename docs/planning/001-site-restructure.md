@@ -155,7 +155,7 @@ Design rules:
 
 | Phase | Name | Primary outcome | Depends on | Status |
 | --- | --- | --- | --- | --- |
-| 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | In progress (PR #3) |
+| 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | Done (PR #3, `d4331b2`) |
 | 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D1–D3 | Not started |
 | 2 | Templates and normalization | One layout; content files are body fragments; consistent markup | 1 | Not started |
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8 | Not started |
@@ -225,8 +225,9 @@ before any structural work begins.
 - `CNAME` is ambiguous: GitHub Pages reports no custom domain, but the file is
   still generated. Leave it for now and revisit in Phase 5.
 
-**Status:** In progress — implementation complete; PR #3 CI and Cloudflare
-preview pass. Awaiting review/merge and mirror verification.
+**Status:** Done — merged as `d4331b2`. CI, GitHub Pages, Cloudflare, the
+canonical site, and the mirror verified. See the
+[implementation log](implementation-log.md) for details.
 
 ---
 
@@ -831,3 +832,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-29 | 0.1 | Initial draft from structural review. | Seth |
 | 2026-10-29 | 0.2 | Corrected the deployment model: Cloudflare Workers & Pages is canonical; GitHub Pages is a mirror. Approved D1 (keep `public/`/`dump/`), D4 (document-relative URLs), D10 (untrack `dump/`), and D12 (keep the mirror). Moved the server work to Phase 4. | Seth |
 | 2026-10-30 | 0.3 | Approved D14: keep jsdom in the legacy pipeline, keep the checker zero-dependency, and remove jsdom after templates. Added future work for source HTML validation (002). | Seth |
+| 2026-10-30 | 0.4 | Phase 0 merged as `d4331b2` and verified on Cloudflare and GitHub Pages. | Seth |

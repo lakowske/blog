@@ -1,6 +1,6 @@
 # 001 — Site Restructure Plan
 
-**Status:** Phase 1 complete. Phase 2 in progress.
+**Status:** Phase 2 complete. Phase 3 in progress.
 **Created:** 2026-10-29
 **Owner:** Seth Lakowske
 **Companion:** [implementation-log.md](implementation-log.md)
@@ -158,7 +158,7 @@ Design rules:
 | 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | Done (PR #3, `d4331b2`) |
 | 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | Done (PR #4, `8882a01`) |
 | 2 | Templates and normalization | Standard article/page layouts; fragments; explicit bare/custom/raw exceptions | 1, D18 | Done (PR #5, `399cfb3`) |
-| 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8 | Not started |
+| 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8, D19–D21 | In progress |
 | 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Not started |
 | 5 | Cutover and verification | Production verified; plan closed; deviations logged | 0–4 | Not started |
 
@@ -419,50 +419,77 @@ mirror, and all 37 URLs verified. See the
 
 ### Phase 3 — Generated navigation and site pages
 
-**Goal:** Replace the all-pages table with generated, meaningful navigation and
-the site-level pages that metadata makes possible.
+**Goal:** Replace the all-pages related table with meaningful related links,
+an archive, tag pages, a feed, a sitemap, a 404 page, and consistent nav/footer
+and page headings.
 
 **Tasks**
 
-- [ ] Implement the related-links scoring in D7.
-- [ ] Exclude self, `type: page`, drafts, and manually excluded slugs.
-- [ ] Render a semantic `<nav>` with at most five links and a stable order.
-- [ ] Support manual `related: [slug, ...]` overrides merged with computed
-  results.
-- [ ] Generate an archive page (`/articles/`) sorted newest first.
-- [ ] Generate one page per tag (`/tags/<tag>/`).
-- [ ] Generate `feed.xml` (Atom or RSS) and `sitemap.xml`.
-- [ ] Generate `robots.txt` with a sitemap reference.
-- [ ] Generate `404.html`.
-- [ ] Configure the Cloudflare project to serve `404.html` instead of the
-  current SPA fallback; verify unknown paths return HTTP 404.
-- [ ] Normalize internal URLs to directory form (`/articles/slug/`) while
-  keeping them document-relative for the `/blog/` mirror.
-- [ ] Update the home page to show recent articles and a link to the archive
-  (D8).
+- [x] Implement D7 related scoring:
+  - `3 × shared tags + 1 if same section`;
+  - section bonus only for `articles`, `software`, and `technology`;
+  - exclude self and `type: page`;
+  - manual `related` overrides first; dedupe; max 5;
+  - fill to 3 with recent articles, same section first.
+- [x] Fix `deriveSection`: top-level articles are `root`, pages are `pages`.
+- [x] Render related links as `<nav id="related" class="related">` with a list.
+- [x] Add a “Tags: …” line to articles and tag links.
+- [x] Generate the archive at `/articles/`:
+  - Dated, newest first;
+  - Evergreen, alphabetical, no date;
+  - Date unknown, alphabetical, with a note;
+  - tag index with counts.
+- [x] Generate `/tags/<tag>/` for all used tags.
+- [x] Home: profile + all 5 evergreen posts + the last 10 dated posts +
+  “All articles” links.
+- [x] Remove related tables from pages; pages use the archive and nav.
+- [x] Add the approved nav and footer: Home · About · Articles · Resume.
+- [x] Add the `heading` field and render one h1 for Home/About/Resume.
+- [x] Generate an RSS 2.0 `/feed.xml` with dated articles only.
+- [x] Generate `sitemap.xml` and `robots.txt`.
+- [x] Generate a top-level `404.html`; no `_redirects` for 404.
+- [x] Generate archive/tag/404 pages synthetically from templates, not the
+  content catalog.
+- [x] Update the checker: one h1 for pages, skip related for pages, validate
+  generated pages.
+- [x] Verify `file://` access and `npm run preview`.
+- [x] Keep internal links document-relative for the `/blog/` mirror; feed and
+  sitemap use canonical absolute URLs.
 
 **Deliverables**
 
-- Related navigation on every article.
-- Archive, tag pages, feed, sitemap, and 404.
-- A home page that no longer needs the all-pages table.
+- Related navigation, tags, archive, tag pages.
+- Home recent/evergreen list.
+- Nav/footer and page headings.
+- RSS 2.0 feed, sitemap, robots, 404.
+- Updated tests and authoring docs.
 
 **Acceptance criteria**
 
-- Every article shows 3–5 related links, never itself, never a nav page.
-- The archive lists every published article, newest first.
-- The feed validates and contains the same articles as the archive.
-- The sitemap contains every public URL and no drafts.
-- `404.html` is served for unknown paths on both hosts.
+- Every article shows 3–5 related links, never itself, never a page.
+- The archive lists all 34 articles, grouped Dated/Evergreen/Date unknown, plus
+  all used tags.
+- Each of the 19 used tags has a page.
+- Home shows 5 evergreen + 10 dated articles and a link to all articles.
+- RSS 2.0 validates and contains the dated articles only.
+- The sitemap contains every public source and generated page except 404.
+- A top-level `404.html` is served for unknown paths on both hosts.
+- Every page has one h1; pages use the `heading` field.
+- `npm test` passes with 0 output-checker warnings.
+- `file://.../dump/index.html` works, and `npm run preview` serves the same
+  pages.
 
 **Risks / rollback**
 
-- Related links may be sparse if tags are inconsistent. Start with a small,
-  controlled tag vocabulary (10–20 tags) and allow manual overrides.
-- Feed and sitemap generation add surface area; keep them simple and validate
-  with a one-off script rather than adding a dependency.
+- Tags are broad (`javascript` has 14 articles); scoring favors multiple shared
+  tags, but fallbacks ensure 3–5 links.
+- Cloudflare Pages serves `404.html` automatically when it exists. If a
+  `_redirects` SPA rule exists in the deployed output, remove it.
+- RSS 2.0 excludes evergreen/unknown-date posts until they have dates.
+- `file://` does not resolve directory URLs; nav/archive/tag links must use
+  explicit `index.html` paths.
 
-**Status:** Not started
+**Status:** In progress — implementation complete; awaiting PR verification.
 
 ---
 
@@ -623,14 +650,19 @@ marked *Blocking* must be settled before the phase that needs them.
 - **Recommendation:** `3 × shared tags + 1 if same section`, sorted by score
   then date then slug; exclude self and pages; take five; if fewer than three,
   fill with recent articles from the same section. Manual overrides win.
-- **Status:** Open
+- **Refinement:** the section bonus applies only to `articles`, `software`, and
+  `technology`; `root` and `pages` do not receive it. Top-level articles should
+  derive `section: "root"`, not their own slug.
+- **Status:** Approved 2026-10-30.
 
 ### D8 — Home page vs About page *(Needed by: Phase 3)*
 
 - **Options:** keep both as-is; merge them; home = profile + recent articles.
-- **Recommendation:** home = profile + recent articles + archive link; About
-  remains the canonical bio. This removes the current near-duplicate.
-- **Status:** Open
+- **Recommendation:** home = profile + evergreen posts + the last 10 dated
+  posts + an “All articles” link; About remains the profile/bio. The archive is
+  the full view of all 34 articles. This keeps a substantial landing page while
+  removing the exact duplication.
+- **Status:** Approved 2026-10-30.
 
 ### D9 — `private/` content *(Needed by: Phase 4)*
 
@@ -741,6 +773,31 @@ marked *Blocking* must be settled before the phase that needs them.
   body fragment. Full documents are allowed only with `layout: "raw"` and are
   listed in the migration report. Metadata fields `layout`, `bodyClass`,
   `showHeader`, `showRelated`, `scripts`, and `styles` control the envelope.
+- **Status:** Approved 2026-10-30.
+
+### D19 — Feed format *(Needed by: Phase 3)*
+
+- **Options:** RSS 2.0; Atom.
+- **Recommendation:** RSS 2.0. It has the broadest reader, aggregator, and
+  podcast compatibility; Atom is stricter but less universal in older tools.
+- **Status:** Approved 2026-10-30.
+
+### D20 — Page headings *(Needed by: Phase 3)*
+
+- **Options:** leave pages without an h1; render the metadata title as h1; add a
+  separate `heading` field.
+- **Recommendation:** add an optional `heading` field. Home/About use
+  “Seth Lakowske”; Resume uses “Seth's Resume”. The page template renders one
+  h1, styled to match the old h2 size.
+- **Status:** Approved 2026-10-30.
+
+### D21 — 404 handling *(Needed by: Phase 3)*
+
+- **Options:** `_redirects`; a top-level `404.html`; a Pages Function.
+- **Recommendation:** add a top-level `404.html`. Cloudflare Pages automatically
+  serves it with a 404 status when no top-level 404 exists; the current SPA
+  behavior is because there is no `404.html`. `_redirects` cannot return a 404
+  status and is not needed for this.
 - **Status:** Approved 2026-10-30.
 
 ## 10. Tracking conventions
@@ -967,3 +1024,5 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.7 | Approved D18 (layered article/page/bare/custom/raw layouts) and the Phase 2 visual defaults: triangles opt-in, Prism removed, nav/footer and semantic related links deferred to Phase 3. | Seth |
 | 2026-10-30 | 0.8 | Phase 2 implementation complete: zero-dep renderer, templates, 37 fragments, standard layouts, 0 checker warnings. Awaiting PR verification. | Seth |
 | 2026-10-30 | 0.9 | Phase 2 merged as `399cfb3` and verified on Cloudflare and GitHub Pages: 37 standard layouts, 0 checker warnings, all URLs and sample pages match. | Seth |
+| 2026-10-30 | 0.10 | Approved Phase 3: related scoring, Home evergreen + 10 dated + all link, archive/tag pages, nav/footer, page headings, RSS 2.0, top-level 404. | Seth |
+| 2026-10-30 | 0.11 | Phase 3 implementation complete: 58 generated pages, 24 tests, 0 checker warnings; related scoring, archive, tags, RSS, sitemap, robots, 404, nav/footer, headings. Awaiting PR verification. | Seth |

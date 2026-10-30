@@ -136,7 +136,7 @@ export function timeStatus(html) {
   const tags = html.match(/<time\b[^>]*>/gi) ?? [];
   const invalid = tags.some((tag) => {
     const value = tag.match(/\bdatetime\s*=\s*["']([^"']+)["']/i)?.[1];
-    return !value || !/^\d{4}-\d{2}-\d{2}$/.test(value);
+    return !value || !/^\d{4}(-\d{2}(-\d{2})?)?$/.test(value);
   });
   return invalid ? "invalid" : "ok";
 }

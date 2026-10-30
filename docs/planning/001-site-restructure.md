@@ -157,7 +157,7 @@ Design rules:
 | --- | --- | --- | --- | --- |
 | 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | Done (PR #3, `d4331b2`) |
 | 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | Done (PR #4, `8882a01`) |
-| 2 | Templates and normalization | Standard article/page layouts; fragments; explicit bare/custom/raw exceptions | 1, D18 | In progress |
+| 2 | Templates and normalization | Standard article/page layouts; fragments; explicit bare/custom/raw exceptions | 1, D18 | Done (PR #5, `399cfb3`) |
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8 | Not started |
 | 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Not started |
 | 5 | Cutover and verification | Production verified; plan closed; deviations logged | 0–4 | Not started |
@@ -411,7 +411,9 @@ hatch for pages that need a custom document.
 - Relative asset paths are sensitive to the page depth. Compute template asset
   URLs from the page path and verify both hosts.
 
-**Status:** In progress — implementation complete; awaiting PR verification.
+**Status:** Done — merged as `399cfb3`. CI, Cloudflare, the canonical site, the
+mirror, and all 37 URLs verified. See the
+[implementation log](implementation-log.md) for details.
 
 ---
 
@@ -964,3 +966,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.6 | Phase 1 merged as `8882a01` and verified on Cloudflare and GitHub Pages; catalog counts, version, and header behavior recorded. | Seth |
 | 2026-10-30 | 0.7 | Approved D18 (layered article/page/bare/custom/raw layouts) and the Phase 2 visual defaults: triangles opt-in, Prism removed, nav/footer and semantic related links deferred to Phase 3. | Seth |
 | 2026-10-30 | 0.8 | Phase 2 implementation complete: zero-dep renderer, templates, 37 fragments, standard layouts, 0 checker warnings. Awaiting PR verification. | Seth |
+| 2026-10-30 | 0.9 | Phase 2 merged as `399cfb3` and verified on Cloudflare and GitHub Pages: 37 standard layouts, 0 checker warnings, all URLs and sample pages match. | Seth |

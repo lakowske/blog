@@ -4,7 +4,7 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 1 complete. Phase 2 in progress.
+**Current status:** Phase 2 complete. Phase 3 not started.
 
 ## How to use this log
 
@@ -30,6 +30,42 @@ way.
 ```
 
 ---
+
+## 2026-10-30 — Phase 2 merged and verified
+
+- **Phase:** 2
+- **Type:** completion
+- **Summary:** PR #5 merged as `399cfb3`. CI, GitHub Pages, Cloudflare, the
+  canonical site, the mirror, all 37 URLs, and the catalog verified.
+- **Details:**
+  - Merge: rebase merge of PR #5. Branch `restructure/phase-2` deleted locally
+    and remotely.
+  - Rebase rewrote the branch hashes:
+    - renderer/fragments: `b2be2c3` → `faae581`
+    - planning docs: `12338eb` → `399cfb3`
+  - CI `validate`: pass (run 41021651925).
+  - Deploy Blog to GitHub Pages: pass (run 41021651845).
+  - Cloudflare Pages production check: pass.
+  - `npm test` on `master`: 14 tests pass; catalog 37 entries (8 expected
+    unknown-date warnings); output checker 0 errors, 0 warnings.
+  - Catalog version: `ec2a3ebb150e59f865eb8329208b8074da884bfd50ff90525d6217226b4bfba2`.
+  - Canonical `/catalog.json`: 200, `cache-control: no-cache`.
+  - Mirror `/blog/catalog.json`: 200, `cache-control: max-age=600`.
+  - All 37 HTML URLs resolve on both hosts. Canonical directory URLs 200;
+    canonical `index.html` 308; mirror directory and `index.html` 200.
+  - Sample pages (`why-learn-haskell`, `about`, `tones-of-the-web`,
+    `use-browserify`, `completed-ml-class`) byte-match the local `dump/` and
+    each other.
+  - Live checks: metadata comments 0; articles have one h1; pages have no h1
+    (deferred); triangles on 17 pages; Prism 0; per-page Browserify
+    `style.css`/`bundle.js` and WebGL `bundle.js` return 200.
+  - Dates verified: `2014-05-15`, `August 2014`, `May 2013`, `January 2012`.
+    Evergreen and unknown-date articles render no `<time>`.
+  - `npm run serve` static preview verified locally on port 8090 before merge.
+- **Impact on plan:** Phase 2 complete. Phase 3 can start.
+- **Follow-up:** Phase 3 — tag-scored semantic related links, archive, tag
+  pages, feed, sitemap, 404, nav/footer, and page headings. Then Phase 4
+  cleanup.
 
 ## 2026-10-30 — Phase 2 metadata and templates implemented
 

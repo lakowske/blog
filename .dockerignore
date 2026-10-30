@@ -1,7 +1,0 @@
-# ignore these files
-**
-!src
-!public
-!package.json
-!Dockerfile.builder
-!tsconfig.json

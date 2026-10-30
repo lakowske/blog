@@ -1,46 +1,31 @@
 {
   "name": "blog",
-  "version": "0.0.3",
+  "version": "1.0.0",
+  "private": true,
   "type": "module",
   "description": "A weblog by Seth Lakowske",
-  "main": "index.js",
   "scripts": {
-      "test": "npm run build && npm run dump && node --test scripts/catalog.test.mjs scripts/render.test.mjs scripts/site-pages.test.mjs && node scripts/check.mjs dump",
-      "check": "node scripts/check.mjs dump",
-      "catalog": "node scripts/catalog.mjs --check",
-      "catalog:report": "node scripts/catalog.mjs --check --report",
-      "build": "./node_modules/.bin/tsc",
-      "watch": "./node_modules/.bin/tsc --watch",
-      "watchAndDump": "./node_modules/.bin/nodemon --watch ./public --ext js,html,css --exec \"npm run dump\"",
-      "serve": "npm run dump && npm run preview",
-      "render": "node scripts/render.mjs",
-      "dump": "node scripts/catalog.mjs --clean --out dump/catalog.json && node scripts/render.mjs",
-      "preview": "python3 -m http.server -d dump 8090"
+    "test": "npm run dump && node --test scripts/catalog.test.mjs scripts/render.test.mjs scripts/site-pages.test.mjs scripts/serve.test.mjs && node scripts/check.mjs dump",
+    "check": "node scripts/check.mjs dump",
+    "catalog": "node scripts/catalog.mjs --check",
+    "catalog:report": "node scripts/catalog.mjs --check --report",
+    "dump": "node scripts/dump.mjs",
+    "build": "npm run dump",
+    "render": "node scripts/render.mjs",
+    "watch": "node --watch-path=public --watch-path=templates --watch-path=site.json --watch-path=scripts scripts/dump.mjs",
+    "preview": "node scripts/serve.mjs",
+    "serve": "npm run dump && npm run preview"
   },
   "engines": {
-      "node": ">=20.12"
+    "node": ">=22"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/lakowske/Blog"
+    "type": "git",
+    "url": "https://github.com/lakowske/blog"
   },
   "keywords": [
-      "blog"
+    "blog"
   ],
   "author": "Seth Lakowske",
-  "license": "All rights reserved",
-  "bugs": {
-      "url": "https://github.com/lakowske/Blog/issues"
-  },
-  "homepage": "https://github.com/lakowske/Blog",
-  "dependencies": {
-      "dotenv": "^16.4.5",
-      "jsdom": "^21.0.0",
-      "mime": "^3.0.0"
-  },
-  "devDependencies": {
-      "@types/node": "^20.12.4",
-      "nodemon": "^3.1.0",
-      "typescript": "^5.4.3"
-  }
+  "license": "All rights reserved"
 }

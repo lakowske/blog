@@ -597,6 +597,22 @@ marked *Blocking* must be settled before the phase that needs them.
   Keep `.nojekyll`. Revisit during Phase 5 cutover.
 - **Status:** Open; deferred to Phase 5.
 
+### D14 — HTML parsing strategy *(Needed by: Phase 2/4)*
+
+- **Options:** keep jsdom permanently; remove it after templates; replace it
+  with regex now; use a lighter parser.
+- **Recommendation:** keep jsdom in the legacy pipeline for now. Do not use it
+  in `scripts/check.mjs`. Remove it in Phase 4 once templates and front matter
+  generate the structure. Use jsdom only as a one-off migration tool if needed.
+- **Rationale:** jsdom is a real HTML5 parser and handles nesting and malformed
+  markup well, but the current code uses it only for title extraction,
+  `#related` row insertion, and full-document serialization. The checker’s
+  checks are shallow and run on generated HTML, so regex is adequate and
+  zero-dependency. Keeping jsdom until Phase 4 avoids a risky rewrite now.
+- **Follow-up:** source HTML validation is tracked separately in
+  [002-source-html-validation.md](002-source-html-validation.md).
+- **Status:** Approved 2026-10-30.
+
 ## 10. Tracking conventions
 
 - **Plan status** lives in the phase table and in each phase's `Status` line.
@@ -642,6 +658,12 @@ At the end of Phase 5:
 - `dump/` no longer tracked.
 - `npm audit` clean.
 - A clean checkout builds and validates with one command.
+
+## 13. Future work
+
+- [002 — Source HTML validation](002-source-html-validation.md): catch malformed
+  source HTML before jsdom or the templates repair it. Not scheduled; a
+  candidate for after Phase 2. This is separate from the current six phases.
 
 ## Appendix A — Findings inventory
 
@@ -808,3 +830,4 @@ articles/traveling-without-moving/index.html
 | --- | --- | --- | --- |
 | 2026-10-29 | 0.1 | Initial draft from structural review. | Seth |
 | 2026-10-29 | 0.2 | Corrected the deployment model: Cloudflare Workers & Pages is canonical; GitHub Pages is a mirror. Approved D1 (keep `public/`/`dump/`), D4 (document-relative URLs), D10 (untrack `dump/`), and D12 (keep the mirror). Moved the server work to Phase 4. | Seth |
+| 2026-10-30 | 0.3 | Approved D14: keep jsdom in the legacy pipeline, keep the checker zero-dependency, and remove jsdom after templates. Added future work for source HTML validation (002). | Seth |

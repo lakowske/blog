@@ -31,6 +31,31 @@ way.
 
 ---
 
+## 2026-10-30 — Recorded HTML parsing decision and future source validation
+
+- **Phase:** 0 / planning
+- **Type:** decision
+- **Summary:** Agreed to keep jsdom in the legacy pipeline, keep the checker
+  zero-dependency and shallow, and record source HTML validation as future
+  work.
+- **Details:**
+  - Reviewed jsdom usage: title extraction, `#related` row insertion, and
+    full-document serialization.
+  - jsdom is a real HTML5 parser and repairs malformed markup. Examples:
+    a related table after `</body>`, `<h2>…</title>`, `<pre>` inside `<p>`,
+    missing `</body>`, uppercase headings, and self-closing `<img />`.
+  - The checker does not need jsdom. Its checks are shallow and run on
+    generated HTML, so regex is adequate and zero-dependency.
+  - Added D14 to `001-site-restructure.md`: keep jsdom for now; remove it in
+    Phase 4 after templates and front matter generate the structure.
+  - Added `002-source-html-validation.md` to capture the separate concern about
+    catching malformed source HTML before jsdom or templates repair it.
+    It is not scheduled and does not change the six phases.
+- **Impact on plan:** Approved D14; added future work 002. No phase changes.
+- **Follow-up:** Consider scheduling 002 after Phase 2, or earlier if authoring
+  errors become a recurring problem. The known malformed pages are still fixed
+  in Phase 2.
+
 ## 2026-10-29 — Checker refactored to functional style
 
 - **Phase:** 0

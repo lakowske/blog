@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -36,6 +36,9 @@ jobs:
 
       - name: Generate static site
         run: npm run dump
+
+      - name: Validate generated site
+        run: node scripts/check.mjs dump
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

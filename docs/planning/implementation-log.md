@@ -31,6 +31,26 @@ way.
 
 ---
 
+## 2026-10-29 — Checker refactored to functional style
+
+- **Phase:** 0
+- **Type:** decision
+- **Summary:** Refactored `scripts/check.mjs` so pure helpers contain the
+  parsing and validation logic and `main()` owns all side effects.
+- **Details:**
+  - Commit `476299b`.
+  - Parsing, URL resolution, and page validation are pure functions.
+  - Filesystem access, logging, and exit-code handling are bundled in `main()`.
+  - The script root calls `main()` once.
+  - Behavior and output are unchanged: 37 files, 0 errors, 146 warnings;
+    `--strict` still exits 1.
+  - Pure functions are exported for future `node:test` coverage. Adding tests
+    will require an import guard or splitting the CLI from the library.
+  - PR comment: <https://github.com/lakowske/blog/pull/3#issuecomment-6515227230>
+  - CI `validate` and Cloudflare Pages preview both pass.
+- **Impact on plan:** None; style-only refactor.
+- **Follow-up:** Consider `node:test` coverage for the pure helpers.
+
 ## 2026-10-29 — Phase 0 implementation
 
 - **Phase:** 0

@@ -257,7 +257,7 @@ export async function validatePage({ rel, html, fileExists: targetExists }) {
   if (!isPage && !hasByline(html)) {
     warnings.push({ kind: "byline", detail: rel });
   }
-  if (!hasRelatedPlaceholder(html)) {
+  if (!isPage && !hasRelatedPlaceholder(html)) {
     warnings.push({ kind: "related", detail: rel });
   }
   if (!hasDescription(html)) {
@@ -268,7 +268,7 @@ export async function validatePage({ rel, html, fileExists: targetExists }) {
   }
 
   const headings = headingCount(html);
-  if (!isPage && headings !== 1) {
+  if (headings !== 1) {
     warnings.push({ kind: "heading", detail: `${rel} (${headings})` });
   }
 

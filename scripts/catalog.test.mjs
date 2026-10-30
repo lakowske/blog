@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   datePrecision,
   deriveId,
+  deriveSection,
   deriveUrl,
   isValidDate,
   sortEntries,
@@ -23,6 +24,15 @@ test("deriveId and deriveUrl handle root and nested pages", () => {
   assert.equal(deriveId("articles/why-learn-haskell/index.html"), "articles/why-learn-haskell");
   assert.equal(deriveUrl("index"), "/");
   assert.equal(deriveUrl("about"), "/about/");
+});
+
+test("deriveSection groups sections and top-level posts", () => {
+  assert.equal(deriveSection("index"), "pages");
+  assert.equal(deriveSection("about"), "pages");
+  assert.equal(deriveSection("articles/why-learn-haskell"), "articles");
+  assert.equal(deriveSection("software/writing-software"), "software");
+  assert.equal(deriveSection("technology/silent-am1h-itx-development-workstation"), "technology");
+  assert.equal(deriveSection("tones-of-the-web"), "root");
 });
 
 test("isValidDate accepts full, partial, and rejects invalid dates", () => {

@@ -27,16 +27,103 @@ body {
     font-weight: bold;
 }
 
-table#related {
+.site-nav {
+    margin: 1em 0;
+}
+
+.site-nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+.site-nav a {
+    text-decoration: none;
+}
+
+.site-nav a[aria-current="page"] {
+    font-weight: bold;
+}
+
+.site-footer {
+    margin: 2em 0 1em;
+    font-size: 0.8em;
+}
+
+.site-footer a {
+    color: inherit;
+}
+
+.page-title {
+    font-size: 1.5em;
+}
+
+.related {
     background: #e9e9e9;
     padding: 10px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    margin: 1.5em 0;
 }
 
-a.articleLink {
-    font-size: 20px;
+.related h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+
+.related ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.related li {
+    margin: 0.25em 0;
+}
+
+.tags {
+    font-size: 0.8em;
+}
+
+.tags a {
+    color: inherit;
+}
+
+.article-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.article-list li {
+    margin: 0.4em 0;
+}
+
+.article-list .tags {
+    margin-left: 0.5em;
+}
+
+.home-section,
+.archive-section {
+    margin: 1.5em 0;
+}
+
+.tag-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em 1em;
+}
+
+.note {
+    font-style: italic;
+}
+
+.all-articles {
+    margin: 1.5em 0;
+    font-weight: bold;
 }
 
 pre, code{

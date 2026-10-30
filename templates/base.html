@@ -11,10 +11,13 @@
     <meta property="og:type" content="{{ogType}}">
     <meta property="og:url" content="{{ogUrl}}">
     <meta property="og:site_name" content="{{siteName}}">
+    <link rel="alternate" type="application/rss+xml" title="{{siteName}}" href="{{feedHref}}">
     {{styles}}
   </head>
   <body class="{{bodyClass}}">
+    {{nav}}
     {{body}}
+    {{footer}}
     {{scripts}}
   </body>
 </html>

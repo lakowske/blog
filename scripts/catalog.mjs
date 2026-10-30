@@ -46,6 +46,7 @@ const ALLOWED_FIELDS = new Set([
   "summary",
   "updated",
   "draft",
+  "heading",
   "layout",
   "bodyClass",
   "showHeader",
@@ -196,7 +197,11 @@ export function deriveUrl(id) {
 }
 
 export function deriveSection(id) {
-  return id === "index" ? "root" : id.split("/")[0];
+  if (id === "index" || id === "about" || id === "resume") {
+    return "pages";
+  }
+  const first = id.split("/")[0];
+  return ["articles", "software", "technology"].includes(first) ? first : "root";
 }
 
 export function dateStatusOf(metadata) {
@@ -268,6 +273,9 @@ export function validateMetadata({ rel, metadata, html, site }) {
   const title = typeof metadata.title === "string" ? metadata.title.trim() : "";
   if (title === "") {
     errors.push(`${rel}: missing or empty title`);
+  }
+  if (metadata.heading !== undefined && (typeof metadata.heading !== "string" || metadata.heading.trim() === "")) {
+    errors.push(`${rel}: heading must be a non-empty string when present`);
   }
 
   if (metadata.type !== "article" && metadata.type !== "page") {
@@ -396,6 +404,7 @@ export function toCatalogEntry({ rel, metadata, html, site }) {
     url,
     canonicalUrl: `${site.baseUrl.replace(/\/$/, "")}${url}`,
     title: metadata.title.trim(),
+    heading: metadata.heading?.trim() ?? metadata.title.trim(),
     type: metadata.type,
     date: metadata.date ?? null,
     datePrecision: datePrecision(metadata.date),

@@ -4,22 +4,28 @@ import assert from "node:assert/strict";
 import {
   escapeHtml,
   formatDate,
-  injectRelated,
-  isFullDocument,
   relativeLink,
   relativePrefix,
+  renderTemplate,
+} from "./site-utils.mjs";
+import {
+  injectRelated,
+  isFullDocument,
+  relatedEntries,
   renderDateLine,
   renderHeader,
-  renderRelatedTable,
+  renderRelatedNav,
   renderScripts,
   renderStyles,
-  renderTemplate,
 } from "./render.mjs";
 
 const entry = {
+  id: "articles/example",
   path: "articles/example/index.html",
   title: "Example & Title",
   type: "article",
+  section: "articles",
+  tags: ["haskell"],
   date: "2016-04-25",
   dateStatus: "dated",
   evergreen: false,
@@ -72,19 +78,41 @@ test("evergreen and unknown dates render no date line", () => {
   assert.equal(renderDateLine({ ...entry, dateStatus: "unknown", date: null }), "");
 });
 
-test("related table excludes the current page and escapes titles", () => {
-  const table = renderRelatedTable(
-    entry,
-    [
-      { path: entry.path, title: "Self" },
-      { path: "about/index.html", title: "About" },
-      { path: "articles/other/index.html", title: "Other & More" },
-    ],
-    entry.path,
-  );
-  assert.doesNotMatch(table, /Self/);
-  assert.match(table, /Other &amp; More/);
-  assert.match(table, /href="\.\.\/other\/index\.html"/);
+test("related nav excludes the current page and includes tag matches", () => {
+  const self = { ...entry, id: "articles/example", path: entry.path, title: "Self" };
+  const about = {
+    ...entry,
+    id: "about",
+    path: "about/index.html",
+    title: "About",
+    type: "page",
+    section: "pages",
+    tags: [],
+  };
+  const other = {
+    ...entry,
+    id: "articles/other",
+    path: "articles/other/index.html",
+    title: "Other & More",
+    tags: ["haskell"],
+  };
+  const nav = renderRelatedNav(entry, [self, about, other], entry.path);
+  assert.doesNotMatch(nav, /Self/);
+  assert.match(nav, /Other &amp; More/);
+  assert.match(nav, /href="\.\.\/other\/index\.html"/);
+  assert.match(nav, /<nav id="related" class="related"/);
+});
+
+test("related scoring uses manual overrides, tags, and section", () => {
+  const source = { ...entry, tags: ["a", "b"], related: ["manual"] };
+  const manual = { ...source, id: "manual", path: "articles/manual/index.html", title: "Manual", tags: [] };
+  const strong = { ...source, id: "strong", path: "articles/strong/index.html", title: "Strong", tags: ["a", "b"], date: "2020-01-01" };
+  const weak = { ...source, id: "weak", path: "articles/weak/index.html", title: "Weak", tags: ["a"], date: "2021-01-01" };
+  const sectionOnly = { ...source, id: "section", path: "articles/section/index.html", title: "Section", tags: [], date: "2022-01-01" };
+  const page = { ...source, id: "about", path: "about/index.html", title: "About", type: "page", section: "pages", tags: [] };
+
+  const related = relatedEntries(source, [source, manual, strong, weak, sectionOnly, page]);
+  assert.deepEqual(related.map((item) => item.id), ["manual", "strong", "weak", "section"]);
 });
 
 test("raw related injection and full-document detection", () => {

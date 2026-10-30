@@ -156,7 +156,7 @@ Design rules:
 | Phase | Name | Primary outcome | Depends on | Status |
 | --- | --- | --- | --- | --- |
 | 0 | Baseline and guardrails | Safe, repeatable changes; CI checks; generated output untracked | — | Done (PR #3, `d4331b2`) |
-| 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | In progress |
+| 1 | Metadata and catalog | Every page has validated metadata; deterministic catalog | 0, D2, D3, D15–D17 | Done (PR #4, `8882a01`) |
 | 2 | Templates and normalization | One layout; content files are body fragments; consistent markup | 1 | Not started |
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8 | Not started |
 | 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Not started |
@@ -327,7 +327,9 @@ generate navigation and site pages without guessing.
 - Catalog completeness depends on the source walk; a page added without
   metadata fails the build.
 
-**Status:** In progress
+**Status:** Done — merged as `8882a01`. CI, Cloudflare, the canonical site,
+the mirror, and the catalog verified. See the
+[implementation log](implementation-log.md) for details.
 
 ---
 
@@ -919,3 +921,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.3 | Approved D14: keep jsdom in the legacy pipeline, keep the checker zero-dependency, and remove jsdom after templates. Added future work for source HTML validation (002). | Seth |
 | 2026-10-30 | 0.4 | Phase 0 merged as `d4331b2` and verified on Cloudflare and GitHub Pages. | Seth |
 | 2026-10-30 | 0.5 | Approved Phase 1 decisions: HTML comment metadata, HTML fragments, three-state date policy (dated/evergreen/unknown), generated catalog with freshness checks, and build-time summary fallbacks. | Seth |
+| 2026-10-30 | 0.6 | Phase 1 merged as `8882a01` and verified on Cloudflare and GitHub Pages; catalog counts, version, and header behavior recorded. | Seth |

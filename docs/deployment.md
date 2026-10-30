@@ -1,6 +1,6 @@
 # Deployment
 
-Last verified: 2026-10-29
+Last verified: 2026-10-30
 
 ## Summary
 
@@ -95,6 +95,9 @@ kept as a mirror for bookmarked URLs.
 5. Confirm bookmarked forms still resolve:
    - `/articles/why-learn-haskell/`
    - `/articles/why-learn-haskell/index.html`
+6. Verify `/catalog.json`:
+   - canonical: 200 with `cache-control: no-cache`
+   - mirror: 200; GitHub Pages ignores `_headers`, so it uses its own caching
 
 ## Changing the deployment
 

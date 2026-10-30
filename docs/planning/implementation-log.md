@@ -4,7 +4,7 @@ Append-only record of implementation work, findings, deviations from
 [001-site-restructure.md](001-site-restructure.md), and decisions made along the
 way.
 
-**Current status:** Phase 0 complete. Phase 1 in progress.
+**Current status:** Phase 1 complete. Phase 2 not started.
 
 ## How to use this log
 
@@ -30,6 +30,44 @@ way.
 ```
 
 ---
+
+## 2026-10-30 — Phase 1 merged and verified
+
+- **Phase:** 1
+- **Type:** completion
+- **Summary:** PR #4 merged as `8882a01`. CI, GitHub Pages, Cloudflare, the
+  canonical site, the mirror, and the catalog all verified.
+- **Details:**
+  - Merge: rebase merge of PR #4. Branch `restructure/phase-1` deleted locally
+    and remotely.
+  - The rebase rewrote the branch hashes:
+    - content metadata: `645eb81` → `3e49763`
+    - catalog tooling: `8df2d02` → `86588d0`
+    - planning docs: `bcab077` → `8882a01`
+  - CI `validate`: pass (run 41014675928).
+  - Deploy Blog to GitHub Pages: pass (run 41014675581).
+  - Cloudflare Pages production check: pass.
+  - `npm test` on `master`: 5 tests pass; catalog 37 entries (34 articles,
+    3 pages), 21 dated, 5 evergreen, 8 unknown; output checker 0 errors,
+    125 warnings.
+  - Catalog version: `d6d8aa903c6d62066b5317a92740e14d99e8f01a9f6eb2c0dff0580a9d0bf0d9`.
+  - Canonical `/catalog.json`: 200, `cache-control: no-cache`.
+  - Mirror `/blog/catalog.json`: 200, `cache-control: max-age=600`
+    (GitHub Pages ignores `_headers`; documented).
+  - Metadata comments: 0 in live HTML on both hosts.
+  - Dates verified: `2014-05-15`, `August 2014`, `May 2013`, `January 2012`.
+  - Evergreen and unknown-date pages have no `<time>` element.
+  - URL status: canonical directory URLs 200, canonical `index.html` 308,
+    mirror directory and `index.html` 200.
+  - Live canonical and mirror pages byte-match the local `dump/` and each
+    other.
+  - The 8 catalog warnings are the intentionally undated technical posts. The
+    125 output-checker warnings are the pre-existing structural issues Phase 2
+    addresses.
+- **Impact on plan:** Phase 1 complete. Phase 2 can start.
+- **Follow-up:** Start Phase 2 (templates and normalization); keep 002 (source
+  HTML validation) in mind; decide what to do with the old checkout before
+  touching its content.
 
 ## 2026-10-30 — Phase 1 metadata and catalog implemented
 

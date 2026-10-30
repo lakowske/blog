@@ -5,12 +5,17 @@
   "description": "A weblog by Seth Lakowske",
   "main": "index.js",
   "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
+      "test": "npm run build && npm run dump && node scripts/check.mjs dump",
+      "check": "node scripts/check.mjs dump",
       "build": "./node_modules/.bin/tsc",
       "watch": "./node_modules/.bin/tsc --watch",
       "watchAndDump": "./node_modules/.bin/nodemon --watch ./public --ext js,html,css --exec \"npm run dump\"",
       "serve": "(cd ./dist; PORT=8090 node server.js serve)",
-      "dump": "(cd ./dist; node server.js dump)"
+      "dump": "(cd ./dist; node server.js dump)",
+      "preview": "python3 -m http.server -d dump 8090"
+  },
+  "engines": {
+      "node": ">=20.12"
   },
   "repository": {
       "type": "git",

@@ -533,6 +533,7 @@ export async function runRender(argv = process.argv.slice(2), io = console) {
   process.exitCode = 0;
 }
 
+// Check if this module is being run directly (as a script) or imported as a module
 const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMain) {
   runRender();

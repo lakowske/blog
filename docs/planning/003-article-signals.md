@@ -196,8 +196,10 @@ FROM votes
 WHERE path = ?1;
 ```
 
-The displayed count is `bumps + 1`. Every article therefore starts at 1 before
-any reader bumps; the first reader bump displays 2.
+The displayed count is `bumps + 1`. The baseline 1 represents the author's vote;
+the table stores reader bumps only. Every article therefore starts at 1 before
+any reader bumps, and the first reader bump displays 2. The baseline is applied
+by the API rather than stored as a row, so new articles need no seeding.
 
 Insert:
 
@@ -610,9 +612,10 @@ No content file, URL, catalog entry, feed, sitemap, or navigation changes.
 ### FD9 — Baseline: every article starts at 1
 
 - **Options:** start at 0; start at 1; seed a row per article.
-- **Decision:** start at 1. The database stores reader bumps only; the API
-  returns `bumps + 1`. The first reader bump displays 2. No seed rows are needed,
-  so new articles are correct automatically.
+- **Decision:** start at 1. The baseline represents the author's vote; the
+  database stores reader bumps only and the API returns `bumps + 1`. The first
+  reader bump displays 2. The baseline is applied at read time, so new articles
+  are correct without seeding.
 - **Status:** Approved 2026-10-30.
 
 ### FD10 — No user-facing privacy note

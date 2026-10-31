@@ -7,7 +7,7 @@ Documentation
 ===
 * [Content authoring](docs/content.md) — metadata, dates, tags, summaries, and commands.
 * [Deployment](docs/deployment.md) — canonical host, mirror, build contract, and URL policy.
-* [Planning](docs/planning/README.md) — restructure plan and implementation log.
+* [Planning](docs/planning/README.md) — restructure plan, feature register, and implementation log.
 
 Requirements
 ===

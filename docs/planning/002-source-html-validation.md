@@ -1,6 +1,8 @@
 # 002 — Source HTML Validation
 
-**Status:** Future work. Not scheduled and not part of the six-phase restructure.
+**Feature ID:** F-003
+**Status:** Proposed in the [feature register](README.md#feature-register). Not
+scheduled.
 **Created:** 2026-10-30
 **Owner:** Seth Lakowske
 **Related:** [001-site-restructure.md](001-site-restructure.md), decision D14.
@@ -57,9 +59,10 @@ before jsdom or the template engine quietly fixes them.
 
 ## Recommended direction
 
-1. **Do this after Phase 2.** Once pages are body fragments rendered through
-   templates, the source is smaller and the validator can focus on authoring
-   mistakes rather than duplicated document chrome.
+1. **Start from the current fragment source.** Phases 2 and 4 are complete, so
+   `public/` now holds body fragments rendered through templates and the build
+   no longer uses jsdom. The validator can focus on authoring mistakes rather
+   than duplicated document chrome.
 2. **Choose a dev-only validator** that can handle both full documents and
    fragments (wrapping a fragment in a minimal document is acceptable).
 3. **Run it on `public/` in CI** before `npm run dump`, with file and line
@@ -92,7 +95,8 @@ before jsdom or the template engine quietly fixes them.
 
 ## Relationship to 001
 
-This is future work and does not change the six phases. Phase 2 fixes the known
-malformed pages, removes duplicated document chrome, and generates structure
-from templates. This effort can then focus on fragments and authoring-time
-feedback, and can run before or alongside the Phase 4 dependency cleanup.
+This is a feature candidate (**F-003**) and does not change 001's completed
+phases. Phase 2 fixed the known malformed pages, removed duplicated document
+chrome, and generates structure from templates; Phase 4 removed jsdom. This
+effort can now focus on fragments and authoring-time feedback, and can run
+before or alongside other features.

@@ -1,6 +1,8 @@
 # 001 — Site Restructure Plan
 
-**Status:** Phase 2 complete. Phase 3 in progress.
+**Status:** Phases 0–4 complete. Phase 5 (cutover and verification) not started.
+Future work is tracked as features in the [planning README](README.md), not as
+Phase 6+.
 **Created:** 2026-10-29
 **Owner:** Seth Lakowske
 **Companion:** [implementation-log.md](implementation-log.md)
@@ -161,6 +163,12 @@ Design rules:
 | 3 | Generated navigation | Related links, archive, tags, feed, sitemap, 404 | 2, D4, D7, D8, D19–D21 | Done (PR #6, `cb975c9`) |
 | 4 | Dependency and code cleanup | Zero runtime dependencies; dead code removed; docs accurate | 2, 3, D5, D6, D9 | Done (PR #7, `8e8cdaf`; D9 deferred) |
 | 5 | Cutover and verification | Production verified; plan closed; deviations logged | 0–4 | Not started |
+
+Phase numbers are historical. Phases 0–4 are complete and Phase 5 closes the
+restructure. Do not add Phase 6: new work is registered as a feature (`F-NNN`)
+in the [planning README](README.md), because features are picked up in an order
+we do not know in advance. Dependencies between features are explicit; a feature
+number does not imply sequence.
 
 ## 8. Phase details
 
@@ -813,8 +821,9 @@ marked *Blocking* must be settled before the phase that needs them.
 
 ## 10. Tracking conventions
 
-- **Plan status** lives in the phase table and in each phase's `Status` line.
-- **Task progress** is tracked with checkboxes in the phase.
+- **Plan status** lives in the phase table for 001 and in the feature register
+  for features.
+- **Task progress** is tracked with checkboxes in the phase or feature document.
 - **Deviations** go in `implementation-log.md`, not silently into the plan. If a
   deviation changes the plan, update the plan and note the change in the log.
 - **Plan revisions** are recorded in the table at the bottom of this document.
@@ -823,13 +832,16 @@ Log entry format:
 
 ```markdown
 ## YYYY-MM-DD — Short title
-- **Phase:** 0–5 or "planning"
+- **Phase:** 0–5, a feature ID such as `F-001`, or "planning"
 - **Type:** baseline | finding | deviation | decision | blocker | completion
 - **Summary:** one or two sentences.
 - **Details:** what happened, with file paths or commit hashes.
 - **Impact on plan:** what changed, or "none".
 - **Follow-up:** next action, or "none".
 ```
+
+Feature entries may use `- **Feature:** F-001` instead of `- **Phase:**`. The
+feature register, not the log, is the source of truth for feature status.
 
 ## 11. Risks and mitigations
 
@@ -859,9 +871,13 @@ At the end of Phase 5:
 
 ## 13. Future work
 
-- [002 — Source HTML validation](002-source-html-validation.md): catch malformed
-  source HTML before jsdom or the templates repair it. Not scheduled; a
-  candidate for after Phase 2. This is separate from the current six phases.
+Future work is tracked in the [feature register](README.md#feature-register),
+not as additional phases.
+
+- [002 — Source HTML validation](002-source-html-validation.md) is registered as
+  **F-003**: catch malformed source HTML before the templates repair it.
+- [003 — Article signals (+1)](003-article-signals.md) is proposed as **F-001**:
+  an optional +1 control backed by D1, removable without affecting rendering.
 
 ## Appendix A — Findings inventory
 
@@ -1041,3 +1057,4 @@ articles/traveling-without-moving/index.html
 | 2026-10-30 | 0.13 | Phase 3 merged as `cb975c9` and verified: 404, 57 sitemap URLs, RSS, archive, tags, related links, and combined Home/archive lists. | Seth |
 | 2026-10-30 | 0.14 | Approved D5 (plain ESM), D6 (drop the legacy server), and a zero-dependency preview server. Deferred D9 (`private/` stays tracked). | Seth |
 | 2026-10-30 | 0.15 | Phase 4 merged as `8e8cdaf` and verified: zero dependencies, clean audit, unchanged output, both hosts green. | Seth |
+| 2026-10-30 | 0.16 | Fixed the stale status line. Declared phases 0–5 historical and moved future work to the feature register (`F-NNN`), because feature order is not known in advance. Added F-001 (article signals). | Seth |

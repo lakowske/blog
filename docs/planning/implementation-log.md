@@ -5,8 +5,42 @@ Append-only record of implementation work, findings, deviations from
 way.
 
 **Current status:** Phase 4 complete. Phase 5 (cutover and verification) not started.
+F-001 (article signals) is approved; no implementation has begun.
 
 ---
+
+## 2026-10-30 — F-001 approved
+
+- **Feature:** F-001
+- **Type:** decision
+- **Summary:** Approved the article +1 design, including the five remaining
+  recommendations.
+- **Details:**
+  - FD2 approved: D1 votes table.
+  - FD4 approved: server-rendered partial.
+  - FD5 approved: counts fetched client-side, never in HTML.
+  - FD7 approved: Wrangler via `npx`, not a package dependency.
+  - FD8 approved: removing the D1 binding is the kill switch.
+  - F-001 moves to Approved. No implementation has begun.
+- **Impact on plan:** F-001 is ready to implement.
+- **Follow-up:** implement on a feature branch when scheduled.
+
+## 2026-10-30 — F-001 review decisions
+
+- **Feature:** F-001
+- **Type:** decision
+- **Summary:** Recorded the review answers for the article +1 feature.
+- **Details:**
+  - The displayed count starts at 1; the first reader bump displays 2.
+  - One bump per browser per article, enforced by a client-generated voter id
+    and a unique `(path, voter)` key.
+  - The GitHub Pages mirror does not show the control and makes no API request.
+  - No user-facing privacy note is added.
+  - F-002 may influence related links and the Home list; the archive stays
+    chronological.
+- **Impact on plan:** FD1, FD3, FD6, FD9, and FD10 decided. FD2, FD4, FD5, FD7,
+  and FD8 remain open.
+- **Follow-up:** resolve the remaining FD decisions, then approve F-001.
 
 ## 2026-10-30 — Phase 4 merged and verified
 
@@ -722,8 +756,11 @@ way.
 | Phase | Status | Started | Completed | Notes |
 | --- | --- | --- | --- | --- |
 | 0 — Baseline and guardrails | Done | 2026-10-29 | 2026-10-30 | Merged as `d4331b2`; CI, Cloudflare, canonical, and mirror verified |
-| 1 — Metadata and catalog | In progress | 2026-10-30 | — | Implementation complete; awaiting review and PR verification |
-| 2 — Templates and normalization | Not started | — | — | Depends on Phase 1; D4 approved |
-| 3 — Generated navigation | Not started | — | — | Depends on Phase 2, D7, D8 |
-| 4 — Dependency and code cleanup | Not started | — | — | Depends on Phases 2–3, D5, D6, D9 |
+| 1 — Metadata and catalog | Done | 2026-10-30 | 2026-10-30 | Merged as `8882a01`; catalog, CI, canonical, and mirror verified |
+| 2 — Templates and normalization | Done | 2026-10-30 | 2026-10-30 | Merged as `399cfb3`; 37 standard layouts, 0 checker warnings |
+| 3 — Generated navigation | Done | 2026-10-30 | 2026-10-30 | Merged as `cb975c9`; archive, tags, RSS, sitemap, 404 verified |
+| 4 — Dependency and code cleanup | Done | 2026-10-30 | 2026-10-30 | Merged as `8e8cdaf`; zero dependencies, clean audit |
 | 5 — Cutover and verification | Not started | — | — | Depends on Phases 0–4; D13 |
+
+Feature status lives in the [feature register](README.md#feature-register), not
+in this table. F-001 is in review; no feature implementation has begun.
